@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(pnpm remove @wfynbzlx666/sdk-http)",
+      "Bash(pnpm add axios)",
+      "Bash(npx tsc --noEmit --skipLibCheck)",
+      "mcp__docsByLangChain__SearchDocsByLangChain",
+      "Bash(npm install @langchain/tavily)",
+      "Bash(npm info duck-duck-scrape)",
+      "Bash(node -e \":*)",
+      "Bash(npm pack @langchain/community --dry-run)",
+      "Bash(npm install @langchain/community duck-duck-scrape)",
+      "Bash(npm install @langchain/core@latest @langchain/openai@latest @langchain/langgraph@latest langchain@latest duck-duck-scrape --legacy-peer-deps)",
+      "Bash(pnpm add -D eslint @eslint/js globals eslint-plugin-prettier prettier)",
+      "Bash(pnpm add -D prettier eslint-config-prettier eslint-plugin-prettier)"
+    ]
+  }
+}
