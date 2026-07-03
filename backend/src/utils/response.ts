@@ -18,7 +18,8 @@ export function ok(
 ) {
 	return res.json({ code, message, data });
 }
-
+//按时
+//返回格式
 export function fail(
 	res: Response,
 	message = "error",

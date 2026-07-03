@@ -29,7 +29,7 @@ export default [
         rules: {
             ...js.configs.recommended.rules,
             ...prettierConfig.rules,
-            "prettier/prettier": "warn",
+            "prettier/prettier": "off",
             "no-unused-vars": "off",
             "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
             "@typescript-eslint/no-explicit-any": "off",
