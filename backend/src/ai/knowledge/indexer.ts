@@ -40,8 +40,7 @@ export async function buildIndex({ clean = true } = {}) {
 
 // 支持直接运行：node src/ai/knowledge/indexer.js
 const isDirectRun =
-	process.argv[1] &&
-	import.meta.url.endsWith(process.argv[1].replace(/\\/g, "/"));
+	process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\/g, "/"));
 
 if (isDirectRun) {
 	buildIndex()

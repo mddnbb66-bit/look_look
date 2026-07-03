@@ -18,7 +18,6 @@ app.use(
 
 // 解析 JSON 请求体
 app.use(express.json({ limit: "10mb" }));
-
 // 健康检查
 app.get("/health", (_req, res) => {
 	res.json({ code: 0, message: "ok" });

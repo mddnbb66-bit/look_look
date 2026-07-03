@@ -19,7 +19,7 @@ export const agent = createAgent({
 		configuration: {
 			baseURL: process.env.DEEPSEEK_BASE_URL,
 		},
-		temperature: 0.5
+		temperature: 0.5,
 	}),
 	middleware: [
 		summarizationMiddleware({

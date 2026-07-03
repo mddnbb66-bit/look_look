@@ -79,11 +79,12 @@ export function buildSystemMessage(): SystemMessage {
 	);
 }
 
-export function buildUserMessage(userPrompt: string, mode: string, componentManifest = ""): HumanMessage {
-	const parts = [
-		"用户需求：" + userPrompt,
-		"生成模式：" + mode,
-	];
+export function buildUserMessage(
+	userPrompt: string,
+	mode: string,
+	componentManifest = ""
+): HumanMessage {
+	const parts = ["用户需求：" + userPrompt, "生成模式：" + mode];
 	if (componentManifest) {
 		parts.push(componentManifest);
 	}

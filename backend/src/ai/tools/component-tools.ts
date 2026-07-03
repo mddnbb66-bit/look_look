@@ -416,7 +416,12 @@ const chartDataSourceInput = z.object({
 	data: z.array(z.unknown()).describe("静态数据"),
 	apiUrl: z.string().optional(),
 	refreshInterval: z.number().optional(),
-	fieldMapping: z.record(z.string()).optional().describe("字段映射，key 为语义名(x/y/name/value/series/category/size)，value 为数据字段名"),
+	fieldMapping: z
+		.record(z.string())
+		.optional()
+		.describe(
+			"字段映射，key 为语义名(x/y/name/value/series/category/size)，value 为数据字段名"
+		),
 });
 
 const chartBaseInput = z.object({
@@ -592,7 +597,8 @@ export const createBubbleChartTool = tool(
 	},
 	{
 		name: "create_bubble_chart_component",
-		description: "生成 BubbleChart 组件。dataSource.fieldMapping 需含 x、y、size，可选 category",
+		description:
+			"生成 BubbleChart 组件。dataSource.fieldMapping 需含 x、y、size，可选 category",
 		schema: baseToolInput.extend({
 			props: chartBaseInput.extend({
 				pointSize: z.number().optional(),
@@ -884,10 +890,13 @@ export const createRadarChartTool = tool(
 	},
 	{
 		name: "create_radar_chart_component",
-		description: "生成 RadarChart 雷达图组件，用于多维度指标对比。不使用 fieldMapping，通过 indicators 定义维度",
+		description:
+			"生成 RadarChart 雷达图组件，用于多维度指标对比。不使用 fieldMapping，通过 indicators 定义维度",
 		schema: baseToolInput.extend({
 			props: chartBaseInput.extend({
-				indicators: z.array(z.object({ name: z.string(), max: z.number() })).describe("雷达指标列表，每项含 name 和 max"),
+				indicators: z
+					.array(z.object({ name: z.string(), max: z.number() }))
+					.describe("雷达指标列表，每项含 name 和 max"),
 				colorPalette: z.array(z.string()).optional(),
 			}),
 			dataSource: chartDataSourceInput.optional(),
@@ -1009,8 +1018,14 @@ export const updatePageConfigTool = tool(
 				.describe("根节点 props，不传则不修改"),
 			settings: z
 				.object({
-					width: z.union([z.number(), z.string()]).optional().describe("画布宽度，默认1920"),
-					height: z.union([z.number(), z.string()]).optional().describe("画布高度，默认1080"),
+					width: z
+						.union([z.number(), z.string()])
+						.optional()
+						.describe("画布宽度，默认1920"),
+					height: z
+						.union([z.number(), z.string()])
+						.optional()
+						.describe("画布高度，默认1080"),
 					backgroundColor: z.string().optional().describe("背景颜色，CSS颜色值"),
 					backgroundImage: z.string().optional().describe("背景图片URL"),
 					gridSize: z.number().optional().describe("网格大小，默认15"),

@@ -42,8 +42,8 @@ export default defineConfig([
             // 关闭与 prettier 冲突的 ESLint 格式规则（避免两者打架）
             ...prettierConfig.rules,
 
-            // 把 prettier 格式不一致作为 warning 报告（而非 error，不阻断开发）
-            "prettier/prettier": "warn",
+            // 格式交给 VS Code Prettier 插件保存时自动处理，ESLint 不再报告
+            "prettier/prettier": "off",
 
             // 允许使用 any 类型（动态渲染场景需要灵活处理未知结构）
             "@typescript-eslint/no-explicit-any": "off",

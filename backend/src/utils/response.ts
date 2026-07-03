@@ -10,10 +10,20 @@ export const RespCode = {
 
 export type RespCodeValue = (typeof RespCode)[keyof typeof RespCode];
 
-export function ok(res: Response, data: unknown = null, message = "ok", code: RespCodeValue = RespCode.SUCCESS) {
+export function ok(
+	res: Response,
+	data: unknown = null,
+	message = "ok",
+	code: RespCodeValue = RespCode.SUCCESS
+) {
 	return res.json({ code, message, data });
 }
 
-export function fail(res: Response, message = "error", code: RespCodeValue = RespCode.SERVER_ERROR, httpStatus = 500) {
+export function fail(
+	res: Response,
+	message = "error",
+	code: RespCodeValue = RespCode.SERVER_ERROR,
+	httpStatus = 500
+) {
 	return res.status(httpStatus).json({ code, message });
 }

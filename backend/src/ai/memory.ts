@@ -11,7 +11,10 @@ export function getHistory(sessionId = "default"): InMemoryChatMessageHistory {
 	return historyStore.get(sessionId)!;
 }
 
-export async function pushToHistory(sessionId: string, messages: BaseMessage[] = []): Promise<void> {
+export async function pushToHistory(
+	sessionId: string,
+	messages: BaseMessage[] = []
+): Promise<void> {
 	const history = getHistory(sessionId);
 	for (const msg of messages) {
 		await history.addMessage(msg);

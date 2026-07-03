@@ -17,20 +17,20 @@ export type ComponentType =
 	| "Avatar"
 	| "Rate"
 	| "Switch"
-	| "BarChart"
-	| "MultiBarChart"
-	| "LineChart"
-	| "PieChart"
-	| "ScatterChart"
-	| "BubbleChart"
-	| "AreaChart"
-	| "MultiLineChart"
-	| "HorizontalBarChart"
-	| "RosePieChart"
-	| "RadarChart"
-	| "FunnelChart"
-	| "GaugeChart"
-	| "TreemapChart";
+	| "BarChart" //柱状图
+	| "MultiBarChart" //多系列柱状图
+	| "LineChart" //折线图
+	| "PieChart" //饼图
+	| "ScatterChart" //散点图
+	| "BubbleChart" //气泡图
+	| "AreaChart" //面积图
+	| "MultiLineChart" //多折线图
+	| "HorizontalBarChart" //横向柱状图
+	| "RosePieChart" //玫瑰图
+	| "RadarChart" //雷达图
+	| "FunnelChart" //漏斗图
+	| "GaugeChart" //仪表盘
+	| "TreemapChart"; //矩形树图
 
 /**
  * 基础组件节点接口
@@ -98,24 +98,25 @@ export interface ChartBaseProps {
  * - 具体图表通过泛型约束自己的 props 结构
  * - dataSource 在组件顶层，不在 props 中
  */
+
 export interface BaseChartComponent<
 	TProps extends ChartBaseProps = ChartBaseProps,
 > extends BaseComponentNode {
 	type:
-		| "BarChart"
-		| "MultiBarChart"
-		| "LineChart"
-		| "PieChart"
-		| "ScatterChart"
-		| "BubbleChart"
-		| "AreaChart"
-		| "MultiLineChart"
-		| "HorizontalBarChart"
-		| "RosePieChart"
-		| "RadarChart"
-		| "FunnelChart"
-		| "GaugeChart"
-		| "TreemapChart";
+		| "BarChart" //柱状图
+		| "MultiBarChart" //多系列柱状图
+		| "LineChart" //折线图
+		| "PieChart" //饼图
+		| "ScatterChart" //散点图
+		| "BubbleChart" //气泡图
+		| "AreaChart" //面积图
+		| "MultiLineChart" //多折线图
+		| "HorizontalBarChart" //横向柱状图
+		| "RosePieChart" //玫瑰图
+		| "RadarChart" //雷达图
+		| "FunnelChart" //漏斗图
+		| "GaugeChart" //仪表盘
+		| "TreemapChart"; //矩形树图
 	props: TProps;
 	dataSource?: ChartDataSource;
 }

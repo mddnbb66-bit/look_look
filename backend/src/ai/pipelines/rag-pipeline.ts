@@ -33,7 +33,7 @@ export async function answerQuestion({
 			const retrievedDocs = await vectorStore.similaritySearch(question, RETRIEVAL_K);
 
 			console.log(
-				`[rag-pipeline] 检索到 ${retrievedDocs.length} 个相关文档片段，sessionId: ${sessionId}`,
+				`[rag-pipeline] 检索到 ${retrievedDocs.length} 个相关文档片段，sessionId: ${sessionId}`
 			);
 
 			// 2. 组装上下文
@@ -57,7 +57,7 @@ export async function answerQuestion({
 					question,
 					"",
 					"请基于以上参考文档回答用户问题。如果文档中没有相关信息，请如实告知。",
-				].join("\n"),
+				].join("\n")
 			);
 
 			// 4. LLM 流式调用
@@ -76,7 +76,8 @@ export async function answerQuestion({
 			// 6. 推送引用来源
 			const sources = retrievedDocs.map((doc: any) => ({
 				title: doc.metadata?.title || doc.metadata?.source || "未知来源",
-				snippet: doc.pageContent?.slice(0, 100) + (doc.pageContent?.length > 100 ? "..." : ""),
+				snippet:
+					doc.pageContent?.slice(0, 100) + (doc.pageContent?.length > 100 ? "..." : ""),
 			}));
 
 			onProgress?.("sources", { sources });

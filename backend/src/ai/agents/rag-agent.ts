@@ -31,5 +31,5 @@ export const ragSystemMessage = new SystemMessage(
 		"3. 回答使用 Markdown 格式，配置示例用 JSON 代码块包裹。",
 		"4. 保持回答简洁准确，优先给出可直接使用的配置示例。",
 		"5. 使用中文回答。",
-	].join("\n"),
+	].join("\n")
 );

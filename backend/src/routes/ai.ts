@@ -69,7 +69,11 @@ interface SSEParams {
 	existingComponents: any[];
 }
 
-async function handleGenerateSchemaSSE(req: Request, res: Response, { prompt, mode, sessionId, pageId, existingComponents }: SSEParams) {
+async function handleGenerateSchemaSSE(
+	req: Request,
+	res: Response,
+	{ prompt, mode, sessionId, pageId, existingComponents }: SSEParams
+) {
 	const abortController = new AbortController();
 	let closed = false;
 

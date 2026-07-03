@@ -8,7 +8,7 @@ import type { Request, Response } from "express";
 const router = express.Router();
 
 const TOKEN_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
-
+//jwt相关
 function signToken(user: { _id: { toString(): string }; email: string }) {
 	const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
 	return jwt.sign({ uid: user._id.toString(), email: user.email }, JWT_SECRET, {
@@ -22,7 +22,6 @@ router.post("/register", async (req: Request, res: Response) => {
 	if (!email || !password) {
 		return fail(res, "邮箱和密码不能为空", RespCode.VALIDATION, 400);
 	}
-
 	try {
 		const existing = await User.findOne({ email });
 		if (existing) {

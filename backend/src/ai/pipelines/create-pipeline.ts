@@ -50,7 +50,9 @@ export async function generateSchema({
 				return;
 			}
 
-			console.log(`[generateSchema] sessionId: ${sessionId}, thread_id: ${pageId || sessionId}`);
+			console.log(
+				`[generateSchema] sessionId: ${sessionId}, thread_id: ${pageId || sessionId}`
+			);
 
 			// [构建消息链] checkpointer 自动管理历史，systemPrompt 已在 agent.js 配置，只需传当前用户消息
 			// 注入组件清单，让 AI 知道当前画布已有组件的真实 id，防止编造 id
@@ -76,14 +78,18 @@ export async function generateSchema({
 					console.log(`[generateSchema] [TOOL CALL] ${toolName}`);
 					console.log("chunk:", chunk);
 					const content = chunk.tools.messages[0].content;
-					const toolOutput = JSON.parse(typeof content === "string" ? content : JSON.stringify(content));
+					const toolOutput = JSON.parse(
+						typeof content === "string" ? content : JSON.stringify(content)
+					);
 
 					// toolOutput.notes 是中间态注释（组件清单），跳过推送
 					if (toolOutput?.notes) continue;
 
 					// 分类校验：只放行完整的组件节点或页面配置更新
-					const isPageConfig = !toolOutput?.type && (toolOutput?.props || toolOutput?.settings);
-					const isComponent = toolOutput?.type && COMPONENT_TYPES.includes(toolOutput.type);
+					const isPageConfig =
+						!toolOutput?.type && (toolOutput?.props || toolOutput?.settings);
+					const isComponent =
+						toolOutput?.type && COMPONENT_TYPES.includes(toolOutput.type);
 
 					if (!isPageConfig && !isComponent) {
 						console.log(`[generateSchema] [SKIP] 非可渲染的工具输出: ${toolName}`);
@@ -96,7 +102,13 @@ export async function generateSchema({
 							toolOutput.id = nanoid();
 						}
 						if (!toolOutput.style) {
-							toolOutput.style = { top: 0, left: 0, width: 400, height: 240, zIndex: 1 };
+							toolOutput.style = {
+								top: 0,
+								left: 0,
+								width: 400,
+								height: 240,
+								zIndex: 1,
+							};
 						}
 					}
 

@@ -46,9 +46,7 @@ export async function loadAndSplitDocs({ chunkSize = 500, chunkOverlap = 50 } = 
 
 	const chunks = await splitter.splitDocuments(allDocs);
 
-	console.log(
-		`[knowledge/loader] 加载 ${files.length} 个文档，分为 ${chunks.length} 个块`,
-	);
+	console.log(`[knowledge/loader] 加载 ${files.length} 个文档，分为 ${chunks.length} 个块`);
 
 	return chunks;
 }
