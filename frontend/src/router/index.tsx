@@ -43,6 +43,7 @@ const RouteErrorBoundary = () => {
 };
 
 // 受保护区域的通用守卫：无 token 时提醒并拉回登录
+//路由守卫
 const AuthGuard = () => {
 	const location = useLocation();
 	const hasToken = Boolean(localStorage.getItem("token"));

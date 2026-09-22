@@ -1,3 +1,4 @@
+//设置axios相关
 import axios, { type InternalAxiosRequestConfig, type AxiosResponse, type AxiosError } from "axios";
 
 const http = axios.create({
@@ -16,7 +17,9 @@ http.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 
 // 响应拦截器：403 清空本地数据并跳转登录页
 http.interceptors.response.use(
+	//// 处理 2xx 范围内的响应
 	(response: AxiosResponse) => response.data,
+	// 处理 2xx 范围之外的响应
 	(error: AxiosError) => {
 		if (error.response?.status === 403) {
 			// 只清理 auth 相关 key，不清空整个 localStorage

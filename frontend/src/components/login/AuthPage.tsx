@@ -1,31 +1,43 @@
 import { useState } from "react";
 import { Tabs, Form, Input, Button, message } from "antd";
 import { login, register } from "../../api/login";
+//保存凭证和跳转之用
 import { useNavigate } from "react-router-dom";
 import { Shield, Monitor, GitBranch } from "lucide-react";
-
+//本文登陆之页。还包含登陆注册逻辑
 export default function AuthPage() {
 	const [mode, setMode] = useState<"login" | "register">("login");
+	// loading的作用
+	// 让用户知道程序正在等待，并没有卡死。
+    // 等待期间禁用按钮，避免重复发送请求。
 	const [loading, setLoading] = useState(false);
+
 	const [form] = Form.useForm();
 	const navigate = useNavigate();
 
 	const handleSubmit = async (values: any) => {
 		setLoading(true);
+		//把来的账密进行解构
 		const { email, password } = values;
 		try {
 			if (mode === "login") {
 				const res = await login(email, password);
 				if (res.code === 0) {
+					// 请求成功或可能报错
+					//走登陆逻辑
 					message.success(res.message);
 					localStorage.setItem("token", res.data.token);
 					localStorage.setItem("user", JSON.stringify(res.data.user));
 					localStorage.setItem("userId", res.data.user.id);
 					navigate("/projects");
 				} else {
+					// res.message后端返回的提示文字，例如“登录成功/失败”
+					
 					message.error(res.message);
 				}
 			} else {
+				//注册逻辑
+				// 请求成功或可能报错
 				const res = await register(email, password);
 				if (res.code === 0) {
 					message.success(res.message);
@@ -39,6 +51,8 @@ export default function AuthPage() {
 			console.error(error);
 			message.error("请求失败，请稍后重试");
 		} finally {
+			// 不管结果如何，请求结束了
+			// 所以“正在等待”这个状态应该结束。
 			setLoading(false);
 		}
 	};

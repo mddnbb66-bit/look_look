@@ -15,7 +15,8 @@ export interface SavePagePayload {
 	// 归属用户 id（创建时必传）
 	userId?: string;
 }
-
+//保存页面的响应
+// 后端返回的对象格式
 export interface SavePageResponse {
 	code: number;
 	message: string;
@@ -32,6 +33,7 @@ export interface SavePageResponse {
 }
 
 // 页面基础信息：用于项目列表卡片
+//一个卡片的信息
 export interface PageSummary {
 	pageId: string;
 	name: string;
@@ -63,7 +65,29 @@ export const getPageById = (id: string): Promise<SavePageResponse> => {
 export const listPages = (userId: string): Promise<PageSummary[]> => {
 	return http.get("/pages", { params: { userId } });
 };
-
+//原项目bug
+// 这里原项目有个类型不一致：listPages 声明返回 PageSummary[]，组件却按 { code, message, data } 使用。我们沿用函数名，但返回类型按实际响应写，不照搬这个问题。
+// 不一致在于：声明说返回“数组”，实际使用时却认为返回“包着数组的对象”。
+// 原项目声明：
+// export const listPages = (userId: string): Promise<PageSummary[]> => {
+//   return http.get("/pages", { params: { userId } });
+// };
+// Promise<PageSummary[]> 告诉 TS，await listPages(...) 得到的是：
+// [
+//   { pageId: "...", name: "项目一" }
+// ]
+// 但后端返回的业务响应体实际是：
+// {
+//   code: 0,
+//   message: "获取成功",
+//   data: [
+//     { pageId: "...", name: "项目一" }
+//   ]
+// }
+// 原项目组件也这样使用：
+// const resp = await listPages(userId);
+// const { code, data, message } = (resp as any) || {};
+// 这里按对象取 code/data/message，而不是直接把 resp 当项目数组。 as any 绕过了类型检查，没有修正类型声明。
 // 删除指定页面
 export const deletePage = (id: string): Promise<DeletePageResponse> => {
 	return http.delete(`/pages/${id}`);

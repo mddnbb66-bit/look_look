@@ -1,0 +1,492 @@
+<div id="vc-cancelled-demo" class="card">
+	<h2><code>cancelled</code> 是“这一轮请求已经作废”的标记</h2>
+
+	<div class="viz-controls" aria-label="演示模式">
+		<button class="btn" type="button" data-mode="without" aria-pressed="false">
+			没有 cancelled
+		</button>
+		<button class="btn btn-primary" type="button" data-mode="with" aria-pressed="true">
+			使用 cancelled
+		</button>
+	</div>
+
+	<div class="vc-flow" aria-label="异步请求生命周期">
+		<div class="vc-step" data-step="mount">
+			<span class="vc-dot"></span>
+			<strong>组件挂载</strong>
+		</div>
+		<span class="vc-arrow" aria-hidden="true">→</span>
+		<div class="vc-step" data-step="request">
+			<span class="vc-dot"></span>
+			<strong>发起请求</strong>
+		</div>
+		<span class="vc-arrow" aria-hidden="true">→</span>
+		<div class="vc-step" data-step="unmount">
+			<span class="vc-dot"></span>
+			<strong>组件卸载</strong>
+		</div>
+		<span class="vc-arrow" aria-hidden="true">→</span>
+		<div class="vc-step" data-step="return">
+			<span class="vc-dot"></span>
+			<strong>请求返回</strong>
+		</div>
+		<span class="vc-arrow" aria-hidden="true">→</span>
+		<div class="vc-step" data-step="setstate">
+			<span class="vc-dot"></span>
+			<strong>setState</strong>
+		</div>
+	</div>
+
+	<div class="vc-action">
+		<div class="vc-buttons">
+			<button class="btn btn-primary" type="button" id="vc-mount">打开项目页（挂载）</button>
+			<button class="btn" type="button" id="vc-unmount" disabled>切走页面（卸载）</button>
+		</div>
+		<div class="vc-status">
+			<code id="vc-flag-value">cancelled = false</code>
+			<span id="vc-request-status">组件未挂载</span>
+		</div>
+	</div>
+
+	<div class="vc-panels">
+		<div class="vc-panel">
+			<div class="vc-panel-title">闭包里的那个变量</div>
+			<pre class="vc-code"><code id="vc-closure-code"></code></pre>
+			<div class="vc-note" id="vc-closure-note">
+				effect 每次执行都会<strong>新建</strong>一个
+				<code>cancelled</code>，旧的那份留给旧请求。
+			</div>
+		</div>
+
+		<div class="vc-panel">
+			<div class="vc-panel-title">await 恢复之后</div>
+			<pre class="vc-code"><code id="vc-guard-code"></code></pre>
+			<div class="vc-note" id="vc-guard-note">请求回来时先问一句：这轮还算数吗？</div>
+		</div>
+	</div>
+
+	<div class="vc-console">
+		<div class="vc-console-title">控制台</div>
+		<div class="vc-log" id="vc-log" aria-live="polite"></div>
+	</div>
+
+	<div class="text-small text-muted" id="vc-hint">
+		先点“打开项目页”，请求发出后马上点“切走页面”，再看请求返回时会发生什么。
+	</div>
+</div>
+
+<style>
+	#vc-cancelled-demo {
+		display: grid;
+		gap: 20px;
+		max-width: 860px;
+		margin: 0 auto;
+	}
+
+	#vc-cancelled-demo h2 {
+		margin: 0;
+		font-size: 1.15rem;
+	}
+
+	#vc-cancelled-demo h2 code {
+		font-size: 1em;
+	}
+
+	#vc-cancelled-demo .vc-flow {
+		display: grid;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+		align-items: center;
+		gap: 8px;
+	}
+
+	#vc-cancelled-demo .vc-step {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		min-height: 56px;
+		padding: 8px 4px;
+		border-radius: 8px;
+		text-align: center;
+		opacity: 0.42;
+		transition:
+			opacity 0.2s ease,
+			background-color 0.2s ease;
+	}
+
+	#vc-cancelled-demo .vc-step strong {
+		font-size: 0.78rem;
+		font-weight: 600;
+		line-height: 1.2;
+	}
+
+	#vc-cancelled-demo .vc-step.is-active {
+		opacity: 1;
+		background: color-mix(in srgb, var(--viz-series-1) 10%, transparent);
+	}
+
+	#vc-cancelled-demo .vc-step.is-danger.is-active {
+		background: color-mix(in srgb, var(--viz-error, #dc2626) 12%, transparent);
+	}
+
+	#vc-cancelled-demo .vc-dot {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: var(--muted-foreground);
+		flex-shrink: 0;
+	}
+
+	#vc-cancelled-demo .vc-step.is-active .vc-dot {
+		background: var(--viz-series-1);
+	}
+
+	#vc-cancelled-demo .vc-step.is-danger.is-active .vc-dot {
+		background: var(--viz-error, #dc2626);
+	}
+
+	#vc-cancelled-demo .vc-arrow {
+		color: var(--muted-foreground);
+		text-align: center;
+	}
+
+	#vc-cancelled-demo .vc-action {
+		display: grid;
+		gap: 12px;
+	}
+
+	#vc-cancelled-demo .vc-buttons {
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap;
+	}
+
+	#vc-cancelled-demo .vc-status {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 12px;
+		flex-wrap: wrap;
+		font-size: 0.85rem;
+	}
+
+	#vc-cancelled-demo #vc-flag-value {
+		font-weight: 600;
+		padding: 2px 8px;
+		border-radius: 6px;
+		background: color-mix(in srgb, var(--viz-series-1) 14%, transparent);
+		color: var(--viz-series-1);
+	}
+
+	#vc-cancelled-demo #vc-flag-value.is-true {
+		background: color-mix(in srgb, var(--viz-error, #dc2626) 14%, transparent);
+		color: var(--viz-error, #dc2626);
+	}
+
+	#vc-cancelled-demo .vc-panels {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 14px;
+	}
+
+	#vc-cancelled-demo .vc-panel {
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		padding: 12px 14px;
+		display: grid;
+		gap: 10px;
+		align-content: start;
+		background: color-mix(in srgb, var(--muted) 35%, transparent);
+	}
+
+	#vc-cancelled-demo .vc-panel-title {
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--muted-foreground);
+	}
+
+	#vc-cancelled-demo .vc-code {
+		margin: 0;
+		padding: 10px 12px;
+		border-radius: 8px;
+		background: var(--background);
+		border: 1px solid var(--border);
+		font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+		font-size: 0.76rem;
+		line-height: 1.65;
+		overflow-x: auto;
+		white-space: pre;
+	}
+
+	#vc-cancelled-demo .vc-code .ln {
+		display: block;
+		color: var(--muted-foreground);
+	}
+
+	#vc-cancelled-demo .vc-code .ln.is-hl {
+		background: color-mix(in srgb, var(--viz-series-2, #f59e0b) 20%, transparent);
+		color: var(--foreground);
+		border-radius: 3px;
+	}
+
+	#vc-cancelled-demo .vc-code .ln.is-off {
+		opacity: 0.4;
+		text-decoration: line-through;
+	}
+
+	#vc-cancelled-demo .vc-note {
+		font-size: 0.76rem;
+		line-height: 1.6;
+		color: var(--muted-foreground);
+	}
+
+	#vc-cancelled-demo .vc-console {
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		overflow: hidden;
+	}
+
+	#vc-cancelled-demo .vc-console-title {
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--muted-foreground);
+		padding: 8px 12px;
+		border-bottom: 1px solid var(--border);
+		background: color-mix(in srgb, var(--muted) 35%, transparent);
+	}
+
+	#vc-cancelled-demo .vc-log {
+		height: 148px;
+		overflow-y: auto;
+		padding: 10px 12px;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+		font-size: 0.74rem;
+		line-height: 1.5;
+	}
+
+	#vc-cancelled-demo .vc-log-line {
+		display: flex;
+		gap: 8px;
+	}
+
+	#vc-cancelled-demo .vc-log-line span:first-child {
+		color: var(--muted-foreground);
+		flex-shrink: 0;
+	}
+
+	#vc-cancelled-demo .vc-log-line.is-warn span:last-child {
+		color: var(--viz-error, #dc2626);
+		font-weight: 600;
+	}
+
+	#vc-cancelled-demo .vc-log-line.is-ok span:last-child {
+		color: var(--viz-series-3, #16a34a);
+		font-weight: 600;
+	}
+
+	#vc-cancelled-demo .vc-log:empty::after {
+		content: "（还没有事件）";
+		color: var(--muted-foreground);
+	}
+
+	@media (max-width: 640px) {
+		#vc-cancelled-demo .vc-flow {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		#vc-cancelled-demo .vc-arrow {
+			transform: rotate(90deg);
+		}
+
+		#vc-cancelled-demo .vc-panels {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+</style>
+
+<script>
+	(() => {
+		const root = document.getElementById("vc-cancelled-demo");
+		const modeButtons = Array.from(root.querySelectorAll("[data-mode]"));
+		const mountBtn = root.querySelector("#vc-mount");
+		const unmountBtn = root.querySelector("#vc-unmount");
+		const flagValue = root.querySelector("#vc-flag-value");
+		const requestStatus = root.querySelector("#vc-request-status");
+		const hint = root.querySelector("#vc-hint");
+		const steps = Array.from(root.querySelectorAll("[data-step]"));
+		const logBox = root.querySelector("#vc-log");
+		const closureCode = root.querySelector("#vc-closure-code");
+		const guardCode = root.querySelector("#vc-guard-code");
+
+		const REQUEST_MS = 6000;
+
+		let mode = "with";
+		let mounted = false;
+		let cancelled = false;
+		let pending = false;
+		let generation = 0;
+		let timer = null;
+		let startedAt = 0;
+
+		const CLOSURE_LINES = [
+			"useEffect(() => {",
+			"  let cancelled = false;",
+			"  const fetch = async () => {",
+			"    const resp = await listPages(id);",
+			"    if (cancelled) return;",
+			"    setProjects(resp.data);",
+			"  };",
+			"  fetch();",
+			"  return () => { cancelled = true; };",
+			"}, []);",
+		];
+
+		const GUARD_LINES = [
+			"// 请求 6 秒后才回来",
+			"const resp = await listPages(id);",
+			"",
+			"if (cancelled) return;   // ← 这道关卡",
+			"setProjects(resp.data);  // ← 对已卸载组件 setState",
+		];
+
+		function renderCode() {
+			const guarded = mode === "with";
+			closureCode.innerHTML = CLOSURE_LINES.map((line, i) => {
+				const cls = i === 1 || i === 8 ? "ln is-hl" : "ln";
+				return `<span class="${cls}">${escapeHtml(line)}</span>`;
+			}).join("");
+			guardCode.innerHTML = GUARD_LINES.map((line, i) => {
+				let cls = "ln";
+				if (i === 3) cls = guarded ? "ln is-hl" : "ln is-off";
+				if (i === 4) cls = guarded ? "ln" : "ln is-hl";
+				return `<span class="${cls}">${escapeHtml(line) || "&nbsp;"}</span>`;
+			}).join("");
+		}
+
+		function escapeHtml(text) {
+			return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		}
+
+		function setActiveStep(name) {
+			steps.forEach((step) => step.classList.toggle("is-active", step.dataset.step === name));
+		}
+
+		function log(text, kind) {
+			const line = document.createElement("div");
+			line.className = `vc-log-line${kind ? ` is-${kind}` : ""}`;
+			const time = document.createElement("span");
+			time.textContent = `+${((Date.now() - startedAt) / 1000).toFixed(1)}s`;
+			const body = document.createElement("span");
+			body.textContent = text;
+			line.append(time, body);
+			logBox.append(line);
+			logBox.scrollTop = logBox.scrollHeight;
+		}
+
+		function render() {
+			const guarded = mode === "with";
+			flagValue.textContent = `cancelled = ${cancelled}`;
+			flagValue.classList.toggle("is-true", cancelled);
+			mountBtn.disabled = mounted;
+			mountBtn.textContent = mounted ? "项目页已挂载" : "打开项目页（挂载）";
+			unmountBtn.disabled = !mounted;
+			requestStatus.textContent = pending
+				? "请求进行中…（await 还没恢复）"
+				: mounted
+					? "组件已挂载，没有进行中的请求"
+					: "组件未挂载";
+			hint.textContent = guarded
+				? "先点“打开项目页”，请求发出后马上点“切走页面”，再看请求返回时会发生什么。"
+				: "同样操作一遍：没有 cancelled 把关，请求回来后会直接对已卸载的组件 setState。";
+			modeButtons.forEach((button) => {
+				const selected = button.dataset.mode === mode;
+				button.setAttribute("aria-pressed", String(selected));
+				button.classList.toggle("btn-primary", selected);
+			});
+			renderCode();
+		}
+
+		function reset() {
+			generation += 1;
+			if (timer) window.clearTimeout(timer);
+			timer = null;
+			mounted = false;
+			cancelled = false;
+			pending = false;
+			logBox.replaceChildren();
+			setActiveStep("mount");
+			render();
+		}
+
+		modeButtons.forEach((button) => {
+			button.addEventListener("click", () => {
+				mode = button.dataset.mode;
+				reset();
+			});
+		});
+
+		mountBtn.addEventListener("click", () => {
+			if (mounted) return;
+			const myGeneration = generation;
+			mounted = true;
+			cancelled = false;
+			pending = true;
+			startedAt = Date.now();
+
+			log("useEffect 执行 → let cancelled = false");
+			log("发起 listPages 请求，进入 await");
+			setActiveStep("request");
+			render();
+
+			timer = window.setTimeout(() => {
+				if (myGeneration !== generation) return;
+				pending = false;
+				setActiveStep("return");
+
+				// 这一轮请求是否已经作废：组件被卸载过（cancelled 被置 true）
+				const stale = mode === "with" && cancelled;
+
+				if (stale) {
+					log("await 恢复 → if (cancelled) return;", "ok");
+					log("✅ 静默退出，没有调用 setState", "ok");
+					setActiveStep("setstate");
+					render();
+					return;
+				}
+
+				if (mode === "with") {
+					log("await 恢复 → cancelled 仍是 false，正常放行");
+					log("setProjects(resp.data) ✅");
+				} else {
+					log("await 恢复 → 没有关卡，直接往下走");
+					log("setProjects(resp.data) ⚠️", "warn");
+					log("React 警告：无法对已卸载的组件执行状态更新", "warn");
+				}
+				setActiveStep("setstate");
+				render();
+			}, REQUEST_MS);
+		});
+
+		unmountBtn.addEventListener("click", () => {
+			if (!mounted) return;
+			mounted = false;
+			setActiveStep("unmount");
+
+			if (mode === "with") {
+				cancelled = true;
+				log("cleanup 执行 → cancelled = true");
+				log("组件已卸载（但这轮请求还在飞）");
+			} else {
+				log("cleanup 执行 → 什么都没做");
+				log("组件已卸载（但这轮请求还在飞）");
+			}
+			render();
+		});
+
+		reset();
+	})();
+</script>

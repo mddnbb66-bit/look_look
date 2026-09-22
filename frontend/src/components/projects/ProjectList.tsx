@@ -1,3 +1,4 @@
+//登录之后的页，也就是项目页
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Modal } from "antd";
 import dayjs from "dayjs";
@@ -8,7 +9,7 @@ import { useShallow } from "zustand/shallow";
 import { savePage, type SavePageResponse } from "@/api/page";
 import { getCurrentUserId } from "@/utils/auth";
 import { Plus, Settings, ArrowLeft, Trash2, LayoutDashboard } from "lucide-react";
-
+//项目页的crud
 export default function ProjectList() {
 	const navigate = useNavigate();
 	const [projects, setProjects] = useState<PageSummary[]>([]);
@@ -20,16 +21,16 @@ export default function ProjectList() {
 	const { setSchema } = useSchemaStore(useShallow((state) => ({ setSchema: state.setSchema })));
 
 	const formatTime = (value?: string) => (value ? dayjs(value).format("YYYY-MM-DD HH:mm") : "--");
-
 	useEffect(() => {
 		let cancelled = false;
+		//查询项目列表
 		const fetchProjects = async () => {
 			setLoading(true);
 			setError("");
 			try {
 				const userId = getCurrentUserId();
 				const resp = await listPages(userId);
-				const { code, data, message } = (resp as any) || {};
+				const { code, data, message } = (resp as any) || {}; //原项目懒狗之处
 				if (code !== undefined && code !== 0) throw new Error(message || "获取项目失败");
 				if (cancelled) return;
 				setProjects(Array.isArray(data) ? data : []);
@@ -45,7 +46,7 @@ export default function ProjectList() {
 			cancelled = true;
 		};
 	}, []);
-
+	//创建项目的函数，
 	const handleCreateProject = useCallback(async () => {
 		setSchema();
 		const latestSchema = useSchemaStore.getState().schema;

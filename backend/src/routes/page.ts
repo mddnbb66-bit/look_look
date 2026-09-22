@@ -13,12 +13,12 @@ router.get("/", async (req: Request, res: Response) => {
 		if (!userId || !mongoose.Types.ObjectId.isValid(userId as string)) {
 			return fail(res, "userId 不合法", RespCode.VALIDATION, 400);
 		}
-
+		// 下面是做一份查询(查谁, 取哪些字段).设置排序(怎么排)
 		const pages = await Page.find(
 			{ owner: userId },
 			"name title description thumbnailUrl createdAt updatedAt"
 		).sort({ updatedAt: -1 });
-
+		//把每一个字段取出来，其中把_id变成pageId
 		const data = pages.map((page) => ({
 			pageId: page._id.toString(),
 			name: page.name,

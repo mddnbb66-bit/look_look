@@ -1,6 +1,7 @@
 import { Suspense, useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 import { ConfigProvider } from "antd";
+
 import { router, routerFallbackElement } from "./router";
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
 			observer.disconnect();
 		};
 	}, []);
-
+			
 	return (
 		<>
 			<ConfigProvider
