@@ -1,11 +1,12 @@
 import type { PageDSL } from "@/core/schema/page";
 import { http } from "./request";
 
-// 保存页面 schema：后端返回 { code, message, data }
-export interface SavePagePayload {
+// 保存页面 schema：	前端 发给 后端 后端在req.body接受
+// 仅本文件内部使用，不对外导出
+interface SavePagePayload {
 	// 当存在 pageId 时走更新，否则视为创建
 	pageId?: string;
-	schema: PageDSL;
+	schema: PageDSL; //核心数据
 	meta?: {
 		title?: string;
 		description?: string;
@@ -15,8 +16,8 @@ export interface SavePagePayload {
 	// 归属用户 id（创建时必传）
 	userId?: string;
 }
-//保存页面的响应
-// 后端返回的对象格式
+//保存页面的响应			后端 还给 前端	后端返回 { code, message, data }
+//后端返回的对象格式
 export interface SavePageResponse {
 	code: number;
 	message: string;
@@ -44,7 +45,8 @@ export interface PageSummary {
 	updatedAt?: string;
 }
 
-export interface DeletePageResponse {
+// 仅本文件内部使用，不对外导出
+interface DeletePageResponse {
 	code: number;
 	message: string;
 	data?: {
@@ -57,6 +59,7 @@ export const savePage = (payload: SavePagePayload): Promise<SavePageResponse> =>
 };
 
 // 根据页面 id 获取 schema
+//新建后读取、以后打开已有项目，都可以调用这个函数，只是传入的 ID 不同。
 export const getPageById = (id: string): Promise<SavePageResponse> => {
 	return http.get(`/pages/${id}`);
 };

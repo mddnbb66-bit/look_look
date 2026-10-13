@@ -46,10 +46,10 @@ export default function DndWrapper({
 		// - over.rect：当前命中的可放置区域在视口中的位置
 		// 通过两者相减，得到组件在父容器内部的相对 left / top
 
-		// 获取画布的滚动信息
-		const canvas = document.getElementById("canvas");
-		const scrollLeft = canvas?.scrollLeft ?? 0;
-		const scrollTop = canvas?.scrollTop ?? 0;
+		// 获取外层可视工作区的滚动信息
+		const viewport = document.getElementById("viewport");
+		const scrollLeft = viewport?.scrollLeft ?? 0;
+		const scrollTop = viewport?.scrollTop ?? 0;
 
 		// 拖拽元素的目标容器相对于浏览器视口左上角的位置
 		const overData = event.over?.data?.current as {

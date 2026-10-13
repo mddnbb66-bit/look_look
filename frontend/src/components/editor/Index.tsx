@@ -14,26 +14,29 @@ import { useZoom } from "@/hooks/useZoom";
 import { Ruler, RULER_THICKNESS } from "@/components/editor/ruler/Ruler";
 import { GuideLayer } from "@/components/editor/ruler/GuideLayer";
 import { Minus, Plus, Maximize, RotateCcw } from "lucide-react";
-
-const toNumber = (value: number | string | undefined, fallback: number) => {
+//提取数字的函数
+const toNumber = (value: number | string | undefined, defaultNum: number) => {
 	if (typeof value === "number") return value;
+	//尝试转换
 	const parsed = Number(value);
-	return Number.isFinite(parsed) ? parsed : fallback;
+	//看看类型是number 以及值不能是 NaN / Infinity
+	return Number.isFinite(parsed) ? parsed : defaultNum;
 };
 
 export default function Index() {
-	const { id } = useParams<{ id: string }>();
+	const { id } = useParams<{ id: string }>(); //从url解构出项目传入的项目id
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [pageId, setPageId] = useState<string | null>(null);
-	const [refreshFlag, setRefreshFlag] = useState(0);
-	const containerRef = useRef<HTMLDivElement | null>(null);
-	const [viewport, setViewport] = useState<{ width: number; height: number } | null>(null);
-	const [scroll, setScroll] = useState({ left: 0, top: 0 });
+	const [refreshFlag, setRefreshFlag] = useState(0); //重试按钮用的，人为制造一个变化。refreshFlag 就是这个「变化源」：
+	const viewportRef = useRef<HTMLDivElement | null>(null); // 外层可视工作区
+	const canvasRef = useRef<HTMLDivElement | null>(null); // 内层画布（不含缩放）
+	const [canvasSize, setCanvasSize] = useState<{ width: number; height: number } | null>(null); //设计画布的宽高
+	const [scroll, setScroll] = useState({ left: 0, top: 0 }); //滚动位置状态
 
 	const { schema, setSchema } = useSchemaStore(
-		useShallow((state) => ({ schema: state.schema, setSchema: state.setSchema }))
+		useShallow((state) => ({ schema: state.schema, setSchema: state.setSchema })) //schema 是描述这个页面的数据对象，不是那块界面本身
 	);
 	const {
 		autoFit,
@@ -45,16 +48,16 @@ export default function Index() {
 		handleZoomChange,
 		handleResetZoom,
 	} = useZoom({
-		viewport,
-		containerRef,
-		resetOnViewportChange: true,
+		canvasSize,
+		viewportRef,
+		resetOnCanvasSizeChange: true,
 	});
-
+	//  请求A返回 → 读 cancelled₁ → true  → return，丢弃 ✅编辑器页：读取 URL 的 ID → 请求这个项目的详情
 	useEffect(() => {
 		let cancelled = false;
-		const bootstrap = async () => {
+		const getPageDetail = async () => {
 			if (!id) {
-				setSchema(null);
+				setSchema(null); //清除旧页面数据
 				setPageId(null);
 				setError("未找到页面标识");
 				setLoading(false);
@@ -78,32 +81,38 @@ export default function Index() {
 				if (!cancelled) setLoading(false);
 			}
 		};
-		bootstrap();
+		getPageDetail();
 		return () => {
 			cancelled = true;
 		};
 	}, [id, refreshFlag, setSchema]);
-
+	//Schema 变化 → 读取宽高 → 和旧尺寸比较 → 不同才更新画布尺寸。
+	//注意：它只负责同步尺寸
 	useEffect(() => {
 		if (!schema) {
-			setViewport(null);
+			setCanvasSize(null);
 			return;
 		}
 		const width = toNumber(schema.settings?.width, 1920);
 		const height = toNumber(schema.settings?.height, 1080);
-		setViewport((prev) => {
+		setCanvasSize((prev) => {
+			// 里的 prev 是上一次的 canvasSize
 			if (prev && prev.width === width && prev.height === height) return prev;
 			return { width, height };
 		});
 	}, [schema]);
 
 	const isCanvasEmpty = !schema?.children || schema.children.length === 0;
+	//“监听画布滚动”
+	//“拿到 scrollLeft 和 scrollTop”
+	//“更新 scroll 状态，供 ruler / 参考线同步使用”
 	const handleScroll = () => {
-		const node = containerRef.current;
-		if (!node) return;
+		const node = viewportRef.current;
+		// console.log(node);
+		if (!node) return; //先确认对象/节点存在 在读取
 		setScroll({ left: node.scrollLeft, top: node.scrollTop });
 	};
-	const rulerViewport = useMemo(() => {
+	const rulerCanvasSize = useMemo(() => {
 		if (!schema) return null;
 		return {
 			width: toNumber(schema.settings?.width, 1920),
@@ -177,7 +186,7 @@ export default function Index() {
 						<div className="flex items-center justify-between border-b border-slate-200 bg-white px-3 py-1.5 text-xs">
 							<div className="flex items-center gap-3 text-slate-500">
 								<span>
-									画布 {viewport?.width ?? "--"} × {viewport?.height ?? "--"}
+									画布 {canvasSize?.width ?? "--"} × {canvasSize?.height ?? "--"}
 								</span>
 								<span className="text-slate-400">{Math.round(scale * 100)}%</span>
 							</div>
@@ -213,8 +222,9 @@ export default function Index() {
 								</div>
 							</div>
 						</div>
-
+						{/* 下面是灰色工作区和2给滑动条 */}
 						<div className="relative flex min-h-0 flex-1 overflow-hidden">
+							{/* 左上角标尺交叉处的小方块 */}
 							<div
 								className="absolute left-0 top-0 z-20 bg-white"
 								style={{
@@ -224,24 +234,27 @@ export default function Index() {
 									borderRight: "1px solid #e2e8f0",
 								}}
 							/>
+							{/* 横向标尺 */}
 							<div className="absolute left-[28px] right-0 top-0 z-20">
 								<Ruler
 									orientation="x"
-									viewport={rulerViewport}
+									canvasSize={rulerCanvasSize}
 									scale={scale}
 									scroll={scroll.left}
-									containerSize={containerRef.current?.clientWidth ?? 0}
+									containerSize={viewportRef.current?.clientWidth ?? 0}
 								/>
 							</div>
+							{/* 第二个：纵向标尺 */}
 							<div className="absolute bottom-0 left-0 top-[28px] z-20">
 								<Ruler
 									orientation="y"
-									viewport={rulerViewport}
+									canvasSize={rulerCanvasSize}
 									scale={scale}
 									scroll={scroll.top}
-									containerSize={containerRef.current?.clientHeight ?? 0}
+									containerSize={viewportRef.current?.clientHeight ?? 0}
 								/>
 							</div>
+
 							<div
 								className="ml-[28px] mt-[28px] flex-1 overflow-hidden"
 								style={{ minWidth: 0, minHeight: 0 }}
@@ -250,10 +263,12 @@ export default function Index() {
 									id={schema!.id}
 									style={{ minHeight: "0", minWidth: "0" }}
 								>
+									{/* //下面是灰色工作区 */}
 									<div
-										ref={containerRef}
-										id="canvas"
+										ref={viewportRef}
+										id="viewport"
 										className="relative h-full w-full min-w-0 overflow-auto bg-slate-100/80"
+										// 画布底纹
 										style={{
 											backgroundImage:
 												"radial-gradient(circle, #e2e8f0 0.5px, transparent 0.5px)",
@@ -270,11 +285,14 @@ export default function Index() {
 												minHeight: 180,
 											}}
 										>
+											{/* 下面div是真实画布内容 */}
 											<div
+												ref={canvasRef}
+												id="canvas"
 												data-canvas-content="true"
 												style={{
-													width: viewport?.width ?? 0,
-													height: viewport?.height ?? 0,
+													width: canvasSize?.width ?? 0,
+													height: canvasSize?.height ?? 0,
 													transform: `scale(${scale})`,
 													transformOrigin: "top left",
 													position: "absolute",
@@ -284,6 +302,7 @@ export default function Index() {
 												{isCanvasEmpty && <CanvasEmpty />}
 												<Renderer schema={schema!} scale={scale} />
 											</div>
+											{/* 辅助线层 */}
 											<GuideLayer
 												scale={scale}
 												width={scaledWidth}
@@ -296,7 +315,7 @@ export default function Index() {
 						</div>
 					</div>
 				</DndWrapper>
-
+				{/* 组件属性、页面配置、AI 对话 */}
 				<div className="h-full overflow-hidden border-l border-slate-200 bg-white">
 					<PropertyPanel />
 				</div>
@@ -304,3 +323,18 @@ export default function Index() {
 		</>
 	);
 }
+
+// 整个编辑器
+// ├─ 顶部工具栏：VC、编辑器、ID、保存、预览
+// ├─ 左侧 SidebarMenu：分类菜单＋组件卡片
+// ├─ 中间编辑区域
+// │  ├─ 缩放栏：画布尺寸、40%、缩放按钮
+// │  └─ 标尺与工作区
+// │     ├─ 左上角小方块
+// │     ├─ 横向标尺
+// │     ├─ 纵向标尺
+// │     └─ 可滚动工作区
+// │        └─ 缩放占位层
+// │           ├─ 实际画布内容层
+// │           └─ 辅助线层
+// └─ 右侧 PropertyPanel：组件属性、页面配置、AI 对话

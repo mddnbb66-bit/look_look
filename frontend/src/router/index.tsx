@@ -15,6 +15,7 @@ const Editor = lazy(() => import("../components/editor/Index"));
 const Auth = lazy(() => import("../components/login/AuthPage"));
 const Projects = lazy(() => import("../components/projects/ProjectList"));
 const Preview = lazy(() => import("../components/preview/PreviewPage"));
+const CancelledDemo = lazy(() => import("../components/demo/CancelledDemo"));
 
 // 路由懒加载的统一兜底，让首屏不再空白
 const RouteFallback = () => (
@@ -84,6 +85,11 @@ export const router = createBrowserRouter([
 			{
 				path: "/auth",
 				Component: Auth,
+			},
+			{
+				// 原理演示页，不涉及业务数据，无需登录
+				path: "/demo/cancelled",
+				Component: CancelledDemo,
 			},
 			{
 				element: <AuthGuard />,

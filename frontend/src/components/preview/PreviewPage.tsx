@@ -14,28 +14,29 @@ const toNumber = (value: number | string | undefined, fallback: number) => {
 export default function PreviewPage() {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
-	const containerRef = useRef<HTMLDivElement | null>(null);
+	const viewportRef = useRef<HTMLDivElement | null>(null);
+	const canvasRef = useRef<HTMLDivElement | null>(null);
 
 	const [schema, setSchema] = useState<PageDSL | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
-	// 视口尺寸
-	const [viewport, setViewport] = useState<{
+	// 设计画布尺寸
+	const [canvasSize, setCanvasSize] = useState<{
 		width: number;
 		height: number;
 	} | null>(null);
 	// 预览schema
 	const previewSchema = useMemo(() => {
-		if (!schema || !viewport) return null;
+		if (!schema || !canvasSize) return null;
 		return {
 			...schema,
 			settings: {
 				...schema.settings,
-				width: viewport.width,
-				height: viewport.height,
+				width: canvasSize.width,
+				height: canvasSize.height,
 			},
 		};
-	}, [schema, viewport]);
+	}, [schema, canvasSize]);
 
 	// 发请求，拿到对应页面的schema
 	useEffect(() => {
@@ -79,12 +80,12 @@ export default function PreviewPage() {
 		};
 	}, [id]);
 
-	// 监听schema变化，当接口拿到schema后，设置视口尺寸
+	// 监听schema变化，当接口拿到schema后，设置设计画布尺寸
 	useEffect(() => {
 		if (!schema) return;
 		const width = toNumber(schema.settings?.width, 1920);
 		const height = toNumber(schema.settings?.height, 1080);
-		setViewport({ width, height });
+		setCanvasSize({ width, height });
 	}, [schema]);
 
 	const {
@@ -97,9 +98,9 @@ export default function PreviewPage() {
 		handleZoomChange,
 		handleResetZoom,
 	} = useZoom({
-		viewport,
-		containerRef,
-		resetOnViewportChange: true,
+		canvasSize,
+		viewportRef,
+		resetOnCanvasSizeChange: true,
 	});
 
 	if (loading) {
@@ -135,7 +136,7 @@ export default function PreviewPage() {
 		);
 	}
 
-	if (!previewSchema || !viewport) {
+	if (!previewSchema || !canvasSize) {
 		return (
 			<div className="flex h-screen items-center justify-center bg-slate-950 text-slate-100">
 				未找到可预览的页面
@@ -154,7 +155,7 @@ export default function PreviewPage() {
 						返回编辑
 					</button>
 					<div className="text-sm text-slate-300">
-						预览模式 · 尺寸 {viewport.width} x {viewport.height} · 缩放{" "}
+						预览模式 · 尺寸 {canvasSize.width} x {canvasSize.height} · 缩放{" "}
 						{Math.round(scale * 100)}%
 					</div>
 				</div>
@@ -190,7 +191,7 @@ export default function PreviewPage() {
 				</div>
 			</header>
 
-			<main ref={containerRef} className="flex flex-1 overflow-auto bg-slate-900 p-4">
+			<main id="viewport" ref={viewportRef} className="flex flex-1 overflow-auto bg-slate-900 p-4">
 				<div className="flex h-full w-full items-center justify-center">
 					<div
 						className="relative rounded-lg border border-slate-800 bg-slate-950 shadow-2xl"
@@ -202,9 +203,11 @@ export default function PreviewPage() {
 						}}
 					>
 						<div
+							ref={canvasRef}
+							id="canvas"
 							style={{
-								width: viewport.width,
-								height: viewport.height,
+								width: canvasSize.width,
+								height: canvasSize.height,
 								transform: `scale(${scale})`,
 								transformOrigin: "top left",
 								position: "absolute",

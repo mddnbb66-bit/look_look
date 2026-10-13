@@ -5,17 +5,17 @@ import type { ComponentNode } from "./basic";
  * 这就是最终保存到数据库的那个 JSON 对象结构
  */
 export interface PageDSL {
-	id: string;
+	id: string; //它是页面根节点（RootContainer）在组件树里的唯一标识
 	name: string; // 页面名称
 	type: "RootContainer"; // 页面根节点是一个特殊的container
 
-	// 页面描述
+	// 页面基础信息描述
 	props: {
 		title: string;
 		description: string;
 	};
 
-	// 页面级设置
+	// 页面级设置(白布大小)
 	settings: {
 		width: number | string; // 大屏设计稿宽度 (如 1920)
 		height: number | string; // 大屏设计稿高度 (如 1080)

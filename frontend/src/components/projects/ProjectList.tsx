@@ -23,6 +23,8 @@ export default function ProjectList() {
 	const formatTime = (value?: string) => (value ? dayjs(value).format("YYYY-MM-DD HH:mm") : "--");
 	useEffect(() => {
 		let cancelled = false;
+		//cancelled === false // 本轮 Effect 尚未被清理，可以使用结果
+		//cancelled === true  // 本轮 Effect 已被清理，不再使用结果
 		//查询项目列表
 		const fetchProjects = async () => {
 			setLoading(true);
@@ -31,14 +33,14 @@ export default function ProjectList() {
 				const userId = getCurrentUserId();
 				const resp = await listPages(userId);
 				const { code, data, message } = (resp as any) || {}; //原项目懒狗之处
-				if (code !== undefined && code !== 0) throw new Error(message || "获取项目失败");
+				if (code !== undefined && code !== 0) throw new Error(message || "获取项目失败"); //
 				if (cancelled) return;
 				setProjects(Array.isArray(data) ? data : []);
 			} catch (err: any) {
 				if (cancelled) return;
 				setError(err?.message || "获取项目失败");
 			} finally {
-				if (!cancelled) setLoading(false);
+				if (!cancelled) setLoading(false); //如果组件没有卸载，那么就不加载
 			}
 		};
 		fetchProjects();
@@ -51,7 +53,9 @@ export default function ProjectList() {
 		setSchema();
 		const latestSchema = useSchemaStore.getState().schema;
 		if (!latestSchema) return;
+
 		const resp: SavePageResponse = await savePage({
+			//传给后端的东西
 			schema: latestSchema,
 			meta: {
 				title: latestSchema.props?.title,
@@ -63,20 +67,20 @@ export default function ProjectList() {
 	}, [navigate, setSchema]);
 
 	const toggleManageMode = () => setManageMode((prev) => !prev);
-	const handleEnterProject = (pageId: string) => {
+	//点击对应项目直接跳转
+	const lookProjectDetail = (pageId: string) => {
 		if (manageMode) return;
 		navigate(`/editor/${pageId}`);
 	};
 	const handleThumbError = (pageId: string) => {
 		setThumbErrorMap((prev) => ({ ...prev, [pageId]: true }));
 	};
-
-	const handleDeleteProject = (pageId: string) => {
-		const target = projects.find((item) => item.pageId === pageId);
-		const title = target?.title || target?.name || "该项目";
+	//删除项目
+	const handleDeleteProject = (pageId: string, name: string) => {
+		//弹窗用
 		Modal.confirm({
 			title: "确认删除项目",
-			content: `确定删除项目「${title}」吗？删除后不可恢复。`,
+			content: `确定删除项目「${name}」吗？删除后不可恢复。`,
 			okText: "确定",
 			cancelText: "取消",
 			okButtonProps: { danger: true },
@@ -160,7 +164,7 @@ export default function ProjectList() {
 					</div>
 				)}
 
-				<div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+				<div className="grid grid-cols-1 gap-6 md:grid-cols-3 ">
 					{projects.map((item, index) => {
 						const title = item.title || item.name || "未命名项目";
 						const desc = item.description || "暂无描述";
@@ -170,13 +174,13 @@ export default function ProjectList() {
 								key={item.pageId}
 								role="button"
 								tabIndex={0}
-								className="group vc-card p-0 overflow-hidden text-left cursor-pointer animate-slide-up"
+								className="group vc-card p-0 overflow-hidden text-left cursor-pointer animate-slide-up relative"
 								style={{ animationDelay: `${index * 50}ms` }}
-								onClick={() => handleEnterProject(item.pageId)}
+								onClick={() => lookProjectDetail(item.pageId)}
 								onKeyDown={(e) => {
 									if (e.key === "Enter" || e.key === " ") {
 										e.preventDefault();
-										handleEnterProject(item.pageId);
+										lookProjectDetail(item.pageId);
 									}
 								}}
 							>
@@ -186,10 +190,10 @@ export default function ProjectList() {
 										className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-lg bg-red-500 text-white shadow-md transition hover:bg-red-600 hover:scale-110 disabled:opacity-50"
 										onClick={(e) => {
 											e.stopPropagation();
-											handleDeleteProject(item.pageId);
+											handleDeleteProject(item.pageId, item.name);
 										}}
-										disabled={deletingId === item.pageId}
-										aria-label={`删除项目 ${title}`}
+										disabled={deletingId === item.pageId} //按钮判断正在删除的是自己？
+										aria-label={`删除项目 ${item.name}`}
 									>
 										{deletingId === item.pageId ? (
 											<div className="h-3.5 w-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />

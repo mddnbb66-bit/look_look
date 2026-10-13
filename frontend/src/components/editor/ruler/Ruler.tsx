@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from "react";
 
 interface RulerProps {
 	orientation: "x" | "y";
-	viewport: { width: number; height: number } | null;
+	canvasSize: { width: number; height: number } | null;
 	scale: number;
 	scroll: number;
 	containerSize: number;
@@ -11,11 +11,11 @@ interface RulerProps {
 
 const RULER_SIZE = 28;
 
-export function Ruler({ orientation, viewport, scale, scroll, containerSize }: RulerProps) {
+export function Ruler({ orientation, canvasSize, scale, scroll, containerSize }: RulerProps) {
 	const ref = useRef<HTMLDivElement | null>(null);
 
 	const { ticks } = useMemo(() => {
-		if (!viewport) return { ticks: [] as { value: number; isMajor: boolean }[] };
+		if (!canvasSize) return { ticks: [] as { value: number; isMajor: boolean }[] };
 		const visibleStart = scroll / Math.max(scale, 0.01);
 		const visibleSize = containerSize / Math.max(scale, 0.01);
 		const stepCandidates = [10, 20, 50, 100, 200, 500];
@@ -28,9 +28,9 @@ export function Ruler({ orientation, viewport, scale, scroll, containerSize }: R
 		for (let v = start; v <= end; v += chosen)
 			list.push({ value: v, isMajor: (v / chosen) % 5 === 0 });
 		return { ticks: list };
-	}, [viewport, scale, scroll, containerSize]);
+	}, [canvasSize, scale, scroll, containerSize]);
 
-	if (!viewport) return null;
+	if (!canvasSize) return null;
 
 	const isX = orientation === "x";
 	return (

@@ -3,9 +3,9 @@ import { immer } from "zustand/middleware/immer";
 import type { PageDSL } from "@/core/schema/page";
 import { nanoid } from "nanoid";
 import type { ComponentNode } from "@/core/schema/basic";
-import { useTreeOperation } from "@/hooks/useTreeOperation";
+import { useTreeOperation } from "@/router/useTreeOperation";
 import { DEFAULT_GRID_SIZE, normalizeGridSize } from "@/core/utils/grid";
-
+// eslint-disable-next-line react-hooks/rules-of-hooks
 const { findNodeById, addNodeToParent, removeNodeById, updateNodeById } = useTreeOperation();
 
 /**
@@ -104,6 +104,10 @@ export const useSchemaStore = create<SchemaState>()(
 		 */
 		setSchema: (schema?: PageDSL | null) => {
 			set((state) => {
+				// 下面这句话是在决定：最终要放进 store 的 schema 是什么。
+				// null      = 没有页面									loading = true   // 正在加载
+				// undefined = 没传，创建默认页面    类似于 			 schema = null    // 当前没有页面数据
+				// 对象      = 使用真实页面								schema = object  // 页面加载完成
 				const resolvedSchema = schema === null ? null : (schema ?? createDefaultSchema());
 				state.schema = resolvedSchema;
 				state.selectedId = null;
@@ -111,6 +115,7 @@ export const useSchemaStore = create<SchemaState>()(
 
 				if (state.schema) {
 					// 确保 settings 完整性并统一 gridSize 规范化
+					//同时这段代码可以补齐旧项目中缺少的 settings 字段：
 					const currentSettings = state.schema.settings ?? {};
 					state.schema.settings = {
 						...currentSettings,
