@@ -40,16 +40,18 @@ export default function Index() {
 	);
 	const {
 		autoFit,
-		manualZoom,
+		canReturnToView,
 		scale,
 		scaledWidth,
 		scaledHeight,
-		setAutoFit,
+		handleToggleOverview,
 		handleZoomChange,
 		handleResetZoom,
 	} = useZoom({
 		canvasSize,
 		viewportRef,
+		canvasRef,
+		viewKey: id,
 		resetOnCanvasSizeChange: true,
 	});
 	//  请求A返回 → 读 cancelled₁ → true  → return，丢弃 ✅编辑器页：读取 URL 的 ID → 请求这个项目的详情
@@ -193,14 +195,20 @@ export default function Index() {
 							<div className="flex items-center gap-1.5">
 								<button
 									className={`rounded-md border p-1 transition-all ${autoFit ? "border-brand-200 text-brand-500 bg-brand-50" : "border-slate-200 text-slate-400 hover:border-brand-200 hover:text-brand-500"}`}
-									onClick={() => setAutoFit((v) => !v)}
+									title={
+										canReturnToView
+											? "返回上次视图（倍率和位置）"
+											: "显示全画布"
+									}
+									aria-label={canReturnToView ? "返回上次视图" : "显示全画布"}
+									onClick={handleToggleOverview}
 								>
 									<Maximize className="h-3.5 w-3.5" />
 								</button>
 								<div className="flex items-center gap-0.5 ml-1">
 									<button
 										className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all"
-										onClick={() => handleZoomChange(manualZoom - 0.1)}
+										onClick={() => handleZoomChange(scale - 0.1)}
 									>
 										<Minus className="h-3.5 w-3.5" />
 									</button>
@@ -209,7 +217,7 @@ export default function Index() {
 									</span>
 									<button
 										className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all"
-										onClick={() => handleZoomChange(manualZoom + 0.1)}
+										onClick={() => handleZoomChange(scale + 0.1)}
 									>
 										<Plus className="h-3.5 w-3.5" />
 									</button>
@@ -276,6 +284,7 @@ export default function Index() {
 										}}
 										onScroll={handleScroll}
 									>
+										{/* 下面是缩放占位层 根据外层工作区和scale得到宽高 */}
 										<div
 											className="relative"
 											style={{
@@ -296,7 +305,8 @@ export default function Index() {
 													transform: `scale(${scale})`,
 													transformOrigin: "top left",
 													position: "absolute",
-													inset: 0,
+													top: 0,
+													left: 0,
 												}}
 											>
 												{isCanvasEmpty && <CanvasEmpty />}
