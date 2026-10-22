@@ -178,7 +178,7 @@ export function useZoom({
 		setViewRequest((value) => value + 1);
 	};
 
-	const handleZoomChange = (value: number) => {
+	const handleScaleChange = (value: number) => {
 		// 在总览中主动调倍率，表示开始新的观察，不再保留旧的返回记录。
 		setSavedView(null);
 		pendingView.current = null;
@@ -186,7 +186,7 @@ export function useZoom({
 		setAutoFit(false);
 	};
 
-	const handleResetZoom = () => {
+	const handleResetScale = () => {
 		setSavedView(null);
 		pendingView.current = null;
 		setManualScale(1);
@@ -200,7 +200,7 @@ export function useZoom({
 	 * - overViewScale: 自适应计算得到的总览倍率
 	 * - scale: 实际使用倍率（autoFit?overViewScale:manualScale）
 	 * - scaledWidth/scaledHeight: 画布在当前倍率下的外层容器尺寸，可用于设置包裹节点宽高
-	 * - setAutoFit/handleZoomChange/handleResetZoom: 控制缩放状态的操作函数
+	 * - setAutoFit/handleScaleChange/handleResetScale: 控制缩放状态的操作函数
 	 */
 	return {
 		canReturnToView: savedView !== null,
@@ -212,8 +212,8 @@ export function useZoom({
 		scaledWidth,
 		scaledHeight,
 		setAutoFit,
-		handleZoomChange,
-		handleResetZoom,
+		handleScaleChange,
+		handleResetScale,
 	};
 }
 // 点击 +

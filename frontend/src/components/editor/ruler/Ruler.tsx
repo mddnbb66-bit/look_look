@@ -1,89 +1,49 @@
-import React, { useMemo, useRef } from "react";
+const STEPS = [10, 20, 50, 100, 200, 500];
 
 interface RulerProps {
-	orientation: "x" | "y";
-	canvasSize: { width: number; height: number } | null;
-	scale: number;
-	scroll: number;
-	containerSize: number;
-	onAddGuide?: (value: number) => void;
+	orientation: "x" | "y"; //这是哪一把标尺
+	length: number; // 画布这条边多长：横向传 width，竖向传 height
+	scale: number; //现在的缩放倍率
+	scroll: number; // 工作区在这个方向上滚了多远：横向传 scrollLeft，竖向传 scrollTop
 }
 
-const RULER_SIZE = 28;
-
-export function Ruler({ orientation, canvasSize, scale, scroll, containerSize }: RulerProps) {
-	const ref = useRef<HTMLDivElement | null>(null);
-
-	const { ticks } = useMemo(() => {
-		if (!canvasSize) return { ticks: [] as { value: number; isMajor: boolean }[] };
-		const visibleStart = scroll / Math.max(scale, 0.01);
-		const visibleSize = containerSize / Math.max(scale, 0.01);
-		const stepCandidates = [10, 20, 50, 100, 200, 500];
-		const chosen =
-			stepCandidates.find((s) => s * scale >= 40 && s * scale <= 120) ??
-			stepCandidates[stepCandidates.length - 1];
-		const start = Math.floor(visibleStart / chosen) * chosen;
-		const end = visibleStart + visibleSize + chosen;
-		const list: { value: number; isMajor: boolean }[] = [];
-		for (let v = start; v <= end; v += chosen)
-			list.push({ value: v, isMajor: (v / chosen) % 5 === 0 });
-		return { ticks: list };
-	}, [canvasSize, scale, scroll, containerSize]);
-
-	if (!canvasSize) return null;
-
+export function Ruler({ orientation, length, scale, scroll }: RulerProps) {
 	const isX = orientation === "x";
+
+	// 1. 选刻度间隔：屏幕上至少隔 50px，数字才不挤
+	const step = STEPS.find((s) => s * scale >= 50) ?? 500;
+	const minor = step / 5; // 每格再分 5 小格
+
+	// 2. 从 0 到画布边长，每一小格一条线
+	const ticks: number[] = [];
+	for (let v = 0; v <= length; v += minor) ticks.push(v);
+
 	return (
 		<div
-			ref={ref}
-			className={`select-none bg-white text-slate-400 ${isX ? "border-b border-slate-200" : "border-r border-slate-200"}`}
-			style={{
-				position: "relative",
-				height: isX ? RULER_SIZE : `calc(100% - ${RULER_SIZE}px)`,
-				width: isX ? `calc(100% - ${RULER_SIZE}px)` : RULER_SIZE,
-				overflow: "hidden",
-				fontSize: 10,
-			}}
+			className={`absolute z-20 select-none overflow-hidden bg-white text-[10px] text-slate-400 border-slate-200 ${
+				isX ? "left-7 right-0 top-0 h-7 border-b" : "left-0 top-7 bottom-0 w-7 border-r"
+			}`}
 		>
-			{ticks.map((tick) => {
-				const pos = tick.value * scale - scroll;
-				const style = isX
-					? {
-							left: pos,
-							top: 0,
-							width: 1,
-							height: tick.isMajor ? RULER_SIZE : RULER_SIZE / 2,
-						}
-					: {
-							top: pos,
-							left: 0,
-							height: 1,
-							width: tick.isMajor ? RULER_SIZE : RULER_SIZE / 2,
-						};
+			{ticks.map((v) => {
+				const pos = v * scale - scroll; // 3. 画布坐标 → 屏幕位置
+				const major = v % step === 0;
+				const size = major ? 28 : 6;
 				return (
 					<div
-						key={`${orientation}-${tick.value}`}
-						className="absolute"
-						style={{
-							...(style as React.CSSProperties),
-							backgroundColor: tick.isMajor ? "#cbd5e1" : "#e2e8f0",
-						}}
+						key={v}
+						className={`absolute ${major ? "bg-slate-300" : "bg-slate-200"}`}
+						style={
+							isX
+								? { left: pos, top: 0, width: 1, height: size }
+								: { top: pos, left: 0, height: 1, width: size }
+						}
 					>
-						{tick.isMajor && (
+						{major && (
 							<span
-								className="absolute text-[10px] text-slate-400"
-								style={
-									isX
-										? { top: 2, left: 2 }
-										: {
-												top: 2,
-												left: 2,
-												transform: "rotate(-90deg)",
-												transformOrigin: "left top",
-											}
-								}
+								className="absolute left-0.5 top-0.5"
+								style={isX ? undefined : { writingMode: "vertical-rl" }}
 							>
-								{Math.round(tick.value)}
+								{v}
 							</span>
 						)}
 					</div>
@@ -92,5 +52,59 @@ export function Ruler({ orientation, canvasSize, scale, scroll, containerSize }:
 		</div>
 	);
 }
+export const RULER_THICKNESS = 28;
 
-export const RULER_THICKNESS = RULER_SIZE;
+// const STEPS = [10, 20, 50, 100, 200, 500];
+
+// interface RulerProps {
+//   orientation: "x" | "y";	哪一个标尺
+//   length: number; // 画布这条边多长：横向传 width，竖向传 height
+//   scale: number;
+//   scroll: number; // 横向传 scrollLeft，竖向传 scrollTop
+// }
+
+// export function Ruler({ orientation, length, scale, scroll }: RulerProps) {
+//   const isX = orientation === "x";
+
+//   // 1. 选刻度间隔：屏幕上至少隔 50px，数字才不挤
+//   const step = STEPS.find((s) => s * scale >= 50) ?? 500;
+//   const minor = step / 5; // 每格再分 5 小格
+
+//   // 2. 从 0 到画布边长，每一小格一条线
+//   const ticks: number[] = [];
+//   for (let v = 0; v <= length; v += minor) ticks.push(v);
+
+//   return (
+//     <div
+//       className={`absolute z-20 select-none overflow-hidden bg-white text-[10px] text-slate-400 border-slate-200 ${
+//         isX ? "left-7 right-0 top-0 h-7 border-b" : "left-0 top-7 bottom-0 w-7 border-r"
+//       }`}
+//     >
+//       {ticks.map((v) => {
+//         const pos = v * scale - scroll; // 3. 画布坐标 → 屏幕位置
+//         const major = v % step === 0;
+//         const size = major ? 28 : 6;
+//         return (
+//           <div
+//             key={v}
+//             className={`absolute ${major ? "bg-slate-300" : "bg-slate-200"}`}
+//             style={
+//               isX
+//                 ? { left: pos, top: 0, width: 1, height: size }
+//                 : { top: pos, left: 0, height: 1, width: size }
+//             }
+//           >
+//             {major && (
+//               <span
+//                 className="absolute left-0.5 top-0.5"
+//                 style={isX ? undefined : { writingMode: "vertical-rl" }}
+//               >
+//                 {v}
+//               </span>
+//             )}
+//           </div>
+//         );
+//       })}
+//     </div>
+//   );
+// }

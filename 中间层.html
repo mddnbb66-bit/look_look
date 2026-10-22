@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<title>minWidth:0 / minHeight:0 到底在干嘛</title>
+		<style>
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				font-family:
+					system-ui,
+					-apple-system,
+					"Segoe UI",
+					sans-serif;
+				background: #e2e8f0;
+				padding: 20px;
+				color: #0f172a;
+			}
+			h1 {
+				font-size: 18px;
+				margin-bottom: 4px;
+			}
+			.tip {
+				font-size: 13px;
+				color: #475569;
+				margin-bottom: 16px;
+			}
+
+			.controls {
+				background: #fff;
+				border-radius: 8px;
+				padding: 12px 16px;
+				margin-bottom: 20px;
+				display: flex;
+				align-items: center;
+				gap: 16px;
+			}
+			.controls input[type="range"] {
+				flex: 1;
+			}
+			.controls .val {
+				font-weight: 700;
+				color: #4f46e5;
+				min-width: 52px;
+			}
+
+			/* ===== 迷你三栏 Grid（复刻 Index.tsx:177）===== */
+			.grid-demo {
+				display: grid;
+				grid-template-columns: 110px 1fr 110px; /* 缩小版 400px 1fr 350px */
+				grid-template-rows: 30px 1fr; /* 缩小版 56px 1fr */
+				height: 300px;
+				background: #f1f5f9;
+				border: 2px solid #334155;
+				margin-bottom: 8px;
+			}
+			.toolbar {
+				grid-row: 1;
+				grid-column: 1 / 4;
+				background: #cbd5e1;
+				font-size: 12px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.sidebar {
+				background: #fff;
+				border-right: 1px solid #e2e8f0;
+				font-size: 12px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #64748b;
+			}
+			.panel {
+				background: #fff;
+				border-left: 1px solid #e2e8f0;
+				font-size: 12px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #64748b;
+			}
+
+			/* ===== 中间栏：flex min-h-0 min-w-0 flex-col ===== */
+			.middle {
+				display: flex;
+				flex-direction: column;
+			}
+			.middle.min0 {
+				min-height: 0;
+				min-width: 0;
+			} /* ← 开关 */
+
+			.zoombar {
+				height: 26px;
+				background: #fff;
+				border-bottom: 1px solid #e2e8f0;
+				font-size: 11px;
+				display: flex;
+				align-items: center;
+				padding: 0 8px;
+				color: #64748b;
+				flex: none;
+			}
+
+			/* ===== 工作区容器：ml-[28px] mt-[28px] flex-1 overflow-hidden ===== */
+			.workspace {
+				margin-left: 28px;
+				margin-top: 28px;
+				flex: 1;
+				overflow: hidden;
+				background: #fecaca;
+			}
+			.workspace.min0 {
+				min-width: 0;
+				min-height: 0;
+			} /* ← 开关 */
+
+			/* ===== #viewport：h-full w-full overflow-auto ===== */
+			.viewport {
+				position: relative;
+				height: 100%;
+				width: 100%;
+				overflow: auto;
+				background: radial-gradient(circle, #e2e8f0 0.5px, transparent 0.5px);
+				background-size: 16px 16px;
+				background-color: #f1f5f9;
+			}
+
+			.placeholder {
+				position: relative;
+			}
+
+			/* ===== 画布层：width 1920 + transform scale ===== */
+			.canvas {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 1920px;
+				height: 1080px;
+				background: #fca5a5;
+				transform: scale(var(--scale, 0.4));
+				transform-origin: top left;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 40px;
+				color: #7f1d1d;
+				font-weight: 700;
+			}
+
+			.ruler-x {
+				position: absolute;
+				left: 28px;
+				right: 0;
+				top: 0;
+				height: 28px;
+				background: #fff;
+				z-index: 5;
+				font-size: 10px;
+				color: #94a3b8;
+				display: flex;
+				align-items: center;
+				padding-left: 6px;
+			}
+			.ruler-y {
+				position: absolute;
+				left: 0;
+				top: 28px;
+				bottom: 0;
+				width: 28px;
+				background: #fff;
+				z-index: 5;
+				font-size: 10px;
+				color: #94a3b8;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.corner {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 28px;
+				height: 28px;
+				background: #fff;
+				z-index: 6;
+			}
+
+			.readout {
+				font-family: ui-monospace, monospace;
+				font-size: 11px;
+				background: #0f172a;
+				color: #a5b4fc;
+				padding: 10px 12px;
+				border-radius: 6px;
+				margin-bottom: 24px;
+				line-height: 1.8;
+				white-space: pre;
+			}
+			.label {
+				font-size: 13px;
+				font-weight: 700;
+				margin-bottom: 6px;
+			}
+			.bad {
+				color: #dc2626;
+			}
+			.good {
+				color: #059669;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>minWidth: 0 / minHeight: 0 到底在干嘛</h1>
+		<p class="tip">拖动倍率滑块。倍率越大，占位层越宽，看上下两块的差别。</p>
+
+		<div class="controls">
+			<span>倍率</span>
+			<input id="scale" type="range" min="0.2" max="1.5" step="0.1" value="0.4" />
+			<span class="val" id="scaleVal">0.40</span>
+			<span style="font-size: 12px; color: #64748b">画布 1920 × 1080</span>
+		</div>
+
+		<!-- ========== 反例 ========== -->
+		<div class="label bad">❌ 反例：去掉 minWidth:0 / minHeight:0</div>
+		<div class="grid-demo" id="demoBad">
+			<div class="toolbar">工具栏（横跨 3 栏）</div>
+			<div class="sidebar">组件栏</div>
+			<div class="middle" id="midBad">
+				<div class="zoombar">画布 1920 × 1080</div>
+				<div class="workspace" id="wsBad">
+					<div class="ruler-x">横向标尺</div>
+					<div class="ruler-y">纵</div>
+					<div class="corner"></div>
+					<div class="viewport" id="vpBad">
+						<div class="placeholder" id="phBad"><div class="canvas">画布内容</div></div>
+					</div>
+				</div>
+			</div>
+			<div class="panel">属性面板</div>
+		</div>
+		<div class="readout" id="roBad"></div>
+
+		<!-- ========== 正例 ========== -->
+		<div class="label good">✅ 正例：保留 minWidth:0 / minHeight:0</div>
+		<div class="grid-demo" id="demoGood">
+			<div class="toolbar">工具栏（横跨 3 栏）</div>
+			<div class="sidebar">组件栏</div>
+			<div class="middle min0" id="midGood">
+				<div class="zoombar">画布 1920 × 1080</div>
+				<div class="workspace min0" id="wsGood">
+					<div class="ruler-x">横向标尺</div>
+					<div class="ruler-y">纵</div>
+					<div class="corner"></div>
+					<div class="viewport" id="vpGood">
+						<div class="placeholder" id="phGood">
+							<div class="canvas">画布内容</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel">属性面板</div>
+		</div>
+		<div class="readout" id="roGood"></div>
+
+		<script>
+			const scaleInput = document.getElementById("scale");
+			const scaleVal = document.getElementById("scaleVal");
+
+			function render() {
+				const s = parseFloat(scaleInput.value);
+				scaleVal.textContent = s.toFixed(2);
+				const w = Math.round(1920 * s);
+				const h = Math.round(1080 * s);
+
+				["Bad", "Good"].forEach((k) => {
+					document.getElementById("demo" + k).style.setProperty("--scale", s);
+					const ph = document.getElementById("ph" + k);
+					ph.style.width = w + "px";
+					ph.style.height = h + "px";
+
+					const mid = document.getElementById("mid" + k);
+					const ws = document.getElementById("ws" + k);
+					const vp = document.getElementById("vp" + k);
+
+					const pageScroll =
+						document.documentElement.scrollWidth > document.documentElement.clientWidth;
+
+					document.getElementById("ro" + k).textContent =
+						`倍率 ${s.toFixed(2)}  →  占位层应该是 ${w} × ${h}\n` +
+						`中间栏 clientWidth     : ${mid.clientWidth}px\n` +
+						`工作区容器 clientWidth : ${ws.clientWidth}px\n` +
+						`#viewport clientWidth  : ${vp.clientWidth}px\n` +
+						`#viewport 内部滚动条   : ${vp.scrollWidth > vp.clientWidth ? "有 ✅ 内容在内部滚" : "无"}\n` +
+						`整页横向滚动条         : ${pageScroll ? "有 ❌ 布局崩了，右栏被挤出屏幕" : "无 ✅"}`;
+				});
+			}
+
+			scaleInput.addEventListener("input", render);
+			window.addEventListener("resize", render);
+			render();
+		</script>
+	</body>
+</html>

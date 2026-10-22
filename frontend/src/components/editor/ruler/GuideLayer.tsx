@@ -14,6 +14,7 @@ interface GuideLayerProps {
  */
 export function GuideLayer({ scale, width, height }: GuideLayerProps) {
 	const { activeSnaps } = useGuideStore(
+		//snap是吸附的意思
 		useShallow((state) => ({
 			activeSnaps: state.activeSnaps,
 		}))

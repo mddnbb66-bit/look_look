@@ -45,8 +45,8 @@ export default function Index() {
 		scaledWidth,
 		scaledHeight,
 		handleToggleOverview,
-		handleZoomChange,
-		handleResetZoom,
+		handleScaleChange,
+		handleResetScale,
 	} = useZoom({
 		canvasSize,
 		viewportRef,
@@ -174,15 +174,19 @@ export default function Index() {
 
 	return (
 		<>
+			{/* 下面是个三栏2行grid布局 */}
+			{/* grid-cols-custom：400px 1fr 350px; 三栏 */}
+			{/* grid-rows-header：56px 1fr */}
 			<div className="grid grid-cols-custom grid-rows-header h-[100vh] bg-slate-100/60">
 				{/* 工具栏 */}
 				<div className="row-start-1 row-end-2 col-start-1 col-end-4">
 					<Toolbar pageId={pageId} onPageIdChange={setPageId} />
+					{/* //横跨三列、独占第一行 */}
 				</div>
-
 				<DndWrapper scale={scale}>
+					{/* //下面是组件栏 */}
 					<SidebarMenu className="border-r border-slate-200 bg-white" />
-
+					{/* 下面是中间栏 */}
 					<div className="flex min-h-0 min-w-0 flex-col">
 						{/* 缩放栏 */}
 						<div className="flex items-center justify-between border-b border-slate-200 bg-white px-3 py-1.5 text-xs">
@@ -193,6 +197,7 @@ export default function Index() {
 								<span className="text-slate-400">{Math.round(scale * 100)}%</span>
 							</div>
 							<div className="flex items-center gap-1.5">
+								{/* 处理缩放 */}
 								<button
 									className={`rounded-md border p-1 transition-all ${autoFit ? "border-brand-200 text-brand-500 bg-brand-50" : "border-slate-200 text-slate-400 hover:border-brand-200 hover:text-brand-500"}`}
 									title={
@@ -205,77 +210,57 @@ export default function Index() {
 								>
 									<Maximize className="h-3.5 w-3.5" />
 								</button>
-								<div className="flex items-center gap-0.5 ml-1">
-									<button
-										className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all"
-										onClick={() => handleZoomChange(scale - 0.1)}
-									>
-										<Minus className="h-3.5 w-3.5" />
-									</button>
-									<span className="w-12 text-center text-xs text-slate-500">
-										{Math.round(scale * 100)}%
-									</span>
-									<button
-										className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all"
-										onClick={() => handleZoomChange(scale + 0.1)}
-									>
-										<Plus className="h-3.5 w-3.5" />
-									</button>
-									<button
-										className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all ml-0.5"
-										onClick={handleResetZoom}
-									>
-										<RotateCcw className="h-3.5 w-3.5" />
-									</button>
-								</div>
+								<button
+									className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all"
+									onClick={() => handleScaleChange(scale - 0.1)}
+								>
+									<Minus className="h-3.5 w-3.5" />
+								</button>
+								<span className="w-12 text-center text-xs text-slate-500">
+									{Math.round(scale * 100)}%
+								</span>
+								<button
+									className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all"
+									onClick={() => handleScaleChange(scale + 0.1)}
+								>
+									<Plus className="h-3.5 w-3.5" />
+								</button>
+								<button
+									className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all ml-0.5"
+									onClick={handleResetScale}
+								>
+									<RotateCcw className="h-3.5 w-3.5" />
+								</button>
 							</div>
 						</div>
-						{/* 下面是灰色工作区和2给滑动条 */}
+						{/* 标尺＋灰色工作区容器 */}
 						<div className="relative flex min-h-0 flex-1 overflow-hidden">
 							{/* 左上角标尺交叉处的小方块 */}
-							<div
-								className="absolute left-0 top-0 z-20 bg-white"
-								style={{
-									width: RULER_THICKNESS,
-									height: RULER_THICKNESS,
-									borderBottom: "1px solid #e2e8f0",
-									borderRight: "1px solid #e2e8f0",
-								}}
+							<Ruler
+								orientation="x"
+								length={rulerCanvasSize?.width ?? 0}
+								scale={scale}
+								scroll={scroll.left}
 							/>
-							{/* 横向标尺 */}
-							<div className="absolute left-[28px] right-0 top-0 z-20">
-								<Ruler
-									orientation="x"
-									canvasSize={rulerCanvasSize}
-									scale={scale}
-									scroll={scroll.left}
-									containerSize={viewportRef.current?.clientWidth ?? 0}
-								/>
-							</div>
-							{/* 第二个：纵向标尺 */}
-							<div className="absolute bottom-0 left-0 top-[28px] z-20">
-								<Ruler
-									orientation="y"
-									canvasSize={rulerCanvasSize}
-									scale={scale}
-									scroll={scroll.top}
-									containerSize={viewportRef.current?.clientHeight ?? 0}
-								/>
-							</div>
+							{/* 纵向标尺 */}
+							<Ruler
+								orientation="y"
+								length={rulerCanvasSize?.height ?? 0}
+								scale={scale}
+								scroll={scroll.top}
+							/>
 
-							<div
-								className="ml-[28px] mt-[28px] flex-1 overflow-hidden"
-								style={{ minWidth: 0, minHeight: 0 }}
-							>
+							{/* 这个层是中间层也是工作区外框是让出标尺位置的包装层 */}
+							<div className="ml-[28px] mt-[28px] flex-1 overflow-hidden">
 								<DroppableItem
 									id={schema!.id}
 									style={{ minHeight: "0", minWidth: "0" }}
 								>
-									{/* //下面是灰色工作区 */}
+									{/* //下面是灰色工作区 不含标尺*/}
 									<div
 										ref={viewportRef}
 										id="viewport"
-										className="relative h-full w-full min-w-0 overflow-auto bg-slate-100/80"
+										className=" h-full w-full  overflow-auto bg-slate-100/80"
 										// 画布底纹
 										style={{
 											backgroundImage:
