@@ -1,4 +1,4 @@
-import type { ComponentType } from "@/core/schema/types";
+import type { ComponentType } from "@/core/schema/commonType";
 
 /**
  * 字段映射槽位定义

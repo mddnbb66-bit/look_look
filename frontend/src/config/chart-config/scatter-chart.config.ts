@@ -1,4 +1,4 @@
-import type { ScatterChartComponent } from "@/core/schema/chart";
+import type { ScatterChartComponent } from "@/core/schema/chartType";
 
 /**
  * ScatterChart 默认配置

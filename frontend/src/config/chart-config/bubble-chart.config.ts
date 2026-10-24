@@ -1,4 +1,4 @@
-import type { BubbleChartComponent } from "@/core/schema/chart";
+import type { BubbleChartComponent } from "@/core/schema/chartType";
 
 /**
  * BubbleChart 默认配置

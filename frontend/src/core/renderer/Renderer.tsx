@@ -1,5 +1,5 @@
 import { componentRegistry, type RegistryComponent } from "@/components/materials/registry";
-import type { ComponentNode } from "../schema/basic";
+import type { ComponentNode } from "../schema/ownType";
 import type { PageDSL } from "../schema/page";
 import RndItem from "../rnd/RndItem";
 

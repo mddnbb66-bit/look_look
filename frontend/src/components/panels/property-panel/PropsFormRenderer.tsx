@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { Input, InputNumber, Switch, Select, Radio, ColorPicker } from "antd";
-import type { ComponentType } from "@/core/schema/types";
+import type { ComponentType } from "@/core/schema/commonType";
 import type { FormHints, FormHint } from "@/config/hints";
 import { componentHintsRegistry } from "@/config/hints";
 

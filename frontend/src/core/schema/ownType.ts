@@ -1,4 +1,4 @@
-import type { BaseComponentNode } from "./types";
+import type { BaseComponentNode } from "./commonType";
 import type {
 	BarChartComponent,
 	LineChartComponent,
@@ -14,7 +14,7 @@ import type {
 	FunnelChartComponent,
 	GaugeChartComponent,
 	TreemapChartComponent,
-} from "./chart";
+} from "./chartType";
 
 /**
  * 文字组件

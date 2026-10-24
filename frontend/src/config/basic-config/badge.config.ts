@@ -1,4 +1,4 @@
-import type { BadgeComponent } from "@/core/schema/basic";
+import type { BadgeComponent } from "@/core/schema/ownType";
 
 export const badgeDefaultConfig: BadgeComponent = {
 	id: "",

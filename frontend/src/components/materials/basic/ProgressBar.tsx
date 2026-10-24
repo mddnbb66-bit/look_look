@@ -1,5 +1,5 @@
-import type { RendererProps } from "@/core/schema/types";
-import type { ProgressBarComponent } from "@/core/schema/basic";
+import type { RendererProps } from "@/core/schema/commonType";
+import type { ProgressBarComponent } from "@/core/schema/ownType";
 
 /**
  * 进度条组件

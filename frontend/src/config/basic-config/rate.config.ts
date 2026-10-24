@@ -1,4 +1,4 @@
-import type { RateComponent } from "@/core/schema/basic";
+import type { RateComponent } from "@/core/schema/ownType";
 
 export const rateDefaultConfig: RateComponent = {
 	id: "",

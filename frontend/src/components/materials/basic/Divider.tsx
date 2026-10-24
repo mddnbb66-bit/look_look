@@ -1,6 +1,6 @@
 import { Divider as AntDivider } from "antd";
-import type { RendererProps } from "@/core/schema/types";
-import type { DividerComponent } from "@/core/schema/basic";
+import type { RendererProps } from "@/core/schema/commonType";
+import type { DividerComponent } from "@/core/schema/ownType";
 
 export default function Divider({ node }: RendererProps) {
 	const props = node.props as DividerComponent["props"];

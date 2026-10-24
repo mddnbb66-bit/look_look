@@ -1,4 +1,4 @@
-import type { CountdownComponent } from "@/core/schema/basic";
+import type { CountdownComponent } from "@/core/schema/ownType";
 
 const pad2 = (num: number) => String(num).padStart(2, "0");
 const formatDateTime = (date: Date) =>

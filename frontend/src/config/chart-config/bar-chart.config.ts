@@ -1,4 +1,4 @@
-import type { BarChartComponent } from "@/core/schema/chart";
+import type { BarChartComponent } from "@/core/schema/chartType";
 
 /**
  * BarChart 组件默认配置

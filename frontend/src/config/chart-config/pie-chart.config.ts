@@ -1,4 +1,4 @@
-import type { PieChartComponent } from "@/core/schema/chart";
+import type { PieChartComponent } from "@/core/schema/chartType";
 
 /**
  * PieChart 默认配置

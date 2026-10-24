@@ -90,13 +90,12 @@ export default function PreviewPage() {
 
 	const {
 		autoFit,
-		manualScale,
 		scale,
 		scaledWidth,
 		scaledHeight,
 		setAutoFit,
-		handleZoomChange,
-		handleResetZoom,
+		handleScaleChange,
+		handleResetScale,
 	} = useZoom({
 		canvasSize,
 		viewportRef,
@@ -170,20 +169,20 @@ export default function PreviewPage() {
 					<div className="flex items-center gap-1">
 						<button
 							className="rounded-md border border-slate-700 px-2 py-1 text-sm hover:border-blue-500"
-							onClick={() => handleZoomChange(manualScale - 0.1)}
+							onClick={() => handleScaleChange(scale - 0.1)}
 						>
 							-
 						</button>
 						<span className="w-16 text-center text-sm">{Math.round(scale * 100)}%</span>
 						<button
 							className="rounded-md border border-slate-700 px-2 py-1 text-sm hover:border-blue-500"
-							onClick={() => handleZoomChange(manualScale + 0.1)}
+							onClick={() => handleScaleChange(scale + 0.1)}
 						>
 							+
 						</button>
 						<button
 							className="rounded-md border border-slate-700 px-3 py-1 text-sm hover:border-blue-500"
-							onClick={handleResetZoom}
+							onClick={handleResetScale}
 						>
 							重置
 						</button>

@@ -1,5 +1,5 @@
-import type { RendererProps } from "@/core/schema/types";
-import type { TextComponent } from "@/core/schema/basic";
+import type { RendererProps } from "@/core/schema/commonType";
+import type { TextComponent } from "@/core/schema/ownType";
 
 export default function Text({ node }: RendererProps) {
 	const props = node.props as TextComponent["props"];

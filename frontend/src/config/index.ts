@@ -27,7 +27,7 @@ import { funnelChartDefaultConfig } from "./chart-config/funnel-chart.config";
 import { gaugeChartDefaultConfig } from "./chart-config/gauge-chart.config";
 import { treemapChartDefaultConfig } from "./chart-config/treemap-chart.config";
 import { smartDeepClone } from "@/utils/deepClone";
-import type { ComponentNode } from "@/core/schema/basic";
+import type { ComponentNode } from "@/core/schema/ownType";
 
 /**
  * 组件默认配置映射

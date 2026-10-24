@@ -1,4 +1,4 @@
-import type { ContainerComponent } from "@/core/schema/basic";
+import type { ContainerComponent } from "@/core/schema/ownType";
 
 /**
  * Container组件默认配置

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { ComponentNode } from "@/core/schema/basic";
+import type { ComponentNode } from "@/core/schema/ownType";
 
 /**
  * 组件级 AI 编辑请求的桥接 store

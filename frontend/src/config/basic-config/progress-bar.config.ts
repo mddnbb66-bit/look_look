@@ -1,4 +1,4 @@
-import type { ProgressBarComponent } from "@/core/schema/basic";
+import type { ProgressBarComponent } from "@/core/schema/ownType";
 
 /**
  * ProgressBar 组件默认配置

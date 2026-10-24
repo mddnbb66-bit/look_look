@@ -1,4 +1,4 @@
-import type { MultiBarChartComponent } from "@/core/schema/chart";
+import type { MultiBarChartComponent } from "@/core/schema/chartType";
 
 /**
  * MultiBarChart 组件默认配置

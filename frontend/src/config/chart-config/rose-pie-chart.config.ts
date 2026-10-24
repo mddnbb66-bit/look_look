@@ -1,4 +1,4 @@
-import type { RosePieChartComponent } from "@/core/schema/chart";
+import type { RosePieChartComponent } from "@/core/schema/chartType";
 
 /**
  * RosePieChart 默认配置

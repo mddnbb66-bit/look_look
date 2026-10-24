@@ -1,7 +1,7 @@
 import { useMemo, useCallback, useEffect, useState } from "react";
 import { Select, Input, InputNumber, Radio, Collapse, Typography } from "antd";
-import type { ComponentType } from "@/core/schema/types";
-import type { ChartDataSource } from "@/core/schema/types";
+import type { ComponentType } from "@/core/schema/commonType";
+import type { ChartDataSource } from "@/core/schema/commonType";
 import { chartFieldSlots, type FieldSlot } from "@/config/chart-field-slots";
 
 const { TextArea } = Input;

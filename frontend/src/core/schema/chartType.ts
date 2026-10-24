@@ -6,7 +6,7 @@
  * - 字段映射（xAxisField/yAxisField 等）已统一收入 dataSource.fieldMapping
  * - props 中只保留纯视觉/交互配置
  */
-import type { BaseChartComponent, ChartBaseProps } from "./types";
+import type { BaseChartComponent, ChartBaseProps } from "./commonType";
 
 /**
  * 单系列柱状图

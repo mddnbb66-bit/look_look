@@ -1,4 +1,4 @@
-import type { ImageComponent } from "@/core/schema/basic";
+import type { ImageComponent } from "@/core/schema/ownType";
 
 /**
  * Image 组件默认配置

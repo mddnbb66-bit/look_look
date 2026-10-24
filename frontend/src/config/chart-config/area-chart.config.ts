@@ -1,4 +1,4 @@
-import type { AreaChartComponent } from "@/core/schema/chart";
+import type { AreaChartComponent } from "@/core/schema/chartType";
 
 /**
  * AreaChart 默认配置

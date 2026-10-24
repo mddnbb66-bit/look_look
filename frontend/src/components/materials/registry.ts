@@ -1,6 +1,6 @@
 import type React from "react";
-import type { ComponentType } from "@/core/schema/types";
-import type { ComponentNode } from "@/core/schema/basic";
+import type { ComponentType } from "@/core/schema/commonType";
+import type { ComponentNode } from "@/core/schema/ownType";
 import type { PageDSL } from "@/core/schema/page";
 import Container from "./basic/Container";
 import Text from "./basic/Text";

@@ -1,6 +1,6 @@
 import { Rate as AntRate } from "antd";
-import type { RendererProps } from "@/core/schema/types";
-import type { RateComponent } from "@/core/schema/basic";
+import type { RendererProps } from "@/core/schema/commonType";
+import type { RateComponent } from "@/core/schema/ownType";
 
 export default function Rate({ node }: RendererProps) {
 	const props = node.props as RateComponent["props"];

@@ -1,4 +1,4 @@
-import type { StatisticCardComponent } from "@/core/schema/basic";
+import type { StatisticCardComponent } from "@/core/schema/ownType";
 
 /**
  * StatisticCard 组件默认配置

@@ -1,4 +1,4 @@
-import type { HorizontalBarChartComponent } from "@/core/schema/chart";
+import type { HorizontalBarChartComponent } from "@/core/schema/chartType";
 
 /**
  * HorizontalBarChart 默认配置

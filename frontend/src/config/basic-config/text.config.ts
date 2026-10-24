@@ -1,4 +1,4 @@
-import type { TextComponent } from "@/core/schema/basic";
+import type { TextComponent } from "@/core/schema/ownType";
 
 /**
  * Text组件默认配置

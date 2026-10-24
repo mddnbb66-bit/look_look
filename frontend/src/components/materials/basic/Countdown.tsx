@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
-import type { RendererProps } from "@/core/schema/types";
-import type { CountdownComponent } from "@/core/schema/basic";
+import type { RendererProps } from "@/core/schema/commonType";
+import type { CountdownComponent } from "@/core/schema/ownType";
 
 /**
  * 倒计时组件

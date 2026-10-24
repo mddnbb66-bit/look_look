@@ -1,4 +1,4 @@
-import type { DividerComponent } from "@/core/schema/basic";
+import type { DividerComponent } from "@/core/schema/ownType";
 
 export const dividerDefaultConfig: DividerComponent = {
 	id: "",

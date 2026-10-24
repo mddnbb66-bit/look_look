@@ -15,6 +15,7 @@ import {
 	avatarHints,
 	rateHints,
 	switchHints,
+	containerHints,
 } from "./basic";
 import {
 	barChartHints,
@@ -48,6 +49,7 @@ export const componentHintsRegistry: ComponentHintsRegistry = {
 	Avatar: avatarHints,
 	Rate: rateHints,
 	Switch: switchHints,
+	Container: containerHints,
 	// 图表组件
 	BarChart: barChartHints,
 	MultiBarChart: multiBarChartHints,

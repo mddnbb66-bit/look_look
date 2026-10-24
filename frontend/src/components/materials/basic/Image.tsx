@@ -1,6 +1,6 @@
 import { Image as AntImage } from "antd";
-import type { RendererProps } from "@/core/schema/types";
-import type { ImageComponent } from "@/core/schema/basic";
+import type { RendererProps } from "@/core/schema/commonType";
+import type { ImageComponent } from "@/core/schema/ownType";
 
 /**
  * 图片组件渲染实现，基于 antd Image 包装

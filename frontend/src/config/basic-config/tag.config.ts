@@ -1,4 +1,4 @@
-import type { TagComponent } from "@/core/schema/basic";
+import type { TagComponent } from "@/core/schema/ownType";
 
 export const tagDefaultConfig: TagComponent = {
 	id: "",

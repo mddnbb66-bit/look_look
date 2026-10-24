@@ -1,4 +1,4 @@
-import type { TreemapChartComponent } from "@/core/schema/chart";
+import type { TreemapChartComponent } from "@/core/schema/chartType";
 
 export const treemapChartDefaultConfig: TreemapChartComponent = {
 	id: "",

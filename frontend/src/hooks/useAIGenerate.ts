@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { nanoid } from "nanoid";
 import { useSchemaStore } from "@/store/schema-store";
 import { useShallow } from "zustand/shallow";
-import type { ComponentNode } from "@/core/schema/basic";
+import type { ComponentNode } from "@/core/schema/ownType";
 import type { ChatMessage } from "@/types/chat";
 
 export type { ChatMessage };

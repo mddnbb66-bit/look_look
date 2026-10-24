@@ -1,4 +1,4 @@
-import type { SwitchComponent } from "@/core/schema/basic";
+import type { SwitchComponent } from "@/core/schema/ownType";
 
 export const switchDefaultConfig: SwitchComponent = {
 	id: "",

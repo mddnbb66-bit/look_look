@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import type { PageDSL } from "@/core/schema/page";
 import { nanoid } from "nanoid";
-import type { ComponentNode } from "@/core/schema/basic";
+import type { ComponentNode } from "@/core/schema/ownType";
 import { useTreeOperation } from "@/router/useTreeOperation";
 import { DEFAULT_GRID_SIZE, normalizeGridSize } from "@/core/utils/grid";
 // eslint-disable-next-line react-hooks/rules-of-hooks

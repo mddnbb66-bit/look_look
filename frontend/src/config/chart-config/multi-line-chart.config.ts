@@ -1,4 +1,4 @@
-import type { MultiLineChartComponent } from "@/core/schema/chart";
+import type { MultiLineChartComponent } from "@/core/schema/chartType";
 
 /**
  * MultiLineChart 默认配置

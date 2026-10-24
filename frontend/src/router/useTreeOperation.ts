@@ -1,5 +1,5 @@
 import type { PageDSL } from "@/core/schema/page";
-import type { ComponentNode } from "@/core/schema/basic";
+import type { ComponentNode } from "@/core/schema/ownType";
 
 /**
  * useTreeOperation

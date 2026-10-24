@@ -1,4 +1,4 @@
-import type { GaugeChartComponent } from "@/core/schema/chart";
+import type { GaugeChartComponent } from "@/core/schema/chartType";
 
 export const gaugeChartDefaultConfig: GaugeChartComponent = {
 	id: "",

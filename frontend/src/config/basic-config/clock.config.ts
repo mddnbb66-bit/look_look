@@ -1,4 +1,4 @@
-import type { ClockComponent } from "@/core/schema/basic";
+import type { ClockComponent } from "@/core/schema/ownType";
 
 /**
  * Clock 组件默认配置

@@ -1,6 +1,6 @@
 import { Rnd } from "react-rnd";
 import React, { useCallback, useEffect, useRef } from "react";
-import type { ComponentNode } from "@/core/schema/basic";
+import type { ComponentNode } from "@/core/schema/ownType";
 import { useSchemaStore } from "@/store/schema-store";
 import { useGuideStore } from "@/store/guide-store";
 import { useShallow } from "zustand/shallow";

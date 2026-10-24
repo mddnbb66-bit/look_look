@@ -1,4 +1,4 @@
-import type { LineChartComponent } from "@/core/schema/chart";
+import type { LineChartComponent } from "@/core/schema/chartType";
 
 /**
  * LineChart 默认配置

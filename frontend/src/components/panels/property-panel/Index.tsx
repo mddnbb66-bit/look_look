@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useCallback, useState } from "react";
-import type { ComponentNode } from "@/core/schema/basic";
+import type { ComponentNode } from "@/core/schema/ownType";
 import type { PageDSL } from "@/core/schema/page";
-import type { ChartDataSource, ComponentType } from "@/core/schema/types";
+import type { ChartDataSource, ComponentType } from "@/core/schema/commonType";
 import { useSchemaStore } from "@/store/schema-store";
 import { useShallow } from "zustand/shallow";
 import EmptyPanel from "./EmptyPanel";

@@ -1,4 +1,4 @@
-import type { AvatarComponent } from "@/core/schema/basic";
+import type { AvatarComponent } from "@/core/schema/ownType";
 
 export const avatarDefaultConfig: AvatarComponent = {
 	id: "",

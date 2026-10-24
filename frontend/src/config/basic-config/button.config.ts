@@ -1,4 +1,4 @@
-import type { ButtonComponent } from "@/core/schema/basic";
+import type { ButtonComponent } from "@/core/schema/ownType";
 
 /**
  * Button 组件默认配置

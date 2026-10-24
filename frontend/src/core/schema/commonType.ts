@@ -1,4 +1,4 @@
-import type { ComponentNode, ContainerComponent } from "./basic";
+import type { ComponentNode, ContainerComponent } from "./ownType";
 import type { PageDSL } from "./page";
 
 // 组件类型枚举

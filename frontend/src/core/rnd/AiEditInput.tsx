@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ComponentNode } from "@/core/schema/basic";
+import type { ComponentNode } from "@/core/schema/ownType";
 import { useComponentEditStore } from "@/store/component-edit-store";
 
 interface AiEditInputProps {

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
-import type { RendererProps } from "@/core/schema/types";
-import type { AreaChartComponent } from "@/core/schema/chart";
+import type { RendererProps } from "@/core/schema/commonType";
+import type { AreaChartComponent } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**

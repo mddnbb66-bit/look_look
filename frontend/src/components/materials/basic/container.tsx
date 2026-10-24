@@ -1,6 +1,6 @@
-import type { ContainerRendererProps } from "@/core/schema/types";
+import type { ContainerRendererProps } from "@/core/schema/commonType";
 import DroppableItem from "@/core/dnd-kit/DroppableItem";
-import type { ContainerComponent } from "@/core/schema/basic";
+import type { ContainerComponent } from "@/core/schema/ownType";
 // import { nanoid } from "nanoid"  // 不再需要
 
 /**

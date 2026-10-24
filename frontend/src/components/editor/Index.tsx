@@ -11,7 +11,7 @@ import { useShallow } from "zustand/shallow";
 import Toolbar from "./Toolbar";
 import { getPageById } from "@/api/page";
 import { useZoom } from "@/hooks/useZoom";
-import { Ruler, RULER_THICKNESS } from "@/components/editor/ruler/Ruler";
+import { Ruler } from "@/components/editor/ruler/Ruler";
 import { GuideLayer } from "@/components/editor/ruler/GuideLayer";
 import { Minus, Plus, Maximize, RotateCcw } from "lucide-react";
 //提取数字的函数
@@ -40,11 +40,11 @@ export default function Index() {
 	);
 	const {
 		autoFit,
-		canReturnToView,
 		scale,
 		scaledWidth,
 		scaledHeight,
-		handleToggleOverview,
+		savedView,
+		handleSwitchOverview,
 		handleScaleChange,
 		handleResetScale,
 	} = useZoom({
@@ -197,40 +197,37 @@ export default function Index() {
 								<span className="text-slate-400">{Math.round(scale * 100)}%</span>
 							</div>
 							<div className="flex items-center gap-1.5">
-								{/* 处理缩放 */}
-								<button
-									className={`rounded-md border p-1 transition-all ${autoFit ? "border-brand-200 text-brand-500 bg-brand-50" : "border-slate-200 text-slate-400 hover:border-brand-200 hover:text-brand-500"}`}
-									title={
-										canReturnToView
-											? "返回上次视图（倍率和位置）"
-											: "显示全画布"
-									}
-									aria-label={canReturnToView ? "返回上次视图" : "显示全画布"}
-									onClick={handleToggleOverview}
-								>
-									<Maximize className="h-3.5 w-3.5" />
-								</button>
-								<button
-									className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all"
-									onClick={() => handleScaleChange(scale - 0.1)}
-								>
-									<Minus className="h-3.5 w-3.5" />
-								</button>
-								<span className="w-12 text-center text-xs text-slate-500">
-									{Math.round(scale * 100)}%
-								</span>
-								<button
-									className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all"
-									onClick={() => handleScaleChange(scale + 0.1)}
-								>
-									<Plus className="h-3.5 w-3.5" />
-								</button>
-								<button
-									className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all ml-0.5"
-									onClick={handleResetScale}
-								>
-									<RotateCcw className="h-3.5 w-3.5" />
-								</button>
+								{/* 处理缩放的 */}
+								<div className="flex items-center justify-between gap-1.5">
+									<button
+										className={`rounded-md border p-1 transition-all ${autoFit ? "border-brand-200 text-brand-500 bg-brand-50" : "border-slate-200 text-slate-400 hover:border-brand-200 hover:text-brand-500"}`}
+										onClick={handleSwitchOverview}
+										disabled={autoFit && !savedView}
+									>
+										<Maximize className="h-3.5 w-3.5" />
+									</button>
+									<button
+										className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all"
+										onClick={() => handleScaleChange(scale - 0.1)}
+									>
+										<Minus className="h-3.5 w-3.5" />
+									</button>
+									<span className="w-12 text-center text-xs text-slate-500">
+										{Math.round(scale * 100)}%
+									</span>
+									<button
+										className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all"
+										onClick={() => handleScaleChange(scale + 0.1)}
+									>
+										<Plus className="h-3.5 w-3.5" />
+									</button>
+									<button
+										className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all ml-0.5"
+										onClick={handleResetScale}
+									>
+										<RotateCcw className="h-3.5 w-3.5" />
+									</button>
+								</div>
 							</div>
 						</div>
 						{/* 标尺＋灰色工作区容器 */}

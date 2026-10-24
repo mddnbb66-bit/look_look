@@ -1,6 +1,6 @@
 import { Button as AntButton } from "antd";
-import type { RendererProps } from "@/core/schema/types";
-import type { ButtonComponent } from "@/core/schema/basic";
+import type { RendererProps } from "@/core/schema/commonType";
+import type { ButtonComponent } from "@/core/schema/ownType";
 
 /**
  * 按钮组件渲染实现，基于 antd Button 包装

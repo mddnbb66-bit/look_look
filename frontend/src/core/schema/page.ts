@@ -1,4 +1,4 @@
-import type { ComponentNode } from "./basic";
+import type { ComponentNode } from "./ownType";
 
 /**
  * 页面配置 (Page Schema)

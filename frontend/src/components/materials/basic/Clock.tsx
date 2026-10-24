@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import type { RendererProps } from "@/core/schema/types";
-import type { ClockComponent } from "@/core/schema/basic";
+import type { RendererProps } from "@/core/schema/commonType";
+import type { ClockComponent } from "@/core/schema/ownType";
 import dayjs from "dayjs";
 
 /**

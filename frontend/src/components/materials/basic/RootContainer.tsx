@@ -1,5 +1,5 @@
 import type React from "react";
-import type { ContainerRendererProps } from "@/core/schema/types";
+import type { ContainerRendererProps } from "@/core/schema/commonType";
 import DroppableItem from "@/core/dnd-kit/DroppableItem";
 import type { PageDSL } from "@/core/schema/page";
 // import { nanoid } from "nanoid"  // 不再需要

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import type { RendererProps } from "@/core/schema/types";
-import type { StatisticCardComponent } from "@/core/schema/basic";
+import type { RendererProps } from "@/core/schema/commonType";
+import type { StatisticCardComponent } from "@/core/schema/ownType";
 
 /**
  * KPI 指标卡渲染组件

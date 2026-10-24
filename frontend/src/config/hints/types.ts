@@ -1,4 +1,4 @@
-import type { ComponentType } from "@/core/schema/types";
+import type { ComponentType } from "@/core/schema/commonType";
 
 /**
  * 字段注解类型 —— 用于补充自动推断无法获取的信息
