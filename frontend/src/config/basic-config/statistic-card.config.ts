@@ -1,9 +1,9 @@
-import type { StatisticCardComponent } from "@/core/schema/ownType";
+import type { StatisticCardComponentType } from "@/core/schema/ownType";
 
 /**
  * StatisticCard 组件默认配置
  */
-export const statisticCardDefaultConfig: StatisticCardComponent = {
+export const statisticCardDefaultConfig: StatisticCardComponentType = {
 	id: "",
 	type: "StatisticCard",
 	name: "指标卡",

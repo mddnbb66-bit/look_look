@@ -1,10 +1,10 @@
-import type { MultiBarChartComponent } from "@/core/schema/chartType";
+import type { MultiBarChartComponentType } from "@/core/schema/chartType";
 
 /**
  * MultiBarChart 组件默认配置
  * - 支持分组或堆叠的多系列柱状图
  */
-export const multiBarChartDefaultConfig: MultiBarChartComponent = {
+export const multiBarChartDefaultConfig: MultiBarChartComponentType = {
 	id: "",
 	type: "MultiBarChart",
 	name: "多系列柱状图",

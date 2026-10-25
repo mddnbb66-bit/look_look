@@ -1,10 +1,10 @@
-import type { MultiLineChartComponent } from "@/core/schema/chartType";
+import type { MultiLineChartComponentType } from "@/core/schema/chartType";
 
 /**
  * MultiLineChart 默认配置
  * - 多系列折线/面积示例，支持平滑与填充
  */
-export const multiLineChartDefaultConfig: MultiLineChartComponent = {
+export const multiLineChartDefaultConfig: MultiLineChartComponentType = {
 	id: "",
 	type: "MultiLineChart",
 	name: "多系列折线图",

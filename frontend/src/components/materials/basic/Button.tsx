@@ -1,12 +1,12 @@
 import { Button as AntButton } from "antd";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { ButtonComponent } from "@/core/schema/ownType";
+import type { ButtonComponentType } from "@/core/schema/ownType";
 
 /**
  * 按钮组件渲染实现，基于 antd Button 包装
  */
-export default function Button({ node }: RendererProps) {
-	const props = node.props as ButtonComponent["props"];
+export default function ButtonComponent({ node }: RendererProps) {
+	const props = node.props as ButtonComponentType["props"];
 
 	return (
 		<AntButton

@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { GaugeChartComponent } from "@/core/schema/chartType";
+import type { GaugeChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
  * 仪表盘业务组件
  */
-export default function GaugeChart({ node }: RendererProps) {
-	const chartNode = node as GaugeChartComponent;
+export default function GaugeChartComponent({ node }: RendererProps) {
+	const chartNode = node as GaugeChartComponentType;
 	const { props } = chartNode;
 
 	const option = useMemo(() => {

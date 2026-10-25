@@ -1,6 +1,6 @@
-import type { TagComponent } from "@/core/schema/ownType";
+import type { TagComponentType } from "@/core/schema/ownType";
 
-export const tagDefaultConfig: TagComponent = {
+export const tagDefaultConfig: TagComponentType = {
 	id: "",
 	type: "Tag",
 	name: "标签",

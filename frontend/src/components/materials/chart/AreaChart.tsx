@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { AreaChartComponent } from "@/core/schema/chartType";
+import type { AreaChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
  * 面积图业务组件
  * - 基于折线图的填充变体
  */
-export default function AreaChart({ node }: RendererProps) {
-	const chartNode = node as AreaChartComponent;
+export default function AreaChartComponent({ node }: RendererProps) {
+	const chartNode = node as AreaChartComponentType;
 	const { props, dataSource } = chartNode;
 	const data = (dataSource?.data ?? []) as Record<string, any>[];
 	const fm = dataSource?.fieldMapping ?? {};

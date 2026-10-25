@@ -1,6 +1,6 @@
-import type { TreemapChartComponent } from "@/core/schema/chartType";
+import type { TreemapChartComponentType } from "@/core/schema/chartType";
 
-export const treemapChartDefaultConfig: TreemapChartComponent = {
+export const treemapChartDefaultConfig: TreemapChartComponentType = {
 	id: "",
 	type: "TreemapChart",
 	name: "矩形树图",

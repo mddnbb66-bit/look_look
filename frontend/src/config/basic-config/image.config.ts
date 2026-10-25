@@ -1,9 +1,9 @@
-import type { ImageComponent } from "@/core/schema/ownType";
+import type { ImageComponentType } from "@/core/schema/ownType";
 
 /**
  * Image 组件默认配置
  */
-export const imageDefaultConfig: ImageComponent = {
+export const imageDefaultConfig: ImageComponentType = {
 	id: "",
 	type: "Image",
 	name: "图片",

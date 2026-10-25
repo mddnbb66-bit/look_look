@@ -1,9 +1,9 @@
 import { Tag as AntTag } from "antd";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { TagComponent } from "@/core/schema/ownType";
+import type { TagComponentType } from "@/core/schema/ownType";
 
-export default function Tag({ node }: RendererProps) {
-	const props = node.props as TagComponent["props"];
+export default function TagComponent({ node }: RendererProps) {
+	const props = node.props as TagComponentType["props"];
 
 	return (
 		<div

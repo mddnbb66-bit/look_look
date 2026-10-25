@@ -1,6 +1,6 @@
-import type { DividerComponent } from "@/core/schema/ownType";
+import type { DividerComponentType } from "@/core/schema/ownType";
 
-export const dividerDefaultConfig: DividerComponent = {
+export const dividerDefaultConfig: DividerComponentType = {
 	id: "",
 	type: "Divider",
 	name: "分割线",

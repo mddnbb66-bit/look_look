@@ -1,12 +1,12 @@
 import type { RendererProps } from "@/core/schema/commonType";
-import type { ProgressBarComponent } from "@/core/schema/ownType";
+import type { ProgressBarComponentType } from "@/core/schema/ownType";
 
 /**
  * 进度条组件
  * - 支持数值/百分比、圆角与动画
  */
-export default function ProgressBar({ node }: RendererProps) {
-	const props = node.props as ProgressBarComponent["props"];
+export default function ProgressBarComponent({ node }: RendererProps) {
+	const props = node.props as ProgressBarComponentType["props"];
 	// 计算百分比，确保 0-100 范围
 	const percent =
 		props.max <= 0 ? 0 : Math.min(100, Math.max(0, (props.value / props.max) * 100));

@@ -1,10 +1,10 @@
-import type { BarChartComponent } from "@/core/schema/chartType";
+import type { BarChartComponentType } from "@/core/schema/chartType";
 
 /**
  * BarChart 组件默认配置
  * - 用于拖拽创建时初始化一个可用的柱状图示例
  */
-export const barChartDefaultConfig: BarChartComponent = {
+export const barChartDefaultConfig: BarChartComponentType = {
 	id: "",
 	type: "BarChart",
 	name: "柱状图",

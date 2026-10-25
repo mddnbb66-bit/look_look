@@ -1,4 +1,4 @@
-import type { CountdownComponent } from "@/core/schema/ownType";
+import type { CountdownComponentType } from "@/core/schema/ownType";
 
 const pad2 = (num: number) => String(num).padStart(2, "0");
 const formatDateTime = (date: Date) =>
@@ -8,7 +8,7 @@ const oneHourLaterString = () => formatDateTime(new Date(Date.now() + 60 * 60 * 
 /**
  * Countdown 组件默认配置
  */
-export const countdownDefaultConfig: CountdownComponent = {
+export const countdownDefaultConfig: CountdownComponentType = {
 	id: "",
 	type: "Countdown",
 	name: "倒计时",

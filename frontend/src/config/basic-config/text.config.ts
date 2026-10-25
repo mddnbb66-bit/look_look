@@ -1,9 +1,9 @@
-import type { TextComponent } from "@/core/schema/ownType";
+import type { TextComponentType } from "@/core/schema/ownType";
 
 /**
  * Text组件默认配置
  */
-export const textDefaultConfig: TextComponent = {
+export const textDefaultConfig: TextComponentType = {
 	id: "",
 	type: "Text",
 	name: "文本",

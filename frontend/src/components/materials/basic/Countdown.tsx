@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { CountdownComponent } from "@/core/schema/ownType";
+import type { CountdownComponentType } from "@/core/schema/ownType";
 
 /**
  * 倒计时组件
  * - 根据目标时间实时刷新，支持格式模板与结束文案
  */
-export default function Countdown({ node }: RendererProps) {
-	const props = node.props as CountdownComponent["props"];
+export default function CountdownComponent({ node }: RendererProps) {
+	const props = node.props as CountdownComponentType["props"];
 
 	// 中文对齐枚举 → CSS text-align
-	const alignToCss = (align: CountdownComponent["props"]["textAlign"]) =>
+	const alignToCss = (align: CountdownComponentType["props"]["textAlign"]) =>
 		align === "居中" ? "center" : align === "右" ? "right" : "left";
 
 	const normalizeTarget = (target: string) => {

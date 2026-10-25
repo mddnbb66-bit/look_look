@@ -1,9 +1,9 @@
 import type { RendererProps } from "@/core/schema/commonType";
-import type { TextComponent } from "@/core/schema/ownType";
+import type { TextComponentType } from "@/core/schema/ownType";
 
-export default function Text({ node }: RendererProps) {
-	const props = node.props as TextComponent["props"];
-	const alignToCss = (align: TextComponent["props"]["textAlign"]) =>
+export default function TextComponent({ node }: RendererProps) {
+	const props = node.props as TextComponentType["props"];
+	const alignToCss = (align: TextComponentType["props"]["textAlign"]) =>
 		align === "居中" ? "center" : align === "右" ? "right" : "left";
 	return (
 		<div

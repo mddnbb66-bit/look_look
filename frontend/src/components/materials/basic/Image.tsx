@@ -1,15 +1,15 @@
 import { Image as AntImage } from "antd";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { ImageComponent } from "@/core/schema/ownType";
+import type { ImageComponentType } from "@/core/schema/ownType";
 
 /**
  * 图片组件渲染实现，基于 antd Image 包装
  */
-export default function Image({ node }: RendererProps) {
-	const props = node.props as ImageComponent["props"];
+export default function ImageComponent({ node }: RendererProps) {
+	const props = node.props as ImageComponentType["props"];
 
 	// 使用类型断言确保 node 有 style 属性
-	const componentNode = node as ImageComponent;
+	const componentNode = node as ImageComponentType;
 
 	return (
 		<AntImage

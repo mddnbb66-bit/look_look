@@ -1,6 +1,6 @@
-import type { GaugeChartComponent } from "@/core/schema/chartType";
+import type { GaugeChartComponentType } from "@/core/schema/chartType";
 
-export const gaugeChartDefaultConfig: GaugeChartComponent = {
+export const gaugeChartDefaultConfig: GaugeChartComponentType = {
 	id: "",
 	type: "GaugeChart",
 	name: "仪表盘",

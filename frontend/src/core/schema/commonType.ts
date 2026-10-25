@@ -1,4 +1,4 @@
-import type { ComponentNode, ContainerComponent } from "./ownType";
+import type { ComponentNode, ContainerComponentType } from "./ownType";
 import type { PageDSL } from "./page";
 
 // 组件类型枚举
@@ -36,7 +36,7 @@ export type ComponentType =
  * 基础组件节点接口
  * 所有的具体组件都继承自这个接口
  */
-export interface BaseComponentNode {
+export interface BaseComponentNodeType {
 	// 核心标识
 	id: string; // UUID，组件在当前页面的唯一标识
 	type: ComponentType; // 组件类型枚举，用于渲染器决定渲染哪个 React 组件
@@ -47,8 +47,8 @@ export interface BaseComponentNode {
 	// 样式属性 (CSS + 布局)
 	style?: {
 		// 基础定位与尺寸 (大屏强依赖绝对定位)
-		top: number; // 左偏移
-		left: number; // 上偏移
+		top: number; // 上偏移
+		left: number; // 左偏移
 		width: number; // 宽度
 		height: number; // 高度
 		zIndex: number; // 层级
@@ -99,9 +99,9 @@ export interface ChartBaseProps {
  * - dataSource 在组件顶层，不在 props 中
  */
 
-export interface BaseChartComponent<
+export interface BaseChartComponentType<
 	TProps extends ChartBaseProps = ChartBaseProps,
-> extends BaseComponentNode {
+> extends BaseComponentNodeType {
 	type:
 		| "BarChart" //柱状图
 		| "MultiBarChart" //多系列柱状图
@@ -133,6 +133,6 @@ export interface RendererProps {
  * renderer对容器组件传入的props类型
  */
 export interface ContainerRendererProps extends RendererProps {
-	node: ContainerComponent | PageDSL;
+	node: ContainerComponentType | PageDSL;
 	renderChildren: (children: ComponentNode[]) => React.ReactNode;
 }

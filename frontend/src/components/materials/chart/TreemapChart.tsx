@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { TreemapChartComponent } from "@/core/schema/chartType";
+import type { TreemapChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
  * 矩形树图业务组件
  */
-export default function TreemapChart({ node }: RendererProps) {
-	const chartNode = node as TreemapChartComponent;
+export default function TreemapChartComponent({ node }: RendererProps) {
+	const chartNode = node as TreemapChartComponentType;
 	const { props, dataSource } = chartNode;
 	const data = (dataSource?.data ?? []) as Record<string, any>[];
 	const fm = dataSource?.fieldMapping ?? {};

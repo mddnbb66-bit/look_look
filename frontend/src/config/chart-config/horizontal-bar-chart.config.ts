@@ -1,10 +1,10 @@
-import type { HorizontalBarChartComponent } from "@/core/schema/chartType";
+import type { HorizontalBarChartComponentType } from "@/core/schema/chartType";
 
 /**
  * HorizontalBarChart 默认配置
  * - 以横向方式展示的单系列柱状图
  */
-export const horizontalBarChartDefaultConfig: HorizontalBarChartComponent = {
+export const horizontalBarChartDefaultConfig: HorizontalBarChartComponentType = {
 	id: "",
 	type: "HorizontalBarChart",
 	name: "横向柱状图",

@@ -1,22 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { StatisticCardComponent } from "@/core/schema/ownType";
+import type { StatisticCardComponentType } from "@/core/schema/ownType";
 
 /**
  * KPI 指标卡渲染组件
  * - 支持前后缀、趋势箭头、可选数值动画
  */
-export default function StatisticCard({ node }: RendererProps) {
-	const props = node.props as StatisticCardComponent["props"];
+export default function StatisticCardComponent({ node }: RendererProps) {
+	const props = node.props as StatisticCardComponentType["props"];
 
 	// 使用类型断言确保 node 有 style 属性
-	const componentNode = node as StatisticCardComponent;
+	const componentNode = node as StatisticCardComponentType;
 
 	const [displayValue, setDisplayValue] = useState<number>(props.value);
 	const lastValueRef = useRef<number>(props.value);
 
 	// 中文对齐枚举 → CSS text-align
-	const alignToCss = (align: StatisticCardComponent["props"]["align"]) =>
+	const alignToCss = (align: StatisticCardComponentType["props"]["align"]) =>
 		align === "居中" ? "center" : align === "右" ? "right" : "left";
 	const alignCss = alignToCss(props.align);
 

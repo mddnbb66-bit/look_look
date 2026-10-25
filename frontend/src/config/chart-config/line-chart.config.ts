@@ -1,9 +1,9 @@
-import type { LineChartComponent } from "@/core/schema/chartType";
+import type { LineChartComponentType } from "@/core/schema/chartType";
 
 /**
  * LineChart 默认配置
  */
-export const lineChartDefaultConfig: LineChartComponent = {
+export const lineChartDefaultConfig: LineChartComponentType = {
 	id: "",
 	type: "LineChart",
 	name: "折线图",

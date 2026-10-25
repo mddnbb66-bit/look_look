@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { LineChartComponent } from "@/core/schema/chartType";
+import type { LineChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
  * 折线图业务组件
  */
-export default function LineChart({ node }: RendererProps) {
-	const chartNode = node as LineChartComponent;
+export default function LineChartComponent({ node }: RendererProps) {
+	const chartNode = node as LineChartComponentType;
 	const { props, dataSource } = chartNode;
 	const data = (dataSource?.data ?? []) as Record<string, any>[];
 	const fm = dataSource?.fieldMapping ?? {};

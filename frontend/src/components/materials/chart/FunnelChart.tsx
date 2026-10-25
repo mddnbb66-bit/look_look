@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { FunnelChartComponent } from "@/core/schema/chartType";
+import type { FunnelChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
  * 漏斗图业务组件
  */
-export default function FunnelChart({ node }: RendererProps) {
-	const chartNode = node as FunnelChartComponent;
+export default function FunnelChartComponent({ node }: RendererProps) {
+	const chartNode = node as FunnelChartComponentType;
 	const { props, dataSource } = chartNode;
 	const data = (dataSource?.data ?? []) as Record<string, any>[];
 	const fm = dataSource?.fieldMapping ?? {};

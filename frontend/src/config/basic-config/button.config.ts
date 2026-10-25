@@ -1,9 +1,9 @@
-import type { ButtonComponent } from "@/core/schema/ownType";
+import type { ButtonComponentType } from "@/core/schema/ownType";
 
 /**
  * Button 组件默认配置
  */
-export const buttonDefaultConfig: ButtonComponent = {
+export const buttonDefaultConfig: ButtonComponentType = {
 	id: "",
 	type: "Button",
 	name: "按钮",

@@ -1,9 +1,9 @@
-import type { ContainerComponent } from "@/core/schema/ownType";
+import type { ContainerComponentType } from "@/core/schema/ownType";
 
 /**
  * Container组件默认配置
  */
-export const containerDefaultConfig: ContainerComponent = {
+export const containerDefaultConfig: ContainerComponentType = {
 	id: "",
 	type: "Container",
 	name: "容器",

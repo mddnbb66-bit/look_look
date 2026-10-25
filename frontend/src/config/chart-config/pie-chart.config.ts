@@ -1,9 +1,9 @@
-import type { PieChartComponent } from "@/core/schema/chartType";
+import type { PieChartComponentType } from "@/core/schema/chartType";
 
 /**
  * PieChart 默认配置
  */
-export const pieChartDefaultConfig: PieChartComponent = {
+export const pieChartDefaultConfig: PieChartComponentType = {
 	id: "",
 	type: "PieChart",
 	name: "饼图",

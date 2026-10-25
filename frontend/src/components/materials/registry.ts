@@ -2,35 +2,35 @@ import type React from "react";
 import type { ComponentType } from "@/core/schema/commonType";
 import type { ComponentNode } from "@/core/schema/ownType";
 import type { PageDSL } from "@/core/schema/page";
-import Container from "./basic/Container";
-import Text from "./basic/Text";
-import Image from "./basic/Image";
-import Button from "./basic/Button";
-import Clock from "./basic/Clock";
-import RootContainer from "./basic/RootContainer";
-import BarChart from "./chart/BarChart";
-import MultiBarChart from "./chart/MultiBarChart";
-import LineChart from "./chart/LineChart";
-import AreaChart from "./chart/AreaChart";
-import MultiLineChart from "./chart/MultiLineChart";
-import PieChart from "./chart/PieChart";
-import RosePieChart from "./chart/RosePieChart";
-import ScatterChart from "./chart/ScatterChart";
-import BubbleChart from "./chart/BubbleChart";
-import HorizontalBarChart from "./chart/HorizontalBarChart";
-import StatisticCard from "./basic/StatisticCard";
-import ProgressBar from "./basic/ProgressBar";
-import Countdown from "./basic/Countdown";
-import Divider from "./basic/Divider";
-import Badge from "./basic/Badge";
-import Tag from "./basic/Tag";
-import Avatar from "./basic/Avatar";
-import Rate from "./basic/Rate";
-import Switch from "./basic/Switch";
-import RadarChart from "./chart/RadarChart";
-import FunnelChart from "./chart/FunnelChart";
-import GaugeChart from "./chart/GaugeChart";
-import TreemapChart from "./chart/TreemapChart";
+import ContainerComponent from "./basic/Container";
+import TextComponent from "./basic/Text";
+import ImageComponent from "./basic/Image";
+import ButtonComponent from "./basic/Button";
+import ClockComponent from "./basic/Clock";
+import RootContainerComponent from "./basic/RootContainer";
+import BarChartComponent from "./chart/BarChart";
+import MultiBarChartComponent from "./chart/MultiBarChart";
+import LineChartComponent from "./chart/LineChart";
+import AreaChartComponent from "./chart/AreaChart";
+import MultiLineChartComponent from "./chart/MultiLineChart";
+import PieChartComponent from "./chart/PieChart";
+import RosePieChartComponent from "./chart/RosePieChart";
+import ScatterChartComponent from "./chart/ScatterChart";
+import BubbleChartComponent from "./chart/BubbleChart";
+import HorizontalBarChartComponent from "./chart/HorizontalBarChart";
+import StatisticCardComponent from "./basic/StatisticCard";
+import ProgressBarComponent from "./basic/ProgressBar";
+import CountdownComponent from "./basic/Countdown";
+import DividerComponent from "./basic/Divider";
+import BadgeComponent from "./basic/Badge";
+import TagComponent from "./basic/Tag";
+import AvatarComponent from "./basic/Avatar";
+import RateComponent from "./basic/Rate";
+import SwitchComponent from "./basic/Switch";
+import RadarChartComponent from "./chart/RadarChart";
+import FunnelChartComponent from "./chart/FunnelChart";
+import GaugeChartComponent from "./chart/GaugeChart";
+import TreemapChartComponent from "./chart/TreemapChart";
 
 /**
  * 组件注册表类
@@ -99,38 +99,38 @@ class ComponentRegistryManager {
 
 // 预注册基础组件，键为 Schema 中的 type 字段
 // 这里通过类型断言把具体组件适配到统一的 RegistryComponent 约定
-ComponentRegistryManager.register("Container", Container as unknown as RegistryComponent);
-ComponentRegistryManager.register("Text", Text as unknown as RegistryComponent);
-ComponentRegistryManager.register("Image", Image as unknown as RegistryComponent);
-ComponentRegistryManager.register("Button", Button as unknown as RegistryComponent);
-ComponentRegistryManager.register("Clock", Clock as unknown as RegistryComponent);
-ComponentRegistryManager.register("StatisticCard", StatisticCard as unknown as RegistryComponent);
-ComponentRegistryManager.register("ProgressBar", ProgressBar as unknown as RegistryComponent);
-ComponentRegistryManager.register("Countdown", Countdown as unknown as RegistryComponent);
-ComponentRegistryManager.register("Divider", Divider as unknown as RegistryComponent);
-ComponentRegistryManager.register("Badge", Badge as unknown as RegistryComponent);
-ComponentRegistryManager.register("Tag", Tag as unknown as RegistryComponent);
-ComponentRegistryManager.register("Avatar", Avatar as unknown as RegistryComponent);
-ComponentRegistryManager.register("Rate", Rate as unknown as RegistryComponent);
-ComponentRegistryManager.register("Switch", Switch as unknown as RegistryComponent);
-ComponentRegistryManager.register("BarChart", BarChart as unknown as RegistryComponent);
+ComponentRegistryManager.register("Container", ContainerComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("Text", TextComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("Image", ImageComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("Button", ButtonComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("Clock", ClockComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("StatisticCard", StatisticCardComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("ProgressBar", ProgressBarComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("Countdown", CountdownComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("Divider", DividerComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("Badge", BadgeComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("Tag", TagComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("Avatar", AvatarComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("Rate", RateComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("Switch", SwitchComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("BarChart", BarChartComponent as unknown as RegistryComponent);
 ComponentRegistryManager.register(
 	"HorizontalBarChart",
-	HorizontalBarChart as unknown as RegistryComponent
+	HorizontalBarChartComponent as unknown as RegistryComponent
 );
-ComponentRegistryManager.register("MultiBarChart", MultiBarChart as unknown as RegistryComponent);
-ComponentRegistryManager.register("LineChart", LineChart as unknown as RegistryComponent);
-ComponentRegistryManager.register("AreaChart", AreaChart as unknown as RegistryComponent);
-ComponentRegistryManager.register("MultiLineChart", MultiLineChart as unknown as RegistryComponent);
-ComponentRegistryManager.register("PieChart", PieChart as unknown as RegistryComponent);
-ComponentRegistryManager.register("RosePieChart", RosePieChart as unknown as RegistryComponent);
-ComponentRegistryManager.register("ScatterChart", ScatterChart as unknown as RegistryComponent);
-ComponentRegistryManager.register("BubbleChart", BubbleChart as unknown as RegistryComponent);
-ComponentRegistryManager.register("RadarChart", RadarChart as unknown as RegistryComponent);
-ComponentRegistryManager.register("FunnelChart", FunnelChart as unknown as RegistryComponent);
-ComponentRegistryManager.register("GaugeChart", GaugeChart as unknown as RegistryComponent);
-ComponentRegistryManager.register("TreemapChart", TreemapChart as unknown as RegistryComponent);
-ComponentRegistryManager.register("RootContainer", RootContainer as unknown as RegistryComponent); // 根容器组件是一个特殊的容器组件
+ComponentRegistryManager.register("MultiBarChart", MultiBarChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("LineChart", LineChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("AreaChart", AreaChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("MultiLineChart", MultiLineChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("PieChart", PieChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("RosePieChart", RosePieChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("ScatterChart", ScatterChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("BubbleChart", BubbleChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("RadarChart", RadarChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("FunnelChart", FunnelChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("GaugeChart", GaugeChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("TreemapChart", TreemapChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register("RootContainer", RootContainerComponent as unknown as RegistryComponent); // 根容器组件是一个特殊的容器组件
 
 // 导出类实例和类型
 export { ComponentRegistryManager };

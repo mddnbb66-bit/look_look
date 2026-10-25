@@ -1,9 +1,9 @@
 import { Badge as AntBadge } from "antd";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { BadgeComponent } from "@/core/schema/ownType";
+import type { BadgeComponentType } from "@/core/schema/ownType";
 
-export default function Badge({ node }: RendererProps) {
-	const props = node.props as BadgeComponent["props"];
+export default function BadgeComponent({ node }: RendererProps) {
+	const props = node.props as BadgeComponentType["props"];
 
 	return (
 		<div

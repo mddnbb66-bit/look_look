@@ -1,9 +1,9 @@
-import type { ScatterChartComponent } from "@/core/schema/chartType";
+import type { ScatterChartComponentType } from "@/core/schema/chartType";
 
 /**
  * ScatterChart 默认配置
  */
-export const scatterChartDefaultConfig: ScatterChartComponent = {
+export const scatterChartDefaultConfig: ScatterChartComponentType = {
 	id: "",
 	type: "ScatterChart",
 	name: "散点图",

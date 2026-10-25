@@ -1,10 +1,10 @@
-import type { RosePieChartComponent } from "@/core/schema/chartType";
+import type { RosePieChartComponentType } from "@/core/schema/chartType";
 
 /**
  * RosePieChart 默认配置
  * - 展示南丁格尔玫瑰图示例
  */
-export const rosePieChartDefaultConfig: RosePieChartComponent = {
+export const rosePieChartDefaultConfig: RosePieChartComponentType = {
 	id: "",
 	type: "RosePieChart",
 	name: "玫瑰图",

@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { RadarChartComponent } from "@/core/schema/chartType";
+import type { RadarChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
  * 雷达图业务组件
  * - 雷达图不使用 fieldMapping，而是通过 indicators 定义维度
  */
-export default function RadarChart({ node }: RendererProps) {
-	const chartNode = node as RadarChartComponent;
+export default function RadarChartComponent({ node }: RendererProps) {
+	const chartNode = node as RadarChartComponentType;
 	const { props, dataSource } = chartNode;
 	const data = (dataSource?.data ?? []) as Record<string, any>[];
 

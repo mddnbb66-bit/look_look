@@ -1,42 +1,42 @@
-import type { BaseComponentNode } from "./commonType";
+import type { BaseComponentNodeType } from "./commonType";
 import type {
-	BarChartComponent,
-	LineChartComponent,
-	MultiBarChartComponent,
-	PieChartComponent,
-	ScatterChartComponent,
-	BubbleChartComponent,
-	AreaChartComponent,
-	MultiLineChartComponent,
-	HorizontalBarChartComponent,
-	RosePieChartComponent,
-	RadarChartComponent,
-	FunnelChartComponent,
-	GaugeChartComponent,
-	TreemapChartComponent,
+	BarChartComponentType,
+	LineChartComponentType,
+	MultiBarChartComponentType,
+	PieChartComponentType,
+	ScatterChartComponentType,
+	BubbleChartComponentType,
+	AreaChartComponentType,
+	MultiLineChartComponentType,
+	HorizontalBarChartComponentType,
+	RosePieChartComponentType,
+	RadarChartComponentType,
+	FunnelChartComponentType,
+	GaugeChartComponentType,
+	TreemapChartComponentType,
 } from "./chartType";
 
 /**
  * 文字组件
  */
-type AlignCN = "左" | "居中" | "右";
-type TrendCN = "上升" | "下降" | "持平";
+type justfiy = "左" | "居中" | "右";
+type align = "上升" | "下降" | "持平";
 
-export interface TextComponent extends BaseComponentNode {
+export interface TextComponentType extends BaseComponentNodeType {
 	type: "Text";
 	props: {
 		content: string; // 内容
 		fontSize: number; // 字体大小
 		fontWeight: number; // 字体粗细
 		color: string; // 颜色
-		textAlign: AlignCN; // 对齐方式
+		textAlign: justfiy; // 对齐方式
 	};
 }
 
 /**
  * 图片组件
  */
-export interface ImageComponent extends BaseComponentNode {
+export interface ImageComponentType extends BaseComponentNodeType {
 	type: "Image";
 	props: {
 		src: string; // 图片地址
@@ -49,7 +49,7 @@ export interface ImageComponent extends BaseComponentNode {
 /**
  * 按钮组件
  */
-export interface ButtonComponent extends BaseComponentNode {
+export interface ButtonComponentType extends BaseComponentNodeType {
 	type: "Button";
 	props: {
 		text: string; // 按钮文案
@@ -64,14 +64,14 @@ export interface ButtonComponent extends BaseComponentNode {
 /**
  * 时钟组件
  */
-export interface ClockComponent extends BaseComponentNode {
+export interface ClockComponentType extends BaseComponentNodeType {
 	type: "Clock";
 	props: {
 		format: string; // 时间格式，例如：HH:mm:ss
 		fontSize: number; // 字体大小
 		fontWeight: number; // 字体粗细
 		color: string; // 颜色
-		textAlign: AlignCN; // 对齐方式
+		textAlign: justfiy; // 对齐方式
 		showSeconds?: boolean; // 是否显示秒
 	};
 }
@@ -79,7 +79,7 @@ export interface ClockComponent extends BaseComponentNode {
 /**
  * KPI 统计卡组件
  */
-export interface StatisticCardComponent extends BaseComponentNode {
+export interface StatisticCardComponentType extends BaseComponentNodeType {
 	type: "StatisticCard";
 	props: {
 		title: string; // 主标题
@@ -88,8 +88,8 @@ export interface StatisticCardComponent extends BaseComponentNode {
 		prefix?: string; // 前缀
 		suffix?: string; // 后缀
 		valueColor: string; // 数值颜色
-		align: AlignCN; // 对齐
-		trend?: TrendCN; // 趋势方向
+		align: justfiy; // 对齐
+		trend?: align; // 趋势方向
 		showTrendIcon?: boolean; // 显示趋势图标
 		trendColorUp?: string; // 上升颜色
 		trendColorDown?: string; // 下降颜色
@@ -103,7 +103,7 @@ export interface StatisticCardComponent extends BaseComponentNode {
 /**
  * 进度条组件
  */
-export interface ProgressBarComponent extends BaseComponentNode {
+export interface ProgressBarComponentType extends BaseComponentNodeType {
 	type: "ProgressBar";
 	props: {
 		value: number; // 当前值
@@ -120,7 +120,7 @@ export interface ProgressBarComponent extends BaseComponentNode {
 /**
  * 倒计时组件
  */
-export interface CountdownComponent extends BaseComponentNode {
+export interface CountdownComponentType extends BaseComponentNodeType {
 	type: "Countdown";
 	props: {
 		targetTime: string; // 目标时间字符串（用户填写 YYYY-MM-DD HH:mm:ss）
@@ -131,7 +131,7 @@ export interface CountdownComponent extends BaseComponentNode {
 		fontSize: number; // 字号
 		fontWeight: number; // 字重
 		color: string; // 颜色
-		textAlign: AlignCN; // 对齐
+		textAlign: justfiy; // 对齐
 		showMilliseconds?: boolean; // 是否显示毫秒
 	};
 }
@@ -139,7 +139,7 @@ export interface CountdownComponent extends BaseComponentNode {
 /**
  * 分割线组件
  */
-export interface DividerComponent extends BaseComponentNode {
+export interface DividerComponentType extends BaseComponentNodeType {
 	type: "Divider";
 	props: {
 		direction: "horizontal" | "vertical"; // 方向
@@ -153,7 +153,7 @@ export interface DividerComponent extends BaseComponentNode {
 /**
  * 徽标数组件
  */
-export interface BadgeComponent extends BaseComponentNode {
+export interface BadgeComponentType extends BaseComponentNodeType {
 	type: "Badge";
 	props: {
 		count: number; // 展示的数字
@@ -169,7 +169,7 @@ export interface BadgeComponent extends BaseComponentNode {
 /**
  * 标签组件
  */
-export interface TagComponent extends BaseComponentNode {
+export interface TagComponentType extends BaseComponentNodeType {
 	type: "Tag";
 	props: {
 		text: string; // 标签文字
@@ -182,7 +182,7 @@ export interface TagComponent extends BaseComponentNode {
 /**
  * 头像组件
  */
-export interface AvatarComponent extends BaseComponentNode {
+export interface AvatarComponentType extends BaseComponentNodeType {
 	type: "Avatar";
 	props: {
 		src?: string; // 图片地址
@@ -197,7 +197,7 @@ export interface AvatarComponent extends BaseComponentNode {
 /**
  * 评分组件
  */
-export interface RateComponent extends BaseComponentNode {
+export interface RateComponentType extends BaseComponentNodeType {
 	type: "Rate";
 	props: {
 		value: number; // 当前值
@@ -211,7 +211,7 @@ export interface RateComponent extends BaseComponentNode {
 /**
  * 开关组件
  */
-export interface SwitchComponent extends BaseComponentNode {
+export interface SwitchComponentType extends BaseComponentNodeType {
 	type: "Switch";
 	props: {
 		checked: boolean; // 是否选中
@@ -226,7 +226,7 @@ export interface SwitchComponent extends BaseComponentNode {
  * 容器组件
  * 核心：拥有 children 属性
  */
-export interface ContainerComponent extends BaseComponentNode {
+export interface ContainerComponentType extends BaseComponentNodeType {
 	type: "Container";
 	props?: {
 		layoutMode: "absolute" | "flex"; // 布局模式：自由拖拽 vs 自动排列
@@ -238,31 +238,31 @@ export interface ContainerComponent extends BaseComponentNode {
 
 // 所有可能的组件类型集合
 export type ComponentNode =
-	| TextComponent
-	| ImageComponent
-	| ButtonComponent
-	| ClockComponent
-	| StatisticCardComponent
-	| ProgressBarComponent
-	| CountdownComponent
-	| DividerComponent
-	| BadgeComponent
-	| TagComponent
-	| AvatarComponent
-	| RateComponent
-	| SwitchComponent
-	| ContainerComponent
-	| BarChartComponent
-	| MultiBarChartComponent
-	| LineChartComponent
-	| PieChartComponent
-	| ScatterChartComponent
-	| BubbleChartComponent
-	| AreaChartComponent
-	| MultiLineChartComponent
-	| HorizontalBarChartComponent
-	| RosePieChartComponent
-	| RadarChartComponent
-	| FunnelChartComponent
-	| GaugeChartComponent
-	| TreemapChartComponent;
+	| TextComponentType
+	| ImageComponentType
+	| ButtonComponentType
+	| ClockComponentType
+	| StatisticCardComponentType
+	| ProgressBarComponentType
+	| CountdownComponentType
+	| DividerComponentType
+	| BadgeComponentType
+	| TagComponentType
+	| AvatarComponentType
+	| RateComponentType
+	| SwitchComponentType
+	| ContainerComponentType
+	| BarChartComponentType
+	| MultiBarChartComponentType
+	| LineChartComponentType
+	| PieChartComponentType
+	| ScatterChartComponentType
+	| BubbleChartComponentType
+	| AreaChartComponentType
+	| MultiLineChartComponentType
+	| HorizontalBarChartComponentType
+	| RosePieChartComponentType
+	| RadarChartComponentType
+	| FunnelChartComponentType
+	| GaugeChartComponentType
+	| TreemapChartComponentType;

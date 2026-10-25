@@ -1,6 +1,6 @@
-import type { FunnelChartComponent } from "@/core/schema/chartType";
+import type { FunnelChartComponentType } from "@/core/schema/chartType";
 
-export const funnelChartDefaultConfig: FunnelChartComponent = {
+export const funnelChartDefaultConfig: FunnelChartComponentType = {
 	id: "",
 	type: "FunnelChart",
 	name: "漏斗图",

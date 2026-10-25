@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { MultiLineChartComponent } from "@/core/schema/chartType";
+import type { MultiLineChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
  * 多系列折线/面积图业务组件
  * - 支持分组与可选面积填充
  */
-export default function MultiLineChart({ node }: RendererProps) {
-	const chartNode = node as MultiLineChartComponent;
+export default function MultiLineChartComponent({ node }: RendererProps) {
+	const chartNode = node as MultiLineChartComponentType;
 	const { props, dataSource } = chartNode;
 	const data = (dataSource?.data ?? []) as Record<string, any>[];
 	const fm = dataSource?.fieldMapping ?? {};

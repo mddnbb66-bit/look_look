@@ -11,7 +11,7 @@ import { normalizeGridSize } from "@/core/utils/grid";
  * @param renderChildren 渲染子组件的函数
  * @returns 返回一个div，里面渲染子组件
  */
-export default function RootContainer({
+export default function RootContainerComponent({
 	node,
 	renderChildren,
 	mode = "edit",

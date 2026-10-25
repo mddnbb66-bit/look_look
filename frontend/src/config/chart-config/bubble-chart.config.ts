@@ -1,9 +1,9 @@
-import type { BubbleChartComponent } from "@/core/schema/chartType";
+import type { BubbleChartComponentType } from "@/core/schema/chartType";
 
 /**
  * BubbleChart 默认配置
  */
-export const bubbleChartDefaultConfig: BubbleChartComponent = {
+export const bubbleChartDefaultConfig: BubbleChartComponentType = {
 	id: "",
 	type: "BubbleChart",
 	name: "气泡图",

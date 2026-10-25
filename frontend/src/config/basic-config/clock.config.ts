@@ -1,9 +1,9 @@
-import type { ClockComponent } from "@/core/schema/ownType";
+import type { ClockComponentType } from "@/core/schema/ownType";
 
 /**
  * Clock 组件默认配置
  */
-export const clockDefaultConfig: ClockComponent = {
+export const clockDefaultConfig: ClockComponentType = {
 	id: "",
 	type: "Clock",
 	name: "时钟",

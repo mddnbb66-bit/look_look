@@ -1,9 +1,9 @@
-import type { ProgressBarComponent } from "@/core/schema/ownType";
+import type { ProgressBarComponentType } from "@/core/schema/ownType";
 
 /**
  * ProgressBar 组件默认配置
  */
-export const progressBarDefaultConfig: ProgressBarComponent = {
+export const progressBarDefaultConfig: ProgressBarComponentType = {
 	id: "",
 	type: "ProgressBar",
 	name: "进度条",

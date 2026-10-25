@@ -1,6 +1,6 @@
-import type { RadarChartComponent } from "@/core/schema/chartType";
+import type { RadarChartComponentType } from "@/core/schema/chartType";
 
-export const radarChartDefaultConfig: RadarChartComponent = {
+export const radarChartDefaultConfig: RadarChartComponentType = {
 	id: "",
 	type: "RadarChart",
 	name: "雷达图",

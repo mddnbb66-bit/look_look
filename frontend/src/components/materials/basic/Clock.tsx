@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { ClockComponent } from "@/core/schema/ownType";
+import type { ClockComponentType } from "@/core/schema/ownType";
 import dayjs from "dayjs";
 
 /**
  * 时钟组件渲染实现
  * 根据 Clock 节点的 props 实时展示当前时间
  */
-export default function Clock({ node }: RendererProps) {
-	const props = node.props as ClockComponent["props"];
+export default function ClockComponent({ node }: RendererProps) {
+	const props = node.props as ClockComponentType["props"];
 	const [now, setNow] = useState<Date>(new Date());
-	const alignToCss = (align: ClockComponent["props"]["textAlign"]) =>
+	const alignToCss = (align: ClockComponentType["props"]["textAlign"]) =>
 		align === "居中" ? "center" : align === "右" ? "right" : "left";
 
 	useEffect(() => {

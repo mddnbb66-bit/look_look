@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { BarChartComponent } from "@/core/schema/chartType";
+import type { BarChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
@@ -9,8 +9,8 @@ import EChartsBase from "./EChartsBase";
  * - 从 node.dataSource 读取数据和字段映射
  * - 从 node.props 读取视觉配置
  */
-export default function BarChart({ node }: RendererProps) {
-	const chartNode = node as BarChartComponent;
+export default function BarChartComponent({ node }: RendererProps) {
+	const chartNode = node as BarChartComponentType;
 	const { props, dataSource } = chartNode;
 
 	const data = (dataSource?.data ?? []) as Record<string, any>[];

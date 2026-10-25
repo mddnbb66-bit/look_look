@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { HorizontalBarChartComponent } from "@/core/schema/chartType";
+import type { HorizontalBarChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
  * 横向柱状图业务组件
  */
-export default function HorizontalBarChart({ node }: RendererProps) {
-	const chartNode = node as HorizontalBarChartComponent;
+export default function HorizontalBarChartComponent({ node }: RendererProps) {
+	const chartNode = node as HorizontalBarChartComponentType;
 	const { props, dataSource } = chartNode;
 	const data = (dataSource?.data ?? []) as Record<string, any>[];
 	const fm = dataSource?.fieldMapping ?? {};

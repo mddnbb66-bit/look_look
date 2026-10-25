@@ -1,6 +1,6 @@
-import type { SwitchComponent } from "@/core/schema/ownType";
+import type { SwitchComponentType } from "@/core/schema/ownType";
 
-export const switchDefaultConfig: SwitchComponent = {
+export const switchDefaultConfig: SwitchComponentType = {
 	id: "",
 	type: "Switch",
 	name: "开关",

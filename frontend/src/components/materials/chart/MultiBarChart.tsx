@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { MultiBarChartComponent } from "@/core/schema/chartType";
+import type { MultiBarChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
  * 多系列柱状图业务组件
  * - 支持分组或堆叠展示
  */
-export default function MultiBarChart({ node }: RendererProps) {
-	const chartNode = node as MultiBarChartComponent;
+export default function MultiBarChartComponent({ node }: RendererProps) {
+	const chartNode = node as MultiBarChartComponentType;
 	const { props, dataSource } = chartNode;
 	const data = (dataSource?.data ?? []) as Record<string, any>[];
 	const fm = dataSource?.fieldMapping ?? {};

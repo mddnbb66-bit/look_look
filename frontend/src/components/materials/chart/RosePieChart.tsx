@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { RosePieChartComponent } from "@/core/schema/chartType";
+import type { RosePieChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
  * 南丁格尔玫瑰图业务组件
  */
-export default function RosePieChart({ node }: RendererProps) {
-	const chartNode = node as RosePieChartComponent;
+export default function RosePieChartComponent({ node }: RendererProps) {
+	const chartNode = node as RosePieChartComponentType;
 	const { props, dataSource } = chartNode;
 	const data = (dataSource?.data ?? []) as Record<string, any>[];
 	const fm = dataSource?.fieldMapping ?? {};

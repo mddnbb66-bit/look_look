@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { BubbleChartComponent } from "@/core/schema/chartType";
+import type { BubbleChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
  * 气泡图业务组件（基于散点图变体）
  */
-export default function BubbleChart({ node }: RendererProps) {
-	const chartNode = node as BubbleChartComponent;
+export default function BubbleChartComponent({ node }: RendererProps) {
+	const chartNode = node as BubbleChartComponentType;
 	const { props, dataSource } = chartNode;
 	const data = (dataSource?.data ?? []) as Record<string, any>[];
 	const fm = dataSource?.fieldMapping ?? {};

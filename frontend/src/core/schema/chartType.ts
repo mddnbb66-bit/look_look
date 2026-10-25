@@ -6,7 +6,7 @@
  * - 字段映射（xAxisField/yAxisField 等）已统一收入 dataSource.fieldMapping
  * - props 中只保留纯视觉/交互配置
  */
-import type { BaseChartComponent, ChartBaseProps } from "./commonType";
+import type { BaseChartComponentType, ChartBaseProps } from "./commonType";
 
 /**
  * 单系列柱状图
@@ -15,7 +15,7 @@ export interface BarChartProps extends ChartBaseProps {
 	barColor?: string;
 }
 
-export interface BarChartComponent extends BaseChartComponent<BarChartProps> {
+export interface BarChartComponentType extends BaseChartComponentType<BarChartProps> {
 	type: "BarChart";
 }
 
@@ -27,7 +27,7 @@ export interface MultiBarChartProps extends ChartBaseProps {
 	isStack?: boolean;
 }
 
-export interface MultiBarChartComponent extends BaseChartComponent<MultiBarChartProps> {
+export interface MultiBarChartComponentType extends BaseChartComponentType<MultiBarChartProps> {
 	type: "MultiBarChart";
 }
 
@@ -40,14 +40,14 @@ export interface LineChartProps extends ChartBaseProps {
 	areaStyle?: boolean;
 }
 
-export interface LineChartComponent extends BaseChartComponent<LineChartProps> {
+export interface LineChartComponentType extends BaseChartComponentType<LineChartProps> {
 	type: "LineChart";
 }
 
 /**
  * 单系列面积图（折线填充变体）
  */
-export interface AreaChartComponent extends BaseChartComponent<LineChartProps> {
+export interface AreaChartComponentType extends BaseChartComponentType<LineChartProps> {
 	type: "AreaChart";
 }
 
@@ -61,7 +61,7 @@ export interface MultiLineChartProps extends ChartBaseProps {
 	areaStyle?: boolean;
 }
 
-export interface MultiLineChartComponent extends BaseChartComponent<MultiLineChartProps> {
+export interface MultiLineChartComponentType extends BaseChartComponentType<MultiLineChartProps> {
 	type: "MultiLineChart";
 }
 
@@ -73,7 +73,7 @@ export interface ScatterChartProps extends ChartBaseProps {
 	pointColor?: string;
 }
 
-export interface ScatterChartComponent extends BaseChartComponent<ScatterChartProps> {
+export interface ScatterChartComponentType extends BaseChartComponentType<ScatterChartProps> {
 	type: "ScatterChart";
 }
 
@@ -85,7 +85,7 @@ export interface BubbleChartProps extends ScatterChartProps {
 	colorPalette?: string[];
 }
 
-export interface BubbleChartComponent extends BaseChartComponent<BubbleChartProps> {
+export interface BubbleChartComponentType extends BaseChartComponentType<BubbleChartProps> {
 	type: "BubbleChart";
 }
 
@@ -97,7 +97,7 @@ export interface HorizontalBarChartProps extends ChartBaseProps {
 	barColor?: string;
 }
 
-export interface HorizontalBarChartComponent extends BaseChartComponent<HorizontalBarChartProps> {
+export interface HorizontalBarChartComponentType extends BaseChartComponentType<HorizontalBarChartProps> {
 	type: "HorizontalBarChart";
 }
 
@@ -108,7 +108,7 @@ export interface PieChartProps extends ChartBaseProps {
 	innerRadius?: number;
 }
 
-export interface PieChartComponent extends BaseChartComponent<PieChartProps> {
+export interface PieChartComponentType extends BaseChartComponentType<PieChartProps> {
 	type: "PieChart";
 }
 
@@ -120,7 +120,7 @@ export interface RosePieChartProps extends PieChartProps {
 	roseType?: "area" | "radius";
 }
 
-export interface RosePieChartComponent extends BaseChartComponent<RosePieChartProps> {
+export interface RosePieChartComponentType extends BaseChartComponentType<RosePieChartProps> {
 	type: "RosePieChart";
 }
 
@@ -132,7 +132,7 @@ export interface RadarChartProps extends ChartBaseProps {
 	colorPalette?: string[];
 }
 
-export interface RadarChartComponent extends BaseChartComponent<RadarChartProps> {
+export interface RadarChartComponentType extends BaseChartComponentType<RadarChartProps> {
 	type: "RadarChart";
 }
 
@@ -144,7 +144,7 @@ export interface FunnelChartProps extends ChartBaseProps {
 	colorPalette?: string[];
 }
 
-export interface FunnelChartComponent extends BaseChartComponent<FunnelChartProps> {
+export interface FunnelChartComponentType extends BaseChartComponentType<FunnelChartProps> {
 	type: "FunnelChart";
 }
 
@@ -159,7 +159,7 @@ export interface GaugeChartProps extends ChartBaseProps {
 	unit?: string;
 }
 
-export interface GaugeChartComponent extends BaseChartComponent<GaugeChartProps> {
+export interface GaugeChartComponentType extends BaseChartComponentType<GaugeChartProps> {
 	type: "GaugeChart";
 }
 
@@ -170,6 +170,6 @@ export interface TreemapChartProps extends ChartBaseProps {
 	colorPalette?: string[];
 }
 
-export interface TreemapChartComponent extends BaseChartComponent<TreemapChartProps> {
+export interface TreemapChartComponentType extends BaseChartComponentType<TreemapChartProps> {
 	type: "TreemapChart";
 }

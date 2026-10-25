@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import * as echarts from "echarts";
 import type { RendererProps } from "@/core/schema/commonType";
-import type { ScatterChartComponent } from "@/core/schema/chartType";
+import type { ScatterChartComponentType } from "@/core/schema/chartType";
 import EChartsBase from "./EChartsBase";
 
 /**
  * 散点图业务组件
  */
-export default function ScatterChart({ node }: RendererProps) {
-	const chartNode = node as ScatterChartComponent;
+export default function ScatterChartComponent({ node }: RendererProps) {
+	const chartNode = node as ScatterChartComponentType;
 	const { props, dataSource } = chartNode;
 	const data = (dataSource?.data ?? []) as Record<string, any>[];
 	const fm = dataSource?.fieldMapping ?? {};

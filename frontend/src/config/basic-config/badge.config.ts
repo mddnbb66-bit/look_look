@@ -1,6 +1,6 @@
-import type { BadgeComponent } from "@/core/schema/ownType";
+import type { BadgeComponentType } from "@/core/schema/ownType";
 
-export const badgeDefaultConfig: BadgeComponent = {
+export const badgeDefaultConfig: BadgeComponentType = {
 	id: "",
 	type: "Badge",
 	name: "徽标数",

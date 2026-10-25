@@ -1,10 +1,10 @@
-import type { AreaChartComponent } from "@/core/schema/chartType";
+import type { AreaChartComponentType } from "@/core/schema/chartType";
 
 /**
  * AreaChart 默认配置
  * - 折线填充成面积图的基础示例
  */
-export const areaChartDefaultConfig: AreaChartComponent = {
+export const areaChartDefaultConfig: AreaChartComponentType = {
 	id: "",
 	type: "AreaChart",
 	name: "面积图",
