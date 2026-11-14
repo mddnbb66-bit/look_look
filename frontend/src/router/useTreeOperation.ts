@@ -1,5 +1,5 @@
 import type { PageDSL } from "@/core/schema/page";
-import type { ComponentNode } from "@/core/schema/ownType";
+import type { ComponentNodeType } from "@/core/schema/ownType";
 
 /**
  * useTreeOperation
@@ -15,10 +15,10 @@ export const useTreeOperation = () => {
 	 */
 	// 判断节点是否具备 children 属性的类型守卫，避免在联合类型上直接访问 children
 	const hasChildren = (
-		node: ComponentNode | PageDSL
+		node: ComponentNodeType | PageDSL
 	): node is
-		| (ComponentNode & { children: ComponentNode[] })
-		| (PageDSL & { children: ComponentNode[] }) => {
+		| (ComponentNodeType & { children: ComponentNodeType[] })
+		| (PageDSL & { children: ComponentNodeType[] }) => {
 		return Array.isArray((node as any).children);
 	};
 
@@ -29,11 +29,11 @@ export const useTreeOperation = () => {
 	 * @param node 当前遍历到的根节点
 	 * @returns 找到的节点，找不到则为 null
 	 */
-	// 通用树操作工具函数，避免在增删改查中重复实现递归逻辑
+	// 返回查找到的节点对象数据
 	const findNodeById = (
-		id: string,
-		node: ComponentNode | PageDSL | null
-	): ComponentNode | PageDSL | null => {
+		id: string, //要找的目标id
+		node: ComponentNodeType | PageDSL | null //当前检查的节点，一开始都是root,仅仅凭个id是找不到的，剩下的方法全是
+	): ComponentNodeType | PageDSL | null => {
 		if (!node) return null;
 		if (node.id === id) return node;
 
@@ -52,27 +52,27 @@ export const useTreeOperation = () => {
 	 * 在指定父节点下插入子节点
 	 * 会在整棵树中查找 parentId 对应的节点并插入 newNode
 	 * @param parentId 父节点 id
-	 * @param root 遍历的根节点（通常为 schema 根）
+	 * @param root 当前整在检查的节点，第一次通常为schema 不能缺少根节点，因为schemas是整个树的入口，只有id的话会不知道往哪里插入
 	 * @param newNode 要插入的组件节点
 	 * @returns 是否插入成功
 	 */
 	const addNodeToParent = (
 		parentId: string,
-		root: ComponentNode | PageDSL,
-		newNode: ComponentNode
+		node: ComponentNodeType | PageDSL,
+		newNode: ComponentNodeType
 	): boolean => {
-		if (root.id === parentId) {
-			// 命中父节点，按需初始化 children 并追加
-			if (!hasChildren(root)) {
-				(root as any).children = [];
+		if (node.id === parentId) {
+			// 有children数组就加入，没有就初始化
+			if (hasChildren(node)) {
+				node.children.push(newNode);
+			} else {
+				(node as any).children = [newNode];
 			}
-			(root as any).children.push(newNode);
 			return true;
 		}
-
 		// 未命中则向子节点递归查找
-		if (hasChildren(root)) {
-			for (const child of root.children) {
+		if (hasChildren(node)) {
+			for (const child of node.children) {
 				if (addNodeToParent(parentId, child, newNode)) {
 					return true;
 				}
@@ -86,21 +86,21 @@ export const useTreeOperation = () => {
 	 * 根据 id 从树中删除节点
 	 * 仅修改 children 数组，不会删除根节点自身
 	 * @param id 要删除的节点 id
-	 * @param root 遍历的根节点
+	 * @param node  当前整在检查的节点，第一次通常为schema 不能缺少根节点，因为schemas是整个树的入口，只有id的话会不知道往哪里插入
 	 * @returns 是否删除成功
 	 */
-	const removeNodeById = (id: string, root: ComponentNode | PageDSL): boolean => {
-		if (!hasChildren(root)) return false;
+	const removeNodeById = (id: string, node: ComponentNodeType | PageDSL): boolean => {
+		if (!hasChildren(node)) return false;
 
-		// 先在当前层级查找需要删除的节点
-		const index = root.children.findIndex((child) => child.id === id);
+		const index = node.children.findIndex((child) => child.id === id);
+
 		if (index !== -1) {
-			root.children.splice(index, 1);
+			//走到这里说明当前层级又要删除的东西
+			node.children.splice(index, 1);
 			return true;
 		}
-
-		// 当前层级没找到则递归到子节点继续查找
-		for (const child of root.children) {
+		//走到这里说明当前层级没有要删除的
+		for (const child of node.children) {
 			if (removeNodeById(id, child)) {
 				return true;
 			}
@@ -108,6 +108,12 @@ export const useTreeOperation = () => {
 
 		return false;
 	};
+	// 	如果当前 root 的直接子节点中找到了目标：
+	//     删除它并返回 true
+	// 否则：
+	//     递归搜索每个子节点
+	//     如果递归删除成功，返回 true
+	//     全部失败后返回 false
 
 	/**
 	 * 根据 id 更新树中的节点属性
@@ -119,17 +125,17 @@ export const useTreeOperation = () => {
 	 */
 	const updateNodeById = (
 		id: string,
-		root: ComponentNode | PageDSL,
-		updates: Partial<ComponentNode>
+		node: ComponentNodeType | PageDSL,
+		updates: Partial<ComponentNodeType>
 	): boolean => {
-		if (root.id === id) {
+		if (node.id === id) {
 			// 命中目标节点，直接合并属性
-			Object.assign(root, updates);
+			Object.assign(node, updates);
 			return true;
 		}
-		if (hasChildren(root)) {
+		if (hasChildren(node)) {
 			// 未命中则递归子节点
-			for (const child of root.children) {
+			for (const child of node.children) {
 				if (updateNodeById(id, child, updates)) {
 					return true;
 				}

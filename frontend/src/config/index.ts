@@ -27,7 +27,7 @@ import { funnelChartDefaultConfig } from "./chart-config/funnel-chart.config";
 import { gaugeChartDefaultConfig } from "./chart-config/gauge-chart.config";
 import { treemapChartDefaultConfig } from "./chart-config/treemap-chart.config";
 import { smartDeepClone } from "@/utils/deepClone";
-import type { ComponentNode } from "@/core/schema/ownType";
+import type { ComponentNodeType } from "@/core/schema/ownType";
 
 /**
  * 组件默认配置映射
@@ -64,10 +64,10 @@ export const componentDefaultConfigs = {
 	GaugeChart: gaugeChartDefaultConfig,
 	TreemapChart: treemapChartDefaultConfig,
 };
-
+//类型-》默认数据
 export const getNewComponentConfig = (
 	type: keyof typeof componentDefaultConfigs
-): ComponentNode => {
+): ComponentNodeType => {
 	// 根据type 获取对应的默认配置
 	return smartDeepClone(componentDefaultConfigs[type]);
 };

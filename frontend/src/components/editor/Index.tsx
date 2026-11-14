@@ -249,6 +249,7 @@ export default function Index() {
 
 							{/* 这个层是中间层也是工作区外框是让出标尺位置的包装层 */}
 							<div className="ml-[28px] mt-[28px] flex-1 overflow-hidden">
+								{/* DroppableItem 把下面的东西变成可接受拖拽组件的区域 */}
 								<DroppableItem
 									id={schema!.id}
 									style={{ minHeight: "0", minWidth: "0" }}

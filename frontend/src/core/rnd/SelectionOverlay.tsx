@@ -27,7 +27,9 @@ export default function SelectionOverlay({
 					inset: 0,
 					border: "1px solid #1677ff",
 					boxShadow: "0 0 0 1px rgba(22,119,255,0.3)",
+					//圆角
 					borderRadius: 2,
+					//这个元素不接受鼠标/指针的命中
 					pointerEvents: "none",
 				}}
 			/>

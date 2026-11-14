@@ -233,11 +233,12 @@ export interface ContainerComponentType extends BaseComponentNodeType {
 		gap?: number; // flex 模式下的间距
 	};
 	// 核心关系定义：递归结构
-	children?: ComponentNode[];
+	children?: ComponentNodeType[];
 }
 
 // 所有可能的组件类型集合
-export type ComponentNode =
+// 定义一个类型，名字叫 ComponentNodeType。符合它的数据，可以是文字节点，或者图片节点，或者按钮节点。
+export type ComponentNodeType =
 	| TextComponentType
 	| ImageComponentType
 	| ButtonComponentType

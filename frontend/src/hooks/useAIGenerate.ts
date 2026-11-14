@@ -2,14 +2,14 @@ import { useRef, useState } from "react";
 import { nanoid } from "nanoid";
 import { useSchemaStore } from "@/store/schema-store";
 import { useShallow } from "zustand/shallow";
-import type { ComponentNode } from "@/core/schema/ownType";
+import type { ComponentNodeType } from "@/core/schema/ownType";
 import type { ChatMessage } from "@/types/chat";
 
 export type { ChatMessage };
 
 export interface SubmitOptions {
 	/** 指定要精准修改的目标组件，携带完整配置注入 prompt 上下文 */
-	targetComponent?: ComponentNode;
+	targetComponent?: ComponentNodeType;
 }
 
 export function useAIGenerate() {

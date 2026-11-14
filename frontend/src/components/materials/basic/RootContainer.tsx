@@ -4,9 +4,8 @@ import DroppableItem from "@/core/dnd-kit/DroppableItem";
 import type { PageDSL } from "@/core/schema/page";
 // import { nanoid } from "nanoid"  // 不再需要
 import { normalizeGridSize } from "@/core/utils/grid";
-
 /**
- * 根容器组件
+ * 白布本身
  * @param node renderer传进来的节点数据
  * @param renderChildren 渲染子组件的函数
  * @returns 返回一个div，里面渲染子组件

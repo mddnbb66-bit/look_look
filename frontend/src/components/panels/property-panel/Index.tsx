@@ -1,5 +1,5 @@
 import { useMemo, useEffect, useCallback, useState } from "react";
-import type { ComponentNode } from "@/core/schema/ownType";
+import type { ComponentNodeType } from "@/core/schema/ownType";
 import type { PageDSL } from "@/core/schema/page";
 import type { ChartDataSource, ComponentType } from "@/core/schema/commonType";
 import { useSchemaStore } from "@/store/schema-store";
@@ -31,9 +31,9 @@ export default function PropertyPanel() {
 		if (pendingEdit) setMode("ai");
 	}, [pendingEdit]);
 
-	const selectedNode = useMemo<ComponentNode | PageDSL | null>(() => {
+	const selectedNode = useMemo<ComponentNodeType | PageDSL | null>(() => {
 		if (!selectedId || !schema) return null;
-		return findItem(selectedId, schema) as ComponentNode | PageDSL | null;
+		return findItem(selectedId, schema) as ComponentNodeType | PageDSL | null;
 	}, [selectedId, schema, findItem]);
 
 	const isPageFormVisible = useMemo(() => {
@@ -102,7 +102,7 @@ export default function PropertyPanel() {
 	const handlePropsChange = useCallback(
 		(newProps: Record<string, any>) => {
 			if (!selectedId) return;
-			updateItem(selectedId, { props: newProps } as Partial<ComponentNode>);
+			updateItem(selectedId, { props: newProps } as Partial<ComponentNodeType>);
 		},
 		[selectedId, updateItem]
 	);
@@ -111,7 +111,7 @@ export default function PropertyPanel() {
 	const handleDataSourceChange = useCallback(
 		(ds: ChartDataSource) => {
 			if (!selectedId) return;
-			updateItem(selectedId, { dataSource: ds } as Partial<ComponentNode>);
+			updateItem(selectedId, { dataSource: ds } as Partial<ComponentNodeType>);
 		},
 		[selectedId, updateItem]
 	);
@@ -165,7 +165,7 @@ export default function PropertyPanel() {
 		}
 		if (mode === "component") {
 			if (!selectedNode) return <EmptyPanel />;
-			const node = selectedNode as ComponentNode;
+			const node = selectedNode as ComponentNodeType;
 			if (node.type === "RootContainer") return renderPageForm();
 			const cType = node.type as ComponentType;
 			const showDataSource = isChartType(cType) && "dataSource" in node;

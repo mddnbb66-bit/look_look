@@ -1,3 +1,9 @@
+/**
+ * @param DragStartEvent 拖拽开始时的数据类型
+ * @param DragEndEvent 	拖拽结束时的数据类型
+ * @param DragOverlay 拖拽过程中的视觉预览
+ * @param DndContext	拖拽系统的上下文容器，类似一个总控制器。
+ */
 import { DndContext, DragOverlay, type DragStartEvent, type DragEndEvent } from "@dnd-kit/core";
 import { useState } from "react";
 import { useSchemaStore } from "@/store/schema-store";
@@ -7,6 +13,7 @@ import { normalizeGridSize, snapToGrid } from "@/core/utils/grid";
 
 /**
  * 该组件是一个拖拽的上下文环境，统一封装各种事件处理逻辑
+ * 也就是处理拖完之后具体怎么处理
  */
 
 export default function DndWrapper({
@@ -17,8 +24,9 @@ export default function DndWrapper({
 	scale?: number;
 }) {
 	const schemaStore = useSchemaStore();
-	// 记录当前处于拖拽中的元素 id，用于在 DragOverlay 中渲染预览内容
-	const [activeId, setActiveId] = useState<string | null>(null);
+	// 记录当前处于拖拽中的元素 type，用于在 DragOverlay 中渲染预览内容
+	//就是被拖拽的那个组件的type
+	const [activeType, setActiveType] = useState<string | null>(null);
 	const zoom = scale && scale > 0 ? scale : 1;
 
 	// 拖拽开始事件处理
@@ -26,13 +34,15 @@ export default function DndWrapper({
 		// TODO: 需要新增组件config，拖拽开始时，深拷贝一份拖拽组件对应config，在useDraggable中注册数据
 		// 目前仅做调试输出，真正的实例 id 在拖拽结束时统一生成，保证「每次成功拖拽一个新实例就得到一个全新的 id」
 		console.log("DragStartEvent:", event);
-		setActiveId(event.active.id as string);
+		//这个id就是ComponentType，只是注册的时候必须写id
+		//event.active    // 正在拖的那个来源的信息对象
+		setActiveType(event.active.id as string);
 	};
 
 	// 拖拽结束事件处理
 	const handleDragEnd = (event: DragEndEvent) => {
 		console.log("DragEndEvent:", event);
-		setActiveId(null);
+		setActiveType(null);
 		// 拖拽结束时，更新组件树结构，更新组件的默认位置配置
 		const dropItemId = event.over?.id;
 		if (!dropItemId) return;
@@ -52,25 +62,22 @@ export default function DndWrapper({
 		const scrollTop = viewport?.scrollTop ?? 0;
 
 		// 拖拽元素的目标容器相对于浏览器视口左上角的位置
-		const overData = event.over?.data?.current as {
-			getBoundingClientRect?: () => DOMRect | undefined;
-		};
-		const overRect = overData?.getBoundingClientRect?.() ?? event.over?.rect;
+		const overPosition = event.over?.rect;
 
 		// 放置的目标元素相对于浏览器视口左上角的相对位置
-		const activeRect = event.active.rect.current?.translated;
+		const newNodePosition = event.active.rect.current?.translated;
 
-		if (activeRect && overRect) {
+		if (newNodePosition && overPosition) {
 			// 缩放后需要把落点还原为原始坐标系
-			// activeRect.left/top - overRect.left/top: 拖拽元素相对于容器左上角的位置
+			// newNodePosition.left/top - overPosition.left/top: 拖拽元素相对于容器左上角的位置
 			// 再加上滚动的距离，除以放大倍数，还原基于屏幕的1:1正常比例
-			const offsetLeft = (activeRect.left - overRect.left + scrollLeft) / zoom;
-			const offsetTop = (activeRect.top - overRect.top + scrollTop) / zoom;
+			const offsetLeft = (newNodePosition.left - overPosition.left + scrollLeft) / zoom;
+			const offsetTop = (newNodePosition.top - overPosition.top + scrollTop) / zoom;
 
 			// 使用页面配置的网格尺寸做吸附：取最近网格点
 			const gridSize = normalizeGridSize(schemaStore.schema?.settings?.gridSize);
-			const snappedLeft = snapToGrid(offsetLeft, gridSize).value;
-			const snappedTop = snapToGrid(offsetTop, gridSize).value;
+			const snappedLeft = snapToGrid(offsetLeft, gridSize).originPosition;
+			const snappedTop = snapToGrid(offsetTop, gridSize).originPosition;
 
 			const nextStyle: any = newConfig.style ?? {};
 			nextStyle.left = snappedLeft;
@@ -86,27 +93,32 @@ export default function DndWrapper({
 
 	// 拖拽被取消（例如 ESC 或拖拽到无效区域）时重置状态
 	const handleDragCancel = () => {
-		setActiveId(null);
+		setActiveType(null);
 	};
+	// 	dnd-kit 处理取消操作
+	//    ├─ 清理库内部的拖拽状态
+	//    ├─ 让 useDraggable 的拖动位移恢复
+	//    └─ 调用你提供的 handleDragCancel，通知你清理自己的状态
 
 	return (
+		// 拖拽系统的上下文容器，类似一个总控制器 监听拖拽开始 监听拖拽结束 监听拖拽取消 管理拖拽源和放置区域之间的关系 给内部的 useDraggable、useDroppable 提供环境
 		<DndContext
-			onDragStart={handleDragStart}
+			onDragStart={handleDragStart} //拖拽开始时触发这个回调 下面是结束的时候
 			onDragEnd={handleDragEnd}
-			onDragCancel={handleDragCancel}
+			onDragCancel={handleDragCancel} //拖拽取消时触发。比如拖到无效区域后取消
 		>
 			{children}
 			{/* 全局拖拽浮层，保证拖拽预览始终在画布上层显示 */}
 			<DragOverlay>
-				{activeId && (
+				{activeType && (
 					<div
 						style={{
 							zIndex: 9999,
 							pointerEvents: "none",
 						}}
 					>
-						{/* TODO: 此处可根据 activeId 渲染对应组件的真实预览内容 */}
-						{activeId}
+						{/* TODO: 此处可根据 activeType 渲染对应组件的真实预览内容 */}
+						{activeType}
 					</div>
 				)}
 			</DragOverlay>

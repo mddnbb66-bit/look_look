@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { ComponentNode } from "@/core/schema/ownType";
+import type { ComponentNodeType } from "@/core/schema/ownType";
 import { useComponentEditStore } from "@/store/component-edit-store";
 
 interface AiEditInputProps {
 	/** 当前选中的节点 */
-	node: ComponentNode;
+	node: ComponentNodeType;
 	/** 组件靠近画布顶部时，输入框位置需向下偏移 */
 	isNearTop: boolean;
 }

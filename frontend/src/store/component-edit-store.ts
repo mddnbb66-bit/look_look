@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { ComponentNode } from "@/core/schema/ownType";
+import type { ComponentNodeType } from "@/core/schema/ownType";
 
 /**
  * 组件级 AI 编辑请求的桥接 store
@@ -10,10 +10,10 @@ interface ComponentEditState {
 	/** 待处理的组件编辑请求 */
 	pendingEdit: {
 		prompt: string;
-		node: ComponentNode;
+		node: ComponentNodeType;
 	} | null;
 	/** 提交一个组件编辑请求 */
-	setPendingEdit: (prompt: string, node: ComponentNode) => void;
+	setPendingEdit: (prompt: string, node: ComponentNodeType) => void;
 	/** 消费后清除 */
 	clearPendingEdit: () => void;
 }

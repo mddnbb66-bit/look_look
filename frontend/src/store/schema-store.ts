@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import type { PageDSL } from "@/core/schema/page";
 import { nanoid } from "nanoid";
-import type { ComponentNode } from "@/core/schema/ownType";
+import type { ComponentNodeType } from "@/core/schema/ownType";
 import { useTreeOperation } from "@/router/useTreeOperation";
 import { DEFAULT_GRID_SIZE, normalizeGridSize } from "@/core/utils/grid";
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -18,7 +18,7 @@ interface SchemaState {
 	// 当前选中的组件 id（用于属性面板、图层面板等联动）
 	selectedId: string | null;
 	// 当前选中的组件节点配置
-	selectedNode: ComponentNode | null;
+	selectedNode: ComponentNodeType | null;
 	// 更新页面级配置（名称、描述、画布尺寸等）
 	updatePage: (patch: Partial<PageDSL>) => void;
 	// 初始化页面组件树
@@ -28,14 +28,14 @@ interface SchemaState {
 	// 查找节点
 	findItem: (
 		id: string,
-		componentNode: ComponentNode | PageDSL
-	) => ComponentNode | PageDSL | null;
+		componentNode: ComponentNodeType | PageDSL
+	) => ComponentNodeType | PageDSL | null;
 	// 新增节点
-	addItem: (parentId: string, newNode: ComponentNode) => boolean;
+	addItem: (parentId: string, newNode: ComponentNodeType) => boolean;
 	// 删除节点
 	removeItem: (id: string) => boolean;
 	// 更新节点
-	updateItem: (id: string, updates: Partial<ComponentNode>) => boolean;
+	updateItem: (id: string, updates: Partial<ComponentNodeType>) => boolean;
 }
 
 // 创建一份全新的默认 Schema，避免复用旧草稿
@@ -70,8 +70,8 @@ export const useSchemaStore = create<SchemaState>()(
 		selectedNode: null,
 
 		/**
-		 * 更新页面级配置，保持组件树不变
-		 * @param patch 需要更新的字段集合
+		 * 更新页面级配置(宽高等)，保持组件树不变
+		 * @param patch 需要更新的字段集合 Partial<PageDSL>:把 PageDSL 类型里的所有字段都变成可选字段。
 		 */
 		updatePage: (patch: Partial<PageDSL>) => {
 			set((state) => {
@@ -126,15 +126,17 @@ export const useSchemaStore = create<SchemaState>()(
 				}
 			});
 		},
-
-		// 更新当前选中的组件 id，并同步选中节点配置
+		//点击选中，传入id,靠findNodeById这个返回节点所有数据
+		// 更新当前选中的组件 id，并同步更新选中节点配置
 		setSelectedId: (id: string | null) => {
 			set((state) => {
 				state.selectedId = id;
 				if (id && state.schema) {
+					// 只有 id 存在，并且页面 schema 已加载时，才继续查找节点
 					const node = findNodeById(id, state.schema);
+					// 同步更新选中节点配置
 					state.selectedNode =
-						node && node.id !== state.schema.id ? (node as ComponentNode) : null;
+						node && node.id !== state.schema.id ? (node as ComponentNodeType) : null;
 				} else {
 					state.selectedNode = null;
 				}
@@ -142,16 +144,16 @@ export const useSchemaStore = create<SchemaState>()(
 		},
 
 		/**
-		 * 查找组件树中的某个组件
+		 * 根据id查找组件树中的某个组件
 		 * @param id 组件id
 		 * @param componentNode 组件树节点
 		 * @returns
 		 */
 		findItem: (
 			id: string,
-			componentNode: ComponentNode | PageDSL
-		): ComponentNode | PageDSL | null => {
-			// 对外暴露的查找接口，内部复用通用 DFS 函数
+			componentNode: ComponentNodeType | PageDSL
+		): ComponentNodeType | PageDSL | null => {
+			// 这个返回节点所有数据
 			return findNodeById(id, componentNode);
 		},
 
@@ -161,7 +163,7 @@ export const useSchemaStore = create<SchemaState>()(
 		 * @param newNode 要添加的新节点
 		 * @returns 是否添加成功
 		 */
-		addItem: (parentId: string, newNode: ComponentNode): boolean => {
+		addItem: (parentId: string, newNode: ComponentNodeType): boolean => {
 			const { schema } = get();
 			if (!schema) return false;
 
@@ -209,7 +211,7 @@ export const useSchemaStore = create<SchemaState>()(
 		 * @param updates 要更新的属性
 		 * @returns 是否更新成功
 		 */
-		updateItem: (id: string, updates: Partial<ComponentNode>): boolean => {
+		updateItem: (id: string, updates: Partial<ComponentNodeType>): boolean => {
 			const { schema } = get();
 			if (!schema) return false;
 
@@ -220,8 +222,8 @@ export const useSchemaStore = create<SchemaState>()(
 				success = updateNodeById(id, state.schema!, updates);
 				// 如果更新的是当前选中节点，同步 selectedNode
 				if (success && state.selectedId === id) {
-					const node = findNodeById(id, state.schema!);
-					state.selectedNode = node ? (node as ComponentNode) : null;
+					const node = findNodeById(id, state.schema);
+					state.selectedNode = node ? (node as ComponentNodeType) : null;
 				}
 			});
 
@@ -229,3 +231,17 @@ export const useSchemaStore = create<SchemaState>()(
 		},
 	}))
 );
+
+// 10-27的返回
+// {
+//   schema: ...,
+//   selectedId: null,
+//   selectedNode: null,
+//   updatePage: [Function],
+//   setSchema: [Function],
+//   setSelectedId: [Function],
+//   findItem: [Function],
+//   addItem: [Function],
+//   removeItem: [Function],
+//   updateItem: [Function]
+// }

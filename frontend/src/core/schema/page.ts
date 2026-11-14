@@ -1,4 +1,4 @@
-import type { ComponentNode } from "./ownType";
+import type { ComponentNodeType } from "./ownType";
 
 /**
  * 页面配置 (Page Schema)
@@ -21,10 +21,11 @@ export interface PageDSL {
 		height: number | string; // 大屏设计稿高度 (如 1080)
 		backgroundColor?: string; // 背景颜色
 		backgroundImage?: string; // 背景图片
-		gridSize?: number; // 编辑时的吸附网格大小
+		gridSize?: number; // 编辑时的网格大小
+		snapSize?: number; //	吸附开始生效时候的作用大小
 	};
 
 	// 组件树 (核心)
 	// 这里的 children 就是第一层级的组件
-	children?: ComponentNode[];
+	children?: ComponentNodeType[];
 }

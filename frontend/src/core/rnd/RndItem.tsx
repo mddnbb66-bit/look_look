@@ -1,6 +1,6 @@
 import { Rnd } from "react-rnd";
 import React, { useCallback, useEffect, useRef } from "react";
-import type { ComponentNode } from "@/core/schema/ownType";
+import type { ComponentNodeType } from "@/core/schema/ownType";
 import { useSchemaStore } from "@/store/schema-store";
 import { useGuideStore } from "@/store/guide-store";
 import { useShallow } from "zustand/shallow";
@@ -9,10 +9,9 @@ import SelectionOverlay from "./SelectionOverlay";
 import AiEditInput from "./AiEditInput";
 import type { DraggableData, ResizableDelta, Position } from "react-rnd";
 import type { DraggableEvent } from "react-draggable";
-
 interface RndItemProps {
 	// 当前渲染的节点数据
-	node: ComponentNode;
+	node: ComponentNodeType;
 	// 真实业务组件（文本、容器等）
 	children: React.ReactNode;
 	// 画布缩放倍率，传给 Rnd 以修正拖拽/缩放坐标
@@ -53,6 +52,7 @@ export default function RndItem({ node, children, scale = 1 }: RndItemProps) {
 		zIndex: 1,
 	};
 
+	//当前正在渲染的组件，是不是用户当前选中的组件？
 	const isSelected = selectedId === node.id;
 	// 当组件靠近画布顶部时，标签会被遮住，需要翻转到下方显示
 	const isNearTop = style.top < 20;
@@ -84,8 +84,8 @@ export default function RndItem({ node, children, scale = 1 }: RndItemProps) {
 	/** 拖拽过程中仅处理参考线高亮 */
 	const handleDrag = useCallback(
 		(_e: DraggableEvent, data: DraggableData) => {
-			const gridXValue = snapToGrid(data.x, resolvedGridSize).value;
-			const gridYValue = snapToGrid(data.y, resolvedGridSize).value;
+			const gridXValue = snapToGrid(data.x, resolvedGridSize).originPosition;
+			const gridYValue = snapToGrid(data.y, resolvedGridSize).originPosition;
 			updateSnapsSafely([
 				{ orientation: "x", value: gridXValue },
 				{ orientation: "y", value: gridYValue },
@@ -95,31 +95,62 @@ export default function RndItem({ node, children, scale = 1 }: RndItemProps) {
 	);
 
 	/** 拖拽结束时同步最新坐标到 schema */
+	/**
+	 * @param data一般是这样{
+  node,    // 被拖拽的 DOM 元素
+  x,       // 当前横坐标
+  y,       // 当前纵坐标
+  deltaX,  // 本次横向移动距离
+  deltaY,  // 本次纵向移动距离
+  lastX,   // 上一次横坐标
+  lastY    // 上一次纵坐标
+}
+	 */
 	const handleDragStop = useCallback(
 		(_e: DraggableEvent, data: DraggableData) => {
-			const snappedLeft = snapToGrid(data.x, resolvedGridSize).value;
-			const snappedTop = snapToGrid(data.y, resolvedGridSize).value;
+			const snappedLeft = snapToGrid(data.x, resolvedGridSize).originPosition;
+			const snappedTop = snapToGrid(data.y, resolvedGridSize).originPosition;
 			updateSnapsSafely([]);
 			updateItem(node.id, {
 				style: { ...style, left: snappedLeft, top: snappedTop },
-			} as Partial<ComponentNode>);
+			} as Partial<ComponentNodeType>);
 		},
 		[resolvedGridSize, updateSnapsSafely, updateItem, node.id, style]
 	);
 
-	/** 缩放结束时同步最新尺寸与坐标到 schema */
+	/** 单个缩放结束时同步最新尺寸与坐标到 schema */
+	// 用户拖动组件边缘
+	//         ↓
+	// Rnd 改变组件大小
+	//         ↓
+	// 用户松开鼠标
+	//         ↓
+	// 触发 handleResizeStop
+	//         ↓
+	// 读取新宽高和位置
+	//         ↓
+	// 吸附到网格
+	//         ↓
+	// 保存到 schema
+	// 不是为了能缩放
+	// 缩放结束
+	// → 获取最终尺寸
+	// → 对齐网格
+	// → 写回 schema
+	// → 保证数据、保存结果和画面一致
 	const handleResizeStop = useCallback(
 		(
 			_e: MouseEvent | TouchEvent,
 			_direction: string,
-			ref: HTMLElement,
-			_delta: ResizableDelta,
-			position: Position
+			ref: HTMLElement, //当前被缩放的 HTML 元素，用.可以获得获取缩放后的尺寸，就offset
+			_delta: ResizableDelta, //表示这次缩放尺寸变化了多少，是怎量
+			position: Position //缩放后的坐标，用来取 x、y
 		) => {
-			const snappedWidth = snapToGrid(ref.offsetWidth, resolvedGridSize).value;
-			const snappedHeight = snapToGrid(ref.offsetHeight, resolvedGridSize).value;
-			const snappedLeft = snapToGrid(position.x, resolvedGridSize).value;
-			const snappedTop = snapToGrid(position.y, resolvedGridSize).value;
+			const snappedWidth = snapToGrid(ref.offsetWidth, resolvedGridSize).originPosition;
+			const snappedHeight = snapToGrid(ref.offsetHeight, resolvedGridSize).originPosition;
+			//从左上角开缩放，的处理
+			const snappedLeft = snapToGrid(position.x, resolvedGridSize).originPosition;
+			const snappedTop = snapToGrid(position.y, resolvedGridSize).originPosition;
 			updateSnapsSafely([]);
 			updateItem(node.id, {
 				style: {
@@ -129,11 +160,16 @@ export default function RndItem({ node, children, scale = 1 }: RndItemProps) {
 					left: snappedLeft,
 					top: snappedTop,
 				},
-			} as Partial<ComponentNode>);
+			} as Partial<ComponentNodeType>);
 		},
 		[resolvedGridSize, updateSnapsSafely, updateItem, node.id, style]
 	);
-
+	// useCallback		决定函数是否复用
+	// 第一次渲染：创建 handleClick
+	// 后续渲染时：
+	// setSelectedId 和 node.id 没变：复用旧函数
+	// 任意一个变了：重新创建函数
+	/** 删除当前组件 */
 	/** 点击选中当前组件 */
 	const handleClick = useCallback(
 		(event: React.MouseEvent) => {
@@ -143,7 +179,6 @@ export default function RndItem({ node, children, scale = 1 }: RndItemProps) {
 		[setSelectedId, node.id]
 	);
 
-	/** 删除当前组件 */
 	const handleDelete = useCallback(() => {
 		removeItem(node.id);
 		if (isSelected) {
@@ -162,12 +197,12 @@ export default function RndItem({ node, children, scale = 1 }: RndItemProps) {
 			position={{ x: style.left, y: style.top }}
 			bounds="parent"
 			scale={scale}
-			disableDragging={node.id !== selectedId}
-			enableResizing={node.id === selectedId}
+			disableDragging={node.id !== selectedId} //没选中的组件禁止拖动。
+			enableResizing={node.id === selectedId} //只有选中的组件允许缩放。
 			style={{ zIndex: style.zIndex }}
-			onDrag={handleDrag}
-			onDragStop={handleDragStop}
-			onResizeStop={handleResizeStop}
+			onDrag={handleDrag} //组件正在移动时持续触发
+			onDragStop={handleDragStop} //组件移动结束时触发
+			onResizeStop={handleResizeStop} //组件缩放结束时触发
 		>
 			{/* 内层容器负责点击选中、高亮边框和标签区域 */}
 			<div
@@ -195,3 +230,11 @@ export default function RndItem({ node, children, scale = 1 }: RndItemProps) {
 		</Rnd>
 	);
 }
+
+// relative 外层 div
+// ├── SelectionOverlay
+// │   ├── 边框 div：absolute
+// │   ├── 名称 div：absolute
+// │   └── 按钮 div：absolute
+// ├── AiEditInput：取决于它自己的 CSS
+// └── children：普通文档流元素

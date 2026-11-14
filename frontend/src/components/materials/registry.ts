@@ -1,8 +1,8 @@
 import type React from "react";
 import type { ComponentType } from "@/core/schema/commonType";
-import type { ComponentNode } from "@/core/schema/ownType";
+import type { ComponentNodeType } from "@/core/schema/ownType";
 import type { PageDSL } from "@/core/schema/page";
-import ContainerComponent from "./basic/Container";
+import ContainerComponent from "./basic/container";
 import TextComponent from "./basic/Text";
 import ImageComponent from "./basic/Image";
 import ButtonComponent from "./basic/Button";
@@ -39,11 +39,11 @@ import TreemapChartComponent from "./chart/TreemapChart";
  */
 // 每个注册组件都约定接收 renderer 传入的节点数据和可选的 renderChildren 回调
 type RegistryComponent = (props: {
-	node: ComponentNode | PageDSL;
-	renderChildren?: (children: ComponentNode[]) => React.ReactNode;
+	node: ComponentNodeType | PageDSL;
+	renderChildren?: (children: ComponentNodeType[]) => React.ReactNode;
 	mode?: "edit" | "preview";
 }) => React.ReactNode;
-
+// React.ReactNode   所有可以被 React 渲染的内容
 // 自定义 Map 类型，让 get 在类型层面**一定**返回一个可用于 JSX 的组件（避免 Renderer 中出现 undefined 报错）
 interface ComponentRegistry extends Map<
 	ComponentType | "error-callback" | "RootContainer",
@@ -104,8 +104,14 @@ ComponentRegistryManager.register("Text", TextComponent as unknown as RegistryCo
 ComponentRegistryManager.register("Image", ImageComponent as unknown as RegistryComponent);
 ComponentRegistryManager.register("Button", ButtonComponent as unknown as RegistryComponent);
 ComponentRegistryManager.register("Clock", ClockComponent as unknown as RegistryComponent);
-ComponentRegistryManager.register("StatisticCard", StatisticCardComponent as unknown as RegistryComponent);
-ComponentRegistryManager.register("ProgressBar", ProgressBarComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register(
+	"StatisticCard",
+	StatisticCardComponent as unknown as RegistryComponent
+);
+ComponentRegistryManager.register(
+	"ProgressBar",
+	ProgressBarComponent as unknown as RegistryComponent
+);
 ComponentRegistryManager.register("Countdown", CountdownComponent as unknown as RegistryComponent);
 ComponentRegistryManager.register("Divider", DividerComponent as unknown as RegistryComponent);
 ComponentRegistryManager.register("Badge", BadgeComponent as unknown as RegistryComponent);
@@ -118,23 +124,53 @@ ComponentRegistryManager.register(
 	"HorizontalBarChart",
 	HorizontalBarChartComponent as unknown as RegistryComponent
 );
-ComponentRegistryManager.register("MultiBarChart", MultiBarChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register(
+	"MultiBarChart",
+	MultiBarChartComponent as unknown as RegistryComponent
+);
 ComponentRegistryManager.register("LineChart", LineChartComponent as unknown as RegistryComponent);
 ComponentRegistryManager.register("AreaChart", AreaChartComponent as unknown as RegistryComponent);
-ComponentRegistryManager.register("MultiLineChart", MultiLineChartComponent as unknown as RegistryComponent);
+ComponentRegistryManager.register(
+	"MultiLineChart",
+	MultiLineChartComponent as unknown as RegistryComponent
+);
 ComponentRegistryManager.register("PieChart", PieChartComponent as unknown as RegistryComponent);
-ComponentRegistryManager.register("RosePieChart", RosePieChartComponent as unknown as RegistryComponent);
-ComponentRegistryManager.register("ScatterChart", ScatterChartComponent as unknown as RegistryComponent);
-ComponentRegistryManager.register("BubbleChart", BubbleChartComponent as unknown as RegistryComponent);
-ComponentRegistryManager.register("RadarChart", RadarChartComponent as unknown as RegistryComponent);
-ComponentRegistryManager.register("FunnelChart", FunnelChartComponent as unknown as RegistryComponent);
-ComponentRegistryManager.register("GaugeChart", GaugeChartComponent as unknown as RegistryComponent);
-ComponentRegistryManager.register("TreemapChart", TreemapChartComponent as unknown as RegistryComponent);
-ComponentRegistryManager.register("RootContainer", RootContainerComponent as unknown as RegistryComponent); // 根容器组件是一个特殊的容器组件
+ComponentRegistryManager.register(
+	"RosePieChart",
+	RosePieChartComponent as unknown as RegistryComponent
+);
+ComponentRegistryManager.register(
+	"ScatterChart",
+	ScatterChartComponent as unknown as RegistryComponent
+);
+ComponentRegistryManager.register(
+	"BubbleChart",
+	BubbleChartComponent as unknown as RegistryComponent
+);
+ComponentRegistryManager.register(
+	"RadarChart",
+	RadarChartComponent as unknown as RegistryComponent
+);
+ComponentRegistryManager.register(
+	"FunnelChart",
+	FunnelChartComponent as unknown as RegistryComponent
+);
+ComponentRegistryManager.register(
+	"GaugeChart",
+	GaugeChartComponent as unknown as RegistryComponent
+);
+ComponentRegistryManager.register(
+	"TreemapChart",
+	TreemapChartComponent as unknown as RegistryComponent
+);
+ComponentRegistryManager.register(
+	"RootContainer",
+	RootContainerComponent as unknown as RegistryComponent
+); // 根容器组件是一个特殊的容器组件
 
 // 导出类实例和类型
 export { ComponentRegistryManager };
 export type { RegistryComponent, ComponentRegistry };
 
 // 为了保持向后兼容，导出原有的 componentRegistry
-export const componentRegistry: ComponentRegistry = ComponentRegistryManager.getAllComponents();
+export const componentRegistryMap: ComponentRegistry = ComponentRegistryManager.getAllComponents();
