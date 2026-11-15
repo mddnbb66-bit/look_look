@@ -68,62 +68,56 @@ export default function Toolbar({ pageId = null, onPageIdChange }: ToolbarProps)
 		navigate(`/preview/${pageId}`);
 	};
 
+	// 顶栏显示的项目名：优先展示标题，其次页面名称；取值顺序和项目列表页的卡片标题一致
+	const pageTitle = schema?.props?.title || schema?.name || "未命名项目";
+
 	return (
-		<div className="flex h-full items-center justify-between px-4 bg-white border-b border-slate-200">
-			<div className="flex items-center gap-3">
-				<div className="flex items-center gap-2">
-					<div className="h-7 w-7 rounded-md bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center text-[10px] font-bold text-white shadow-brand-soft">
-						VC
-					</div>
-					<span className="text-sm font-medium text-slate-700">编辑器</span>
+		<div className="flex h-full items-center justify-between border-b border-slate-200 bg-white px-3">
+			{/* 左侧：标识 + 项目名。数据库 ID 不再占位置，鼠标停在项目名上可以看到 */}
+			<div className="flex min-w-0 items-center gap-2.5">
+				<div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-slate-900 text-[10px] font-bold tracking-wide text-white">
+					VC
 				</div>
-				{pageId && (
-					<span className="text-xs text-slate-400 bg-slate-50 px-2 py-0.5 rounded">
-						ID: {pageId}
-					</span>
-				)}
+				<span
+					className="truncate text-sm font-medium text-slate-900"
+					title={pageId ? `ID: ${pageId}` : undefined}
+				>
+					{pageTitle}
+				</span>
 			</div>
 
-			<div className="flex items-center gap-3">
+			{/* 右侧：保存结果提示 + 两个操作。主按钮（保存）放最右边 */}
+			<div className="flex shrink-0 items-center gap-2">
 				{status.message && (
 					<span
-						className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md ${
-							status.type === "error"
-								? "text-red-600 bg-red-50"
-								: "text-emerald-600 bg-emerald-50"
+						className={`mr-1 inline-flex items-center gap-1.5 text-xs ${
+							status.type === "error" ? "text-red-600" : "text-emerald-600"
 						}`}
 					>
 						{status.type === "error" ? (
-							<AlertCircle className="h-3 w-3" />
+							<AlertCircle className="h-3.5 w-3.5" />
 						) : (
-							<CheckCircle className="h-3 w-3" />
+							<CheckCircle className="h-3.5 w-3.5" />
 						)}
 						{status.message}
 					</span>
 				)}
+				{/* 禁用态的样式写在 index.css 的 .vc-btn:disabled 里，这里只需要传 disabled */}
 				<button
-					className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${
-						disabled
-							? "bg-slate-100 text-slate-400 cursor-not-allowed"
-							: "bg-brand-500 text-white hover:bg-brand-600 shadow-brand-soft"
-					}`}
-					disabled={disabled}
-					onClick={handleSave}
-				>
-					<Save className="h-3.5 w-3.5" />
-					{saving ? "保存中..." : "保存"}
-				</button>
-				<button
-					className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${
-						!pageId
-							? "bg-slate-100 text-slate-400 cursor-not-allowed"
-							: "border border-slate-200 text-slate-600 hover:border-brand-300 hover:text-brand-600"
-					}`}
+					className="vc-btn-ghost h-8 px-3 text-[13px]"
 					disabled={!pageId}
 					onClick={handlePreview}
 				>
 					<Eye className="h-3.5 w-3.5" />
 					预览
+				</button>
+				<button
+					className="vc-btn h-8 px-3 text-[13px]"
+					disabled={disabled}
+					onClick={handleSave}
+				>
+					<Save className="h-3.5 w-3.5" />
+					{saving ? "保存中..." : "保存"}
 				</button>
 			</div>
 		</div>

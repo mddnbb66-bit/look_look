@@ -23,12 +23,18 @@ interface ComponentItem {
 	icon: React.ReactNode;
 }
 
+/**
+ * 一个可拖拽的物料格子：上面图标，下面名称
+ * - 没有边框和阴影，只用一块很浅的灰底；悬停时底色加深一档
+ * - cursor-grab / active:cursor-grabbing：鼠标样式提示「这个可以拖」
+ * - ChartPanel 里的格子用的是同一套类名，改这里时两边一起改
+ */
 function PanelItem({ type, name, icon }: ComponentItem) {
 	return (
 		<DraggableItem id={type}>
-			<div className="w-[100px] h-[100px] flex flex-col items-center justify-evenly rounded-lg border border-slate-200 bg-white cursor-grab text-slate-500 text-xs transition-all duration-200 hover:border-brand-300 hover:bg-brand-50/50 hover:text-brand-600 active:scale-95 shadow-soft">
-				<div>{icon}</div>
-				<p>{name}</p>
+			<div className="flex h-16 cursor-grab flex-col items-center justify-center gap-1.5 rounded-md bg-slate-50 text-xs text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 active:cursor-grabbing">
+				{icon}
+				<span className="leading-none">{name}</span>
 			</div>
 		</DraggableItem>
 	);
@@ -53,7 +59,8 @@ export default function BasicPanel() {
 	];
 
 	return (
-		<div className="w-[265px] grid grid-cols-2 grid-rows-component gap-[12px] p-[12px]">
+		// 两列网格，宽度跟随父容器（SidebarMenu 的右半边），不再写死 265px
+		<div className="grid grid-cols-2 gap-2 px-3 pb-3">
 			{component.map((item) => (
 				<PanelItem key={item.type} {...item} />
 			))}

@@ -4,6 +4,11 @@ import { ConfigProvider } from "antd";
 
 import { router, routerFallbackElement } from "./router";
 
+// 和 index.css 的 --vc-ink / --vc-accent 是同一组值。
+// AntD 的主题只能接收具体的颜色字符串，读不了 CSS 变量，所以这里再写一份。
+const INK = "#0f172a"; // 最深的中性色（slate-900）
+const ACCENT = "#3b76f6"; // 强调色（brand-500）
+
 function App() {
 	useEffect(() => {
 		const observer = new PerformanceObserver((list) => {
@@ -20,69 +25,83 @@ function App() {
 			
 	return (
 		<>
+			{/*
+				AntD 主题：让 AntD 组件和我们自己写的 Tailwind 界面用同一套颜色。
+				- token：全局变量，所有 AntD 组件都会读
+				- components：只对某一种组件生效的变量
+				颜色值都来自文件顶部的 INK / ACCENT 和 Tailwind 的 slate 色阶。
+			*/}
 			<ConfigProvider
 				theme={{
 					token: {
-						colorPrimary: "#6366f1",
+						// 主色用最深的中性色：主按钮、开关、选中的单选按钮都会变成深色
+						colorPrimary: INK,
+						// 链接、信息提示用强调色
+						colorLink: ACCENT,
+						colorInfo: ACCENT,
 						colorBgBase: "#ffffff",
 						colorBgContainer: "#ffffff",
 						colorBgElevated: "#ffffff",
 						colorBgLayout: "#f8fafc",
-						colorTextBase: "#1e293b",
-						colorText: "#1e293b",
-						colorTextSecondary: "#64748b",
-						colorTextTertiary: "#94a3b8",
-						colorBorder: "#e2e8f0",
-						colorBorderSecondary: "#f1f5f9",
-						colorFill: "rgba(99,102,241,0.06)",
+						colorTextBase: INK,
+						colorText: INK,
+						colorTextSecondary: "#475569", // slate-600
+						colorTextTertiary: "#64748b", // slate-500
+						colorBorder: "#e2e8f0", // slate-200
+						colorBorderSecondary: "#f1f5f9", // slate-100
+						colorFill: "rgba(15,23,42,0.06)",
 						colorFillSecondary: "#f8fafc",
-						borderRadius: 8,
-						controlHeight: 38,
+						borderRadius: 6,
+						// 控件默认高 32px；属性面板里用 size="small"，会是 24px
+						controlHeight: 32,
 						wireframe: false,
 					},
 					components: {
 						Button: {
-							controlHeight: 40,
-							controlHeightLG: 44,
-							colorPrimary: "#6366f1",
-							colorPrimaryHover: "#818cf8",
-							colorPrimaryActive: "#4f46e5",
-							borderRadiusLG: 10,
-							primaryShadow: "0 4px 14px rgba(99,102,241,0.18)",
+							colorPrimaryHover: "#1e293b", // slate-800
+							colorPrimaryActive: "#020617", // slate-950
+							// 去掉主按钮自带的彩色投影
+							primaryShadow: "none",
+							defaultShadow: "none",
 						},
 						Input: {
-							controlHeight: 40,
-							colorBgContainer: "#fff",
-							colorBorder: "#e2e8f0",
 							colorTextPlaceholder: "#94a3b8",
-							activeShadow: "0 0 0 2px rgba(99,102,241,0.12)",
-							hoverBorderColor: "#a5b4fc",
+							// 聚焦时：边框变深 + 一圈很淡的强调色
+							hoverBorderColor: "#cbd5e1",
+							activeBorderColor: INK,
+							activeShadow: "0 0 0 2px rgba(59,118,246,0.16)",
+						},
+						InputNumber: {
+							hoverBorderColor: "#cbd5e1",
+							activeBorderColor: INK,
+							activeShadow: "0 0 0 2px rgba(59,118,246,0.16)",
+						},
+						Select: {
+							hoverBorderColor: "#cbd5e1",
+							activeBorderColor: INK,
+							activeOutlineColor: "rgba(59,118,246,0.16)",
+							optionSelectedBg: "#f1f5f9",
 						},
 						Tabs: {
-							inkBarColor: "#6366f1",
+							inkBarColor: INK,
 							itemColor: "#64748b",
-							itemSelectedColor: "#1e293b",
-							itemHoverColor: "#4f46e5",
+							itemSelectedColor: INK,
+							itemHoverColor: INK,
 						},
 						Form: {
 							labelColor: "#475569",
 						},
 						Message: {
-							colorText: "#1e293b",
+							colorText: INK,
 						},
-						Menu: {
-							colorBgContainer: "#fff",
-							colorText: "#475569",
-							itemSelectedBg: "#eef2ff",
-							itemSelectedColor: "#4f46e5",
-							itemHoverBg: "#f8fafc",
-							itemHoverColor: "#1e293b",
-							subMenuItemBg: "#fff",
+						Collapse: {
+							// 属性面板的分组标题不要灰色底
+							headerBg: "transparent",
 						},
 						Modal: {
 							contentBg: "#fff",
 							headerBg: "#fff",
-							titleColor: "#1e293b",
+							titleColor: INK,
 						},
 					},
 				}}

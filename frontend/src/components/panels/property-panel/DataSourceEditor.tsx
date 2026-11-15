@@ -193,11 +193,13 @@ export default function DataSourceEditor({
 	];
 
 	return (
+		// 外观和 PageFormRenderer 的 Collapse 保持一致：无外框，分组之间一条细线
 		<Collapse
 			size="small"
+			bordered={false}
 			defaultActiveKey={["source", "mapping"]}
 			items={collapseItems}
-			className="bg-white"
+			classNames={{ title: "text-xs font-semibold text-slate-700" }}
 		/>
 	);
 }

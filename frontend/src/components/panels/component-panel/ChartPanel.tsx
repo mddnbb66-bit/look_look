@@ -22,12 +22,13 @@ interface ChartItem {
 	icon: React.ReactNode;
 }
 
+// 和 BasicPanel 的 PanelItem 是同一套外观，说明见那边的注释
 function ChartPanelItem({ type, name, icon }: ChartItem) {
 	return (
 		<DraggableItem id={type}>
-			<div className="w-[100px] h-[100px] flex flex-col items-center justify-evenly rounded-lg border border-slate-200 bg-white cursor-grab text-slate-500 text-xs transition-all duration-200 hover:border-cyan-300 hover:bg-cyan-50/50 hover:text-cyan-600 active:scale-95 shadow-soft">
-				<div>{icon}</div>
-				<p>{name}</p>
+			<div className="flex h-16 cursor-grab flex-col items-center justify-center gap-1.5 rounded-md bg-slate-50 text-xs text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 active:cursor-grabbing">
+				{icon}
+				<span className="leading-none">{name}</span>
 			</div>
 		</DraggableItem>
 	);
@@ -67,7 +68,7 @@ const chartItemsByCategory: Record<ChartCategory, ChartItem[]> = {
 export default function ChartPanel({ category }: { category: ChartCategory }) {
 	const chartItems = chartItemsByCategory[category] ?? chartItemsByCategory.bar;
 	return (
-		<div className="w-[265px] grid grid-cols-2 grid-rows-component gap-[12px] p-[12px]">
+		<div className="grid grid-cols-2 gap-2 px-3 pb-3">
 			{chartItems.map((item) => (
 				<ChartPanelItem key={item.type} {...item} />
 			))}

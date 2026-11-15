@@ -126,8 +126,8 @@ export default function Index() {
 		return (
 			<div className="flex h-screen items-center justify-center bg-slate-50">
 				<div className="flex flex-col items-center gap-3 animate-fade-in">
-					<div className="h-8 w-8 border-2 border-brand-200 border-t-brand-500 rounded-full animate-spin" />
-					<span className="text-sm text-slate-400">正在加载页面...</span>
+					<div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-900" />
+					<span className="text-sm text-slate-500">正在加载页面...</span>
 				</div>
 			</div>
 		);
@@ -137,7 +137,7 @@ export default function Index() {
 		return (
 			<div className="flex h-screen items-center justify-center bg-slate-50">
 				<div className="vc-card p-8 max-w-sm text-center space-y-4 animate-fade-in">
-					<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-red-50 text-red-500">
+					<div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-red-600">
 						<svg
 							width="24"
 							height="24"
@@ -175,9 +175,9 @@ export default function Index() {
 	return (
 		<>
 			{/* 下面是个三栏2行grid布局 */}
-			{/* grid-cols-custom：400px 1fr 350px; 三栏 */}
-			{/* grid-rows-header：56px 1fr */}
-			<div className="grid grid-cols-custom grid-rows-header h-[100vh] bg-slate-100/60">
+			{/* grid-cols-custom：272px 1fr 296px; 三栏（值定义在 tailwind.config.js） */}
+			{/* grid-rows-header：48px 1fr */}
+			<div className="grid h-[100vh] grid-cols-custom grid-rows-header bg-white text-slate-900">
 				{/* 工具栏 */}
 				<div className="row-start-1 row-end-2 col-start-1 col-end-4">
 					<Toolbar pageId={pageId} onPageIdChange={setPageId} />
@@ -185,54 +185,13 @@ export default function Index() {
 				</div>
 				<DndWrapper scale={scale}>
 					{/* //下面是组件栏 */}
-					<SidebarMenu className="border-r border-slate-200 bg-white" />
+					<SidebarMenu className="min-h-0 border-r border-slate-200 bg-white" />
 					{/* 下面是中间栏 */}
 					<div className="flex min-h-0 min-w-0 flex-col">
-						{/* 缩放栏 */}
-						<div className="flex items-center justify-between border-b border-slate-200 bg-white px-3 py-1.5 text-xs">
-							<div className="flex items-center gap-3 text-slate-500">
-								<span>
-									画布 {canvasSize?.width ?? "--"} × {canvasSize?.height ?? "--"}
-								</span>
-								<span className="text-slate-400">{Math.round(scale * 100)}%</span>
-							</div>
-							<div className="flex items-center gap-1.5">
-								{/* 处理缩放的 */}
-								<div className="flex items-center justify-between gap-1.5">
-									<button
-										className={`rounded-md border p-1 transition-all ${autoFit ? "border-brand-200 text-brand-500 bg-brand-50" : "border-slate-200 text-slate-400 hover:border-brand-200 hover:text-brand-500"}`}
-										onClick={handleSwitchOverview}
-										disabled={autoFit && !savedView}
-									>
-										<Maximize className="h-3.5 w-3.5" />
-									</button>
-									<button
-										className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all"
-										onClick={() => handleScaleChange(scale - 0.1)}
-									>
-										<Minus className="h-3.5 w-3.5" />
-									</button>
-									<span className="w-12 text-center text-xs text-slate-500">
-										{Math.round(scale * 100)}%
-									</span>
-									<button
-										className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all"
-										onClick={() => handleScaleChange(scale + 0.1)}
-									>
-										<Plus className="h-3.5 w-3.5" />
-									</button>
-									<button
-										className="rounded-md border border-slate-200 p-1 text-slate-400 hover:border-brand-200 hover:text-brand-500 transition-all ml-0.5"
-										onClick={handleResetScale}
-									>
-										<RotateCcw className="h-3.5 w-3.5" />
-									</button>
-								</div>
-							</div>
-						</div>
 						{/* 标尺＋灰色工作区容器 */}
 						<div className="relative flex min-h-0 flex-1 overflow-hidden">
-							{/* 左上角标尺交叉处的小方块 */}
+							{/* 左上角标尺交叉处的小方块：盖住两把标尺相交的空角 */}
+							<div className="absolute left-0 top-0 z-20 h-7 w-7 border-b border-r border-slate-200 bg-white" />
 							<Ruler
 								orientation="x"
 								length={rulerCanvasSize?.width ?? 0}
@@ -255,21 +214,19 @@ export default function Index() {
 									style={{ minHeight: "0", minWidth: "0" }}
 								>
 									{/* //下面是灰色工作区 不含标尺*/}
+									{/* 工作区用比白色深一档的纯灰，不加底纹：让白色画板的边界一眼能看清 */}
 									<div
 										ref={viewportRef}
 										id="viewport"
-										className=" h-full w-full  overflow-auto bg-slate-100/80"
-										// 画布底纹
-										style={{
-											backgroundImage:
-												"radial-gradient(circle, #e2e8f0 0.5px, transparent 0.5px)",
-											backgroundSize: "16px 16px",
-										}}
+										className="h-full w-full overflow-auto bg-slate-200/70"
 										onScroll={handleScroll}
 									>
 										{/* 下面是缩放占位层 根据外层工作区和scale得到宽高 */}
+										{/* shadow-artboard：给画板描一圈细边再加一点投影。
+										    阴影加在这一层而不是里面的 #canvas 上，因为 #canvas 会被 transform 缩放，
+										    1px 的边缩到 48% 就看不见了；这一层不缩放，边线始终是 1px。 */}
 										<div
-											className="relative"
+											className="relative shadow-artboard"
 											style={{
 												width: scaledWidth,
 												height: scaledHeight,
@@ -305,11 +262,56 @@ export default function Index() {
 									</div>
 								</DroppableItem>
 							</div>
+
+							{/* 缩放栏：浮在工作区左下角的一个小胶囊。
+							    left-10 = 标尺宽 28px + 12px 间距；z-30 保证盖在标尺和画布之上。
+							    按钮的点击逻辑和原来完全一样，只是换了位置和外观。 */}
+							<div className="absolute bottom-3 left-10 z-30 flex h-9 items-center gap-0.5 rounded-lg bg-white px-1 text-xs text-slate-600 shadow-float">
+								{/* 总览：自适应时高亮 */}
+								<button
+									className={`vc-icon-btn ${autoFit ? "is-active" : ""}`}
+									onClick={handleSwitchOverview}
+									disabled={autoFit && !savedView}
+									title="总览 / 返回上一次视图"
+								>
+									<Maximize className="h-3.5 w-3.5" />
+								</button>
+								<button
+									className="vc-icon-btn"
+									onClick={() => handleScaleChange(scale - 0.1)}
+									title="缩小"
+								>
+									<Minus className="h-3.5 w-3.5" />
+								</button>
+								{/* tabular-nums：数字等宽，百分比变化时不会左右抖动 */}
+								<span className="w-11 text-center tabular-nums text-slate-900">
+									{Math.round(scale * 100)}%
+								</span>
+								<button
+									className="vc-icon-btn"
+									onClick={() => handleScaleChange(scale + 0.1)}
+									title="放大"
+								>
+									<Plus className="h-3.5 w-3.5" />
+								</button>
+								<button
+									className="vc-icon-btn"
+									onClick={handleResetScale}
+									title="重置缩放"
+								>
+									<RotateCcw className="h-3.5 w-3.5" />
+								</button>
+								{/* 分隔线 + 画布尺寸 */}
+								<span className="mx-1 h-4 w-px bg-slate-200" />
+								<span className="pr-2 tabular-nums text-slate-500">
+									{canvasSize?.width ?? "--"} × {canvasSize?.height ?? "--"}
+								</span>
+							</div>
 						</div>
 					</div>
 				</DndWrapper>
 				{/* 组件属性、页面配置、AI 对话 */}
-				<div className="h-full overflow-hidden border-l border-slate-200 bg-white">
+				<div className="h-full min-h-0 overflow-hidden border-l border-slate-200 bg-white">
 					<PropertyPanel />
 				</div>
 			</div>
@@ -318,16 +320,16 @@ export default function Index() {
 }
 
 // 整个编辑器
-// ├─ 顶部工具栏：VC、编辑器、ID、保存、预览
+// ├─ 顶部工具栏：VC、项目名、预览、保存
 // ├─ 左侧 SidebarMenu：分类菜单＋组件卡片
 // ├─ 中间编辑区域
-// │  ├─ 缩放栏：画布尺寸、40%、缩放按钮
 // │  └─ 标尺与工作区
 // │     ├─ 左上角小方块
 // │     ├─ 横向标尺
 // │     ├─ 纵向标尺
-// │     └─ 可滚动工作区
-// │        └─ 缩放占位层
-// │           ├─ 实际画布内容层
-// │           └─ 辅助线层
+// │     ├─ 可滚动工作区
+// │     │  └─ 缩放占位层（画板的边线和投影在这一层）
+// │     │     ├─ 实际画布内容层
+// │     │     └─ 辅助线层
+// │     └─ 缩放栏（浮在左下角）：总览、缩小、百分比、放大、重置、画布尺寸
 // └─ 右侧 PropertyPanel：组件属性、页面配置、AI 对话

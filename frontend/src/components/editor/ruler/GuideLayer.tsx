@@ -23,7 +23,9 @@ export function GuideLayer({ scale, width, height }: GuideLayerProps) {
 	const hasLines = activeSnaps.length > 0;
 	if (!hasLines) return null;
 
-	const LINE_WIDTH = 2;
+	// 参考线用 1px 细线，颜色和选中框一致（index.css 的 --vc-accent）
+	const LINE_WIDTH = 1;
+	const LINE_COLOR = "var(--vc-accent)";
 
 	return (
 		<div
@@ -44,7 +46,7 @@ export function GuideLayer({ scale, width, height }: GuideLayerProps) {
 							top: 0,
 							width: LINE_WIDTH,
 							height: "100%",
-							backgroundColor: "#2563eb",
+							backgroundColor: LINE_COLOR,
 							opacity: 0.9,
 							pointerEvents: "none" as const,
 						}
@@ -54,7 +56,7 @@ export function GuideLayer({ scale, width, height }: GuideLayerProps) {
 							left: 0,
 							height: LINE_WIDTH,
 							width: "100%",
-							backgroundColor: "#2563eb",
+							backgroundColor: LINE_COLOR,
 							opacity: 0.9,
 							pointerEvents: "none" as const,
 						};

@@ -165,8 +165,8 @@ export default function AIChatPanel({ visible }: { visible: boolean }) {
 					<button
 						className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs transition-colors ${
 							isCreate
-								? "bg-brand-50 text-brand-600 font-medium"
-								: "text-slate-400 hover:text-slate-600 hover:bg-slate-50"
+								? "bg-slate-100 text-slate-900 font-medium"
+								: "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
 						}`}
 						onClick={() => setMode("create")}
 						disabled={loading}
@@ -177,8 +177,8 @@ export default function AIChatPanel({ visible }: { visible: boolean }) {
 					<button
 						className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs transition-colors ${
 							!isCreate
-								? "bg-brand-50 text-brand-600 font-medium"
-								: "text-slate-400 hover:text-slate-600 hover:bg-slate-50"
+								? "bg-slate-100 text-slate-900 font-medium"
+								: "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
 						}`}
 						onClick={() => setMode("ask")}
 						disabled={loading}
@@ -214,7 +214,7 @@ export default function AIChatPanel({ visible }: { visible: boolean }) {
 								? "描述你想要的大屏需求，AI 将直接产出可编辑的 Schema。多轮对话可在现有画布基础上追加或修改。"
 								: "向 AI 助手提问关于组件配置、数据源设置、图表映射等问题，将基于平台知识库为你解答。"}
 						</p>
-						<div className="flex items-start gap-2 rounded-lg border border-brand-100 bg-brand-50/50 px-3 py-2 text-xs text-brand-600">
+						<div className="flex items-start gap-2 rounded-md bg-slate-50 px-3 py-2 text-xs text-slate-600">
 							<Info className="h-3.5 w-3.5 mt-0.5 shrink-0" />
 							<span>
 								{isCreate
@@ -230,7 +230,7 @@ export default function AIChatPanel({ visible }: { visible: boolean }) {
 								{examples.map((item) => (
 									<div
 										key={item}
-										className="w-full cursor-pointer rounded-lg border border-slate-100 bg-slate-50/50 px-3 py-2 text-xs leading-relaxed text-slate-500 transition-all hover:border-brand-200 hover:text-brand-600 hover:bg-brand-50/30"
+										className="w-full cursor-pointer rounded-md border border-slate-200 px-3 py-2 text-xs leading-relaxed text-slate-600 transition-colors hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
 										onClick={() => setInputValue(item)}
 									>
 										{item}
@@ -249,7 +249,8 @@ export default function AIChatPanel({ visible }: { visible: boolean }) {
 								content={renderMessageContent(msg)}
 								styles={{
 									content: {
-										background: msg.role === "user" ? "#6366f1" : "#f8fafc",
+										// 用户气泡用最深的中性色（和主按钮同色），AI 气泡用浅灰
+										background: msg.role === "user" ? "#0f172a" : "#f8fafc",
 										color: msg.role === "user" ? "#fff" : "#334155",
 										border: msg.role === "user" ? "none" : "1px solid #e2e8f0",
 										fontSize: "13px",
@@ -257,7 +258,7 @@ export default function AIChatPanel({ visible }: { visible: boolean }) {
 										padding: "8px 12px",
 										maxWidth: "100%",
 										wordBreak: "break-word" as const,
-										borderRadius: "10px",
+										borderRadius: "8px",
 									},
 								}}
 							/>

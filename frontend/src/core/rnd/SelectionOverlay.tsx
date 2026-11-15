@@ -11,6 +11,9 @@ interface SelectionOverlayProps {
 
 /**
  * 选中态覆盖层：蓝色边框 + 名称标签 + 删除/取消操作按钮
+ *
+ * 颜色都读 index.css 里的 CSS 变量（--vc-accent / --vc-danger / --vc-ink），
+ * 这样换主题色时不用到这里改十六进制值。
  */
 export default function SelectionOverlay({
 	name,
@@ -25,8 +28,8 @@ export default function SelectionOverlay({
 				style={{
 					position: "absolute",
 					inset: 0,
-					border: "1px solid #1677ff",
-					boxShadow: "0 0 0 1px rgba(22,119,255,0.3)",
+					border: "1px solid var(--vc-accent)",
+					boxShadow: "0 0 0 1px rgba(59,118,246,0.25)",
 					//圆角
 					borderRadius: 2,
 					//这个元素不接受鼠标/指针的命中
@@ -43,7 +46,7 @@ export default function SelectionOverlay({
 					height: 16,
 					lineHeight: "16px",
 					fontSize: 12,
-					backgroundColor: "#1677ff",
+					backgroundColor: "var(--vc-accent)",
 					color: "#ffffff",
 					borderRadius: 2,
 					whiteSpace: "nowrap",
@@ -67,7 +70,7 @@ export default function SelectionOverlay({
 						height: 16,
 						lineHeight: "16px",
 						fontSize: 12,
-						backgroundColor: "#ff4d4f",
+						backgroundColor: "var(--vc-danger)",
 						color: "#ffffff",
 						borderRadius: 2,
 						cursor: "pointer",
@@ -87,7 +90,7 @@ export default function SelectionOverlay({
 						height: 16,
 						lineHeight: "16px",
 						fontSize: 12,
-						backgroundColor: "rgba(0,0,0,0.65)",
+						backgroundColor: "var(--vc-ink)",
 						color: "#ffffff",
 						borderRadius: 2,
 						cursor: "pointer",

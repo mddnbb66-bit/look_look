@@ -47,12 +47,15 @@ export default function PageFormRenderer({
 		),
 	}));
 
+	// bordered={false}：去掉 Collapse 的外框和灰色标题底，只保留分组之间的一条细线。
+	// classNames.title：AntD 6 提供的「语义化类名」入口，可以直接给标题文字加 Tailwind 类。
 	return (
 		<Collapse
 			size="small"
+			bordered={false}
 			defaultActiveKey={groups.map((g) => g.key)}
 			items={collapseItems}
-			className="bg-white"
+			classNames={{ title: "text-xs font-semibold text-slate-700" }}
 		/>
 	);
 }
@@ -72,19 +75,24 @@ function PageFieldRow({ fieldKey, value, hint, onChange }: PageFieldRowProps) {
 
 	const type = typeof value;
 
+	// 行布局和 PropsFormRenderer 的 FieldRow 相同：左 76px 标题，右边控件，说明文字跟在控件下面
 	// color → ColorPicker（同时保留文字输入）
 	if (hint?.widget === "color") {
 		return (
-			<div className="flex flex-col gap-1">
-				<label className="text-xs font-medium text-slate-600">{label}</label>
-				{description && <span className="text-[10px] text-slate-400">{description}</span>}
-				<ColorPicker
-					size="small"
-					value={value || "#ffffff"}
-					showText
-					format="hex"
-					onChange={(_, hex) => handleChange(hex)}
-				/>
+			<div className="grid grid-cols-[76px_minmax(0,1fr)] items-start gap-x-2">
+				<label className="pt-1 text-xs leading-4 text-slate-500">{label}</label>
+				<div className="min-w-0">
+					<ColorPicker
+						size="small"
+						value={value || "#ffffff"}
+						showText
+						format="hex"
+						onChange={(_, hex) => handleChange(hex)}
+					/>
+					{description && (
+						<p className="mt-1 text-[11px] leading-4 text-slate-400">{description}</p>
+					)}
+				</div>
 			</div>
 		);
 	}
@@ -123,10 +131,14 @@ function PageFieldRow({ fieldKey, value, hint, onChange }: PageFieldRowProps) {
 	}
 
 	return (
-		<div className="flex flex-col gap-1">
-			<label className="text-xs font-medium text-slate-600">{label}</label>
-			{description && <span className="text-[10px] text-slate-400">{description}</span>}
-			{control}
+		<div className="grid grid-cols-[76px_minmax(0,1fr)] items-start gap-x-2">
+			<label className="pt-1 text-xs leading-4 text-slate-500">{label}</label>
+			<div className="min-w-0">
+				{control}
+				{description && (
+					<p className="mt-1 text-[11px] leading-4 text-slate-400">{description}</p>
+				)}
+			</div>
 		</div>
 	);
 }

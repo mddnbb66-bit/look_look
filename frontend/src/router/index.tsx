@@ -19,7 +19,8 @@ const CancelledDemo = lazy(() => import("../components/demo/CancelledDemo"));
 
 // 路由懒加载的统一兜底，让首屏不再空白
 const RouteFallback = () => (
-	<div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-slate-950 text-slate-200">
+	// 浅色底：和其他页面一致，切换路由时不会闪一下黑屏
+	<div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-slate-50 text-sm text-slate-500">
 		<Spin size="large" />
 		<div>页面加载中，请稍候…</div>
 	</div>

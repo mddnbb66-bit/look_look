@@ -64,11 +64,19 @@ function FieldRow({ fieldKey, value, hint, onChange }: FieldRowProps) {
 	const label = hint?.title ?? fieldKey;
 	const description = hint?.description;
 
+	// 一行两列：左边 76px 放标题，右边放控件（原来是标题在上、控件在下，比较占高度）。
+	// - items-start + 标题的 pt-1：小号控件高 24px，标题行高 16px，往下推 4px 正好和控件垂直居中；
+	//   遇到多行文本框时标题则停在顶部，不会被拉到中间。
+	// - 右列的 min-w-0：允许控件被压窄，避免长内容把面板撑出横向滚动条。
 	return (
-		<div className="flex flex-col gap-1">
-			<label className="text-xs font-medium text-slate-600">{label}</label>
-			{description && <span className="text-[10px] text-slate-400">{description}</span>}
-			<FieldControl fieldKey={fieldKey} value={value} hint={hint} onChange={onChange} />
+		<div className="grid grid-cols-[76px_minmax(0,1fr)] items-start gap-x-2">
+			<label className="pt-1 text-xs leading-4 text-slate-500">{label}</label>
+			<div className="min-w-0">
+				<FieldControl fieldKey={fieldKey} value={value} hint={hint} onChange={onChange} />
+				{description && (
+					<p className="mt-1 text-[11px] leading-4 text-slate-400">{description}</p>
+				)}
+			</div>
 		</div>
 	);
 }

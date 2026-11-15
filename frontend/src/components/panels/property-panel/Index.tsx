@@ -116,8 +116,9 @@ export default function PropertyPanel() {
 		[selectedId, updateItem]
 	);
 
+	// 外层不加内边距：让表单分组之间的分隔线能横贯整个面板
 	const renderPageForm = () => (
-		<div className="flex h-full w-full flex-col overflow-y-auto overflow-x-hidden p-3">
+		<div className="flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
 			<PageFormRenderer
 				values={pageValues}
 				hints={pageHints}
@@ -137,17 +138,18 @@ export default function PropertyPanel() {
 		{ key: "ai" as const, label: "AI 对话", icon: <Sparkles className="h-3.5 w-3.5" /> },
 	];
 
+	// 标签栏：下划线样式。
+	// 每个按钮底部都有 2px 的边：选中的是深色，没选中的是透明色（占位，避免切换时文字上下跳）。
+	// -mb-px 让按钮往下多伸 1px，正好压住外层容器那条 1px 的灰色底边，看起来像把它「染深」了一段。
 	const renderHeader = () => (
-		<div className="flex items-center gap-1 border-b border-slate-200 px-2 py-1.5">
+		<div className="flex h-10 shrink-0 items-stretch gap-4 border-b border-slate-200 px-3">
 			{tabs.map((tab) => (
 				<button
 					key={tab.key}
-					className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+					className={`-mb-px inline-flex items-center gap-1.5 border-b-2 text-xs font-medium transition-colors ${
 						mode === tab.key
-							? tab.key === "ai"
-								? "bg-emerald-50 text-emerald-600 border border-emerald-200"
-								: "bg-brand-50 text-brand-600 border border-brand-200"
-							: "border border-transparent text-slate-400 hover:text-slate-600 hover:bg-slate-50"
+							? "border-slate-900 text-slate-900"
+							: "border-transparent text-slate-500 hover:text-slate-900"
 					}`}
 					onClick={() => setMode(tab.key)}
 				>
@@ -178,7 +180,7 @@ export default function PropertyPanel() {
 						onChange={handlePropsChange}
 					/>
 					{showDataSource && (
-						<div className="border-t border-slate-200 p-3">
+						<div className="border-t border-slate-200">
 							<DataSourceEditor
 								componentType={cType}
 								dataSource={(node as any).dataSource as ChartDataSource}

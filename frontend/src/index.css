@@ -2,19 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * 全局样式
+ * ------------------------------------------------------------------
+ * 这个文件只放三样东西：
+ *   1. :root 里的 CSS 变量 —— 给「写不了 Tailwind 类名」的地方用（行内 style、AntD 主题）
+ *   2. body、滚动条这类全局基础样式
+ *   3. 几个到处复用的公共类（.vc-card / .vc-btn / .vc-btn-ghost / .vc-icon-btn）
+ *
+ * 其余样式都直接写在组件的 className 里。
+ */
+
+:root {
+	/* 强调色，和 tailwind.config.js 的 brand-500 是同一个值 */
+	--vc-accent: #3b76f6;
+	/* 危险操作（删除） */
+	--vc-danger: #e5484d;
+	/* 最深的中性色，和 Tailwind 的 slate-900 是同一个值 */
+	--vc-ink: #0f172a;
+}
+
 body {
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
 	background-color: #f8fafc;
-	color: #1e293b;
+	color: #0f172a;
 	font-family:
-		-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-		"Noto Sans SC", sans-serif;
+		-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC",
+		"Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", sans-serif;
 	-webkit-font-smoothing: antialiased;
 }
 
-/* 滚动条 */
+/* 滚动条：细、无轨道，不抢视线 */
 ::-webkit-scrollbar {
 	width: 6px;
 	height: 6px;
@@ -38,67 +58,119 @@ body {
 }
 
 ::selection {
-	background: rgba(99, 102, 241, 0.15);
-	color: #1e293b;
+	background: rgba(59, 118, 246, 0.18);
+	color: #0f172a;
 }
 
-/* 公共样式 */
-.vc-card {
-	background: #fff;
-	border: 1px solid #e2e8f0;
-	border-radius: 0.75rem;
-	box-shadow:
-		0 1px 3px rgba(0, 0, 0, 0.06),
-		0 1px 2px rgba(0, 0, 0, 0.04);
-	transition: all 0.2s ease;
-}
-.vc-card:hover {
-	border-color: #c7d2fe;
-	box-shadow:
-		0 4px 12px rgba(0, 0, 0, 0.06),
-		0 1px 3px rgba(0, 0, 0, 0.04);
-}
+/*
+ * 公共类
+ * 放在 @layer components 里，这样组件上再写 Tailwind 工具类（如 text-xs、h-8）可以覆盖它们。
+ */
+@layer components {
+	/* 卡片：白底 + 一条细边线。不用阴影，层次靠边线表达 */
+	.vc-card {
+		background: #fff;
+		border: 1px solid #e2e8f0;
+		border-radius: 8px;
+		transition: border-color 0.15s ease;
+	}
+	.vc-card:hover {
+		border-color: #cbd5e1;
+	}
 
-.vc-btn {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.375rem;
-	border-radius: 0.5rem;
-	padding: 0.5rem 1rem;
-	font-weight: 500;
-	font-size: 0.875rem;
-	color: #fff;
-	background: linear-gradient(135deg, #6366f1, #4f46e5);
-	border: none;
-	box-shadow: 0 4px 14px rgba(99, 102, 241, 0.15);
-	transition: all 0.2s ease;
-	cursor: pointer;
-}
-.vc-btn:hover {
-	background: linear-gradient(135deg, #818cf8, #6366f1);
-	box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
-	transform: translateY(-1px);
-}
-.vc-btn:active {
-	transform: translateY(0);
-}
+	/* 主按钮：深色实心。一个页面里只应该有一个 */
+	.vc-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		height: 36px;
+		padding: 0 14px;
+		border: 1px solid var(--vc-ink);
+		border-radius: 6px;
+		background: var(--vc-ink);
+		color: #fff;
+		font-size: 14px;
+		font-weight: 500;
+		white-space: nowrap;
+		cursor: pointer;
+		transition: background-color 0.15s ease;
+	}
+	.vc-btn:hover {
+		background: #1e293b;
+	}
 
-.vc-btn-ghost {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.375rem;
-	border-radius: 0.5rem;
-	padding: 0.5rem 1rem;
-	font-weight: 500;
-	font-size: 0.875rem;
-	color: #475569;
-	background: transparent;
-	border: 1px solid #e2e8f0;
-	transition: all 0.2s ease;
-	cursor: pointer;
-}
-.vc-btn-ghost:hover {
-	border-color: #a5b4fc;
-	color: #4f46e5;
-	background: rgba(99, 102, 241, 0.04);
+	/* 次按钮：白底描边。和主按钮同高，方便并排 */
+	.vc-btn-ghost {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		height: 36px;
+		padding: 0 14px;
+		border: 1px solid #e2e8f0;
+		border-radius: 6px;
+		background: #fff;
+		color: #334155;
+		font-size: 14px;
+		font-weight: 500;
+		white-space: nowrap;
+		cursor: pointer;
+		transition:
+			background-color 0.15s ease,
+			border-color 0.15s ease;
+	}
+	.vc-btn-ghost:hover {
+		background: #f8fafc;
+		border-color: #cbd5e1;
+	}
+
+	/* 禁用态：统一变浅、换鼠标样式。组件里只需要写 disabled 属性，不用再拼类名 */
+	.vc-btn:disabled {
+		background: #e2e8f0;
+		border-color: #e2e8f0;
+		color: #94a3b8;
+		cursor: not-allowed;
+	}
+	.vc-btn-ghost:disabled {
+		background: #fff;
+		border-color: #e2e8f0;
+		color: #cbd5e1;
+		cursor: not-allowed;
+	}
+
+	/* 图标按钮：28×28，没有边框，悬停才出现底色。编辑器里的小工具按钮都用它 */
+	.vc-icon-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		border-radius: 6px;
+		color: #475569;
+		cursor: pointer;
+		transition: background-color 0.15s ease;
+	}
+	.vc-icon-btn:hover {
+		background: #f1f5f9;
+		color: #0f172a;
+	}
+	.vc-icon-btn:disabled {
+		color: #cbd5e1;
+		cursor: not-allowed;
+		background: transparent;
+	}
+	/* 开关型按钮处于「开」的状态（例如缩放栏的总览）。写在 :disabled 后面，两者同时成立时以它为准 */
+	.vc-icon-btn.is-active {
+		background: #f1f5f9;
+		color: #0f172a;
+	}
+
+	/* 键盘聚焦时统一显示强调色外圈，鼠标点击不显示 */
+	.vc-btn:focus-visible,
+	.vc-btn-ghost:focus-visible,
+	.vc-icon-btn:focus-visible {
+		outline: 2px solid var(--vc-accent);
+		outline-offset: 2px;
+	}
 }

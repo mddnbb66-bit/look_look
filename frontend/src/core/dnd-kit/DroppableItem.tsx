@@ -31,8 +31,12 @@ export default function DroppableItem({ id, children, style }: DroppableItemProp
 		nodeRef.current = node; //我们之后用它调用 getBoundingClientRect()	自己存一份，之后可以拿它测位置
 		setNodeRef(node); //告诉 dnd-kit：这个就是接收拖拽的 DOM
 	};
-	// 设置悬停时的默认样式 绿色
-	const defaultStyle = isOver ? { backgroundColor: "green", opacity: 0.7 } : {};
+	// 设置悬停时的默认样式：描一圈强调色的边（原来是整块变绿 + 半透明）
+	// 用 outline 而不是 border：outline 不占空间，不会让里面的内容挪位置；
+	// outlineOffset 为负数表示往里收 2px，避免被父容器的 overflow-hidden 裁掉
+	const defaultStyle: React.CSSProperties = isOver
+		? { outline: "2px solid var(--vc-accent)", outlineOffset: -2 }
+		: {};
 	const finalStyle = { ...defaultStyle, ...style };
 
 	return (

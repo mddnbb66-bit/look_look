@@ -111,7 +111,9 @@ export default function DndWrapper({
 			{/* 全局拖拽浮层，保证拖拽预览始终在画布上层显示 */}
 			<DragOverlay>
 				{activeType && (
+					// 拖拽时跟着鼠标走的小标签：深色底白字，显示正在拖的组件类型
 					<div
+						className="inline-flex h-7 items-center rounded-md bg-slate-900 px-2.5 text-xs font-medium text-white shadow-float"
 						style={{
 							zIndex: 9999,
 							pointerEvents: "none",

@@ -3,7 +3,6 @@ import { Tabs, Form, Input, Button, message } from "antd";
 import { login, register } from "../../api/login";
 //保存凭证和跳转之用
 import { useNavigate } from "react-router-dom";
-import { Shield, Monitor, GitBranch } from "lucide-react";
 //本文登陆之页。还包含登陆注册逻辑
 export default function AuthPage() {
 	const [mode, setMode] = useState<"login" | "register">("login");
@@ -62,124 +61,112 @@ export default function AuthPage() {
 		form.resetFields();
 	};
 
-	const badges = [
-		{ icon: <Shield className="h-3.5 w-3.5" />, text: "安全登录" },
-		{ icon: <Monitor className="h-3.5 w-3.5" />, text: "多端预览" },
-		{ icon: <GitBranch className="h-3.5 w-3.5" />, text: "版本管理" },
-	];
-
+	// 页面结构：整屏居中一个窄列（max-w-sm），从上到下是 标识 → 标题 → 表单卡片。
+	// 原来左边那一大块宣传文案和三个徽标去掉了：登录页只做登录这一件事。
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-brand-50/30 text-slate-800 flex items-center justify-center px-4 py-10">
-			{/* 淡雅装饰 */}
-			<div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-brand-100/20 rounded-full blur-[120px] pointer-events-none" />
+		// body 设了 overflow: hidden，所以这一层自己滚动（小屏幕、注册表单较高时用得到）
+		<div className="h-screen overflow-y-auto bg-slate-50 text-slate-900">
+			{/* min-h-full + flex 居中：内容矮时垂直居中，内容高时从顶部正常排，不会被裁掉 */}
+			<div className="flex min-h-full items-center justify-center px-4 py-10">
+				<div className="w-full max-w-sm animate-fade-in">
+					{/* 标识：点击回首页 */}
+					<a href="/" className="flex items-center gap-2.5">
+						<div className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-900 text-[10px] font-bold tracking-wide text-white">
+							VC
+						</div>
+						<span className="text-[15px] font-semibold">Vision-Craft</span>
+					</a>
 
-			<div className="relative z-10 max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center animate-fade-in">
-				{/* 左侧品牌 */}
-				<div className="space-y-6">
-					<p className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 text-brand-600 text-xs font-medium">
-						<span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
-						Vision-Craft · 账户中心
-					</p>
-					<h1 className="text-4xl font-bold leading-tight text-slate-900">
-						登录 / 注册
-						<br />
-						<span className="text-brand-500">解锁你的可视化空间</span>
+					<h1 className="mt-8 text-2xl font-semibold tracking-tight">
+						{mode === "login" ? "登录" : "注册账号"}
 					</h1>
-					<p className="text-slate-500 leading-relaxed">
-						登录后即可保存大屏、管理版本、预览与发布。注册新账号，开启你的 Vision-Craft
-						搭建之旅。
+					<p className="mt-2 text-sm text-slate-500">
+						{mode === "login"
+							? "登录后继续编辑你的数据大屏。"
+							: "注册完成后，用邮箱和密码登录。"}
 					</p>
-					<div className="flex flex-wrap gap-2">
-						{badges.map((b) => (
-							<span
-								key={b.text}
-								className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 border border-slate-100 px-3 py-1.5 text-xs text-slate-500"
-							>
-								{b.icon}
-								{b.text}
-							</span>
-						))}
-					</div>
-				</div>
 
-				{/* 右侧表单 */}
-				<div className="vc-card p-8">
-					<Tabs
-						activeKey={mode}
-						onChange={(key) => onModeChange(key as "login" | "register")}
-						items={[
-							{ key: "login", label: "登录" },
-							{ key: "register", label: "注册" },
-						]}
-						className="mb-4"
-					/>
-
-					<Form
-						form={form}
-						layout="vertical"
-						requiredMark={false}
-						onFinish={handleSubmit}
-						className="space-y-1"
-					>
-						<Form.Item
-							label={<span className="text-slate-600 text-sm">邮箱</span>}
-							name="email"
-							rules={[
-								{ required: true, message: "邮箱不能为空" },
-								{ type: "email", message: "请输入有效邮箱" },
+					{/* 表单卡片 */}
+					<div className="vc-card mt-6 p-6">
+						<Tabs
+							activeKey={mode}
+							onChange={(key) => onModeChange(key as "login" | "register")}
+							items={[
+								{ key: "login", label: "登录" },
+								{ key: "register", label: "注册" },
 							]}
-						>
-							<Input size="large" placeholder="you@example.com" />
-						</Form.Item>
+							className="mb-4"
+						/>
 
-						<Form.Item
-							label={<span className="text-slate-600 text-sm">密码</span>}
-							name="password"
-							rules={[{ required: true, message: "密码不能为空" }]}
+						<Form
+							form={form}
+							layout="vertical"
+							requiredMark={false}
+							onFinish={handleSubmit}
 						>
-							<Input.Password size="large" placeholder="请输入密码" />
-						</Form.Item>
-
-						{mode === "register" && (
+							{/* 表单项之间的间距用 AntD 自带的 24px。
+							    原来这里有个 space-y-1，它会把后面几项的下边距清零，导致密码框和按钮贴在一起 */}
 							<Form.Item
-								label={<span className="text-slate-600 text-sm">确认密码</span>}
-								name="confirm"
-								dependencies={["password"]}
+								label={<span className="text-slate-600 text-sm">邮箱</span>}
+								name="email"
 								rules={[
-									{ required: true, message: "请再次输入密码" },
-									({ getFieldValue }) => ({
-										validator(_, value) {
-											if (!value || getFieldValue("password") === value) {
-												return Promise.resolve();
-											}
-											return Promise.reject(
-												new Error("两次输入的密码不一致")
-											);
-										},
-									}),
+									{ required: true, message: "邮箱不能为空" },
+									{ type: "email", message: "请输入有效邮箱" },
 								]}
 							>
-								<Input.Password size="large" placeholder="请再次输入密码" />
+								<Input size="large" placeholder="you@example.com" />
 							</Form.Item>
-						)}
 
-						<Form.Item>
-							<Button
-								type="primary"
-								htmlType="submit"
-								loading={loading}
-								block
-								size="large"
-								className="mt-3 !h-11 !font-medium"
+							<Form.Item
+								label={<span className="text-slate-600 text-sm">密码</span>}
+								name="password"
+								rules={[{ required: true, message: "密码不能为空" }]}
 							>
-								{mode === "login" ? "登录" : "注册"}
-							</Button>
-						</Form.Item>
+								<Input.Password size="large" placeholder="请输入密码" />
+							</Form.Item>
 
-						<div className="text-xs text-slate-400 text-center">
-							点击按钮即表示同意《隐私政策》与《用户协议》
-						</div>
-					</Form>
+							{mode === "register" && (
+								<Form.Item
+									label={<span className="text-slate-600 text-sm">确认密码</span>}
+									name="confirm"
+									dependencies={["password"]}
+									rules={[
+										{ required: true, message: "请再次输入密码" },
+										({ getFieldValue }) => ({
+											validator(_, value) {
+												if (!value || getFieldValue("password") === value) {
+													return Promise.resolve();
+												}
+												return Promise.reject(
+													new Error("两次输入的密码不一致")
+												);
+											},
+										}),
+									]}
+								>
+									<Input.Password size="large" placeholder="请再次输入密码" />
+								</Form.Item>
+							)}
+
+							{/* !mb-4：按钮下面只留 16px（默认 24px），让底部那行小字离按钮近一点 */}
+							<Form.Item className="!mb-4">
+								<Button
+									type="primary"
+									htmlType="submit"
+									loading={loading}
+									block
+									size="large"
+									className="!font-medium"
+								>
+									{mode === "login" ? "登录" : "注册"}
+								</Button>
+							</Form.Item>
+
+							<div className="text-xs text-slate-500 text-center">
+								点击按钮即表示同意《隐私政策》与《用户协议》
+							</div>
+						</Form>
+					</div>
 				</div>
 			</div>
 		</div>
