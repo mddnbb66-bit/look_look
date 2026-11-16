@@ -188,6 +188,48 @@ export default function Index() {
 					<SidebarMenu className="min-h-0 border-r border-slate-200 bg-white" />
 					{/* 下面是中间栏 */}
 					<div className="flex min-h-0 min-w-0 flex-col">
+						{/* 缩放栏：画布上方的一整行，位置和原版一致。左边是画布尺寸和倍率，右边是五个缩放按钮 */}
+						<div className="flex items-center justify-between border-b border-slate-200 bg-white px-3 py-1.5 text-xs">
+							<div className="flex items-center gap-3 text-slate-600">
+								<span className="tabular-nums">
+									画布 {canvasSize?.width ?? "--"} × {canvasSize?.height ?? "--"}
+								</span>
+								<span className="tabular-nums text-slate-500">{Math.round(scale * 100)}%</span>
+							</div>
+							{/* 处理缩放的 */}
+							<div className="flex items-center gap-0.5">
+								{/* 总览：自适应时高亮 */}
+								<button
+									className={`vc-icon-btn ${autoFit ? "is-active" : ""}`}
+									onClick={handleSwitchOverview}
+									disabled={autoFit && !savedView}
+									title="总览 / 返回上一次视图"
+								>
+									<Maximize className="h-3.5 w-3.5" />
+								</button>
+								<button
+									className="vc-icon-btn"
+									onClick={() => handleScaleChange(scale - 0.1)}
+									title="缩小"
+								>
+									<Minus className="h-3.5 w-3.5" />
+								</button>
+								{/* tabular-nums：数字等宽，百分比变化时不会左右抖动 */}
+								<span className="w-11 text-center tabular-nums text-slate-900">
+									{Math.round(scale * 100)}%
+								</span>
+								<button
+									className="vc-icon-btn"
+									onClick={() => handleScaleChange(scale + 0.1)}
+									title="放大"
+								>
+									<Plus className="h-3.5 w-3.5" />
+								</button>
+								<button className="vc-icon-btn" onClick={handleResetScale} title="重置缩放">
+									<RotateCcw className="h-3.5 w-3.5" />
+								</button>
+							</div>
+						</div>
 						{/* 标尺＋灰色工作区容器 */}
 						<div className="relative flex min-h-0 flex-1 overflow-hidden">
 							{/* 左上角标尺交叉处的小方块：盖住两把标尺相交的空角 */}
@@ -262,51 +304,6 @@ export default function Index() {
 									</div>
 								</DroppableItem>
 							</div>
-
-							{/* 缩放栏：浮在工作区左下角的一个小胶囊。
-							    left-10 = 标尺宽 28px + 12px 间距；z-30 保证盖在标尺和画布之上。
-							    按钮的点击逻辑和原来完全一样，只是换了位置和外观。 */}
-							<div className="absolute bottom-3 left-10 z-30 flex h-9 items-center gap-0.5 rounded-lg bg-white px-1 text-xs text-slate-600 shadow-float">
-								{/* 总览：自适应时高亮 */}
-								<button
-									className={`vc-icon-btn ${autoFit ? "is-active" : ""}`}
-									onClick={handleSwitchOverview}
-									disabled={autoFit && !savedView}
-									title="总览 / 返回上一次视图"
-								>
-									<Maximize className="h-3.5 w-3.5" />
-								</button>
-								<button
-									className="vc-icon-btn"
-									onClick={() => handleScaleChange(scale - 0.1)}
-									title="缩小"
-								>
-									<Minus className="h-3.5 w-3.5" />
-								</button>
-								{/* tabular-nums：数字等宽，百分比变化时不会左右抖动 */}
-								<span className="w-11 text-center tabular-nums text-slate-900">
-									{Math.round(scale * 100)}%
-								</span>
-								<button
-									className="vc-icon-btn"
-									onClick={() => handleScaleChange(scale + 0.1)}
-									title="放大"
-								>
-									<Plus className="h-3.5 w-3.5" />
-								</button>
-								<button
-									className="vc-icon-btn"
-									onClick={handleResetScale}
-									title="重置缩放"
-								>
-									<RotateCcw className="h-3.5 w-3.5" />
-								</button>
-								{/* 分隔线 + 画布尺寸 */}
-								<span className="mx-1 h-4 w-px bg-slate-200" />
-								<span className="pr-2 tabular-nums text-slate-500">
-									{canvasSize?.width ?? "--"} × {canvasSize?.height ?? "--"}
-								</span>
-							</div>
 						</div>
 					</div>
 				</DndWrapper>
@@ -323,13 +320,13 @@ export default function Index() {
 // ├─ 顶部工具栏：VC、项目名、预览、保存
 // ├─ 左侧 SidebarMenu：分类菜单＋组件卡片
 // ├─ 中间编辑区域
+// │  ├─ 缩放栏：画布尺寸、倍率、缩放按钮
 // │  └─ 标尺与工作区
 // │     ├─ 左上角小方块
 // │     ├─ 横向标尺
 // │     ├─ 纵向标尺
-// │     ├─ 可滚动工作区
-// │     │  └─ 缩放占位层（画板的边线和投影在这一层）
-// │     │     ├─ 实际画布内容层
-// │     │     └─ 辅助线层
-// │     └─ 缩放栏（浮在左下角）：总览、缩小、百分比、放大、重置、画布尺寸
+// │     └─ 可滚动工作区
+// │        └─ 缩放占位层（画板的边线和投影在这一层）
+// │           ├─ 实际画布内容层
+// │           └─ 辅助线层
 // └─ 右侧 PropertyPanel：组件属性、页面配置、AI 对话
